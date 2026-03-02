@@ -1,0 +1,3068 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Azura Somatometría — Editor de Parámetros</title>
+  <meta name="description"
+    content="Editor de parámetros clínicos para auto-llenado de Azura tableSoma. Funciona sin conexión." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg-base: #0c0e14;
+      --bg-surface: #12151e;
+      --bg-elevated: #181c28;
+      --bg-hover: #1e2336;
+      --border: #242840;
+      --border-focus: #4a7ff7;
+      --border-ok: #2dc96a;
+      --border-warn: #f0a12a;
+      --text-primary: #e8ecf5;
+      --text-sec: #8892a4;
+      --text-muted: #525d72;
+      --text-key: #7eb8ff;
+      --text-ok: #2dc96a;
+      --text-warn: #f0a12a;
+      --text-err: #f05a5a;
+      --text-ro: #555f73;
+      --accent: #4a7ff7;
+      --accent-dim: rgba(74, 127, 247, 0.13);
+      --accent-glow: rgba(74, 127, 247, 0.28);
+      --amber-dim: rgba(240, 161, 42, 0.13);
+      --green-dim: rgba(45, 201, 106, 0.11);
+      --r-sm: 6px;
+      --r: 10px;
+      --r-lg: 14px;
+      --mono: 'JetBrains Mono', monospace;
+      --ui: 'Inter', system-ui, sans-serif;
+      --t: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--ui);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(36, 40, 64, 0.3);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(136, 146, 164, 0.4);
+      border-radius: 99px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(136, 146, 164, 0.6);
+    }
+
+    /* ── LAYOUT ── */
+    .shell {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      grid-template-rows: 54px 1fr;
+      grid-template-areas: "hdr hdr" "side main";
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── HEADER ── */
+    header {
+      grid-area: hdr;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, #4a7ff7, #7b5cf7);
+      border-radius: var(--r-sm);
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+    }
+
+    .brand-name {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    .brand-sub {
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .hdr-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .autosave {
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      opacity: 0;
+      transition: opacity var(--t);
+    }
+
+    .autosave.show {
+      opacity: 1;
+    }
+
+    .as-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-ok);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .25
+      }
+    }
+
+    /* ── SIDEBAR ── */
+    aside {
+      grid-area: side;
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .side-label {
+      font-size: 10px;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--text-muted);
+      padding: 18px 14px 8px;
+    }
+
+    .session-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 6px;
+    }
+
+    .s-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 10px;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      transition: background var(--t);
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-sec);
+      border: 1px solid transparent;
+    }
+
+    .s-item:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .s-item.active {
+      background: var(--accent-dim);
+      border-color: var(--border-focus);
+      color: var(--text-key);
+    }
+
+    .s-name {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+    }
+
+    .s-date {
+      display: block;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .s-del {
+      margin-left: auto;
+      opacity: 0;
+      background: none;
+      border: none;
+      color: var(--text-err);
+      cursor: pointer;
+      font-size: 12px;
+      padding: 2px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      transition: opacity var(--t);
+    }
+
+    .s-item:hover .s-del {
+      opacity: 1;
+    }
+
+    .s-ren {
+      color: var(--text-sec) !important;
+      margin-right: 4px;
+    }
+
+    .s-ren:hover {
+      color: var(--accent) !important;
+    }
+
+    .side-bottom {
+      padding: 10px 8px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .empty-s {
+      text-align: center;
+      padding: 20px 10px;
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+    }
+
+    /* ── MAIN ── */
+    main {
+      grid-area: main;
+      overflow-y: auto;
+      min-height: 0;
+      height: 100%;
+      padding: 22px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: var(--r-sm);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all var(--t);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover {
+      background: #5d8ff9;
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+
+    .btn-sec {
+      background: transparent;
+      color: var(--text-sec);
+      border-color: var(--border);
+    }
+
+    .btn-sec:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+      border-color: var(--text-muted);
+    }
+
+    .btn-apply {
+      background: linear-gradient(135deg, #2dc96a, #1fa352);
+      color: #fff;
+      font-size: 13px;
+      padding: 10px 22px;
+      box-shadow: 0 0 0 0 var(--green-dim);
+      border: none;
+    }
+
+    .btn-apply:hover {
+      box-shadow: 0 0 22px var(--green-dim);
+      transform: translateY(-1px);
+    }
+
+    .btn-apply:active {
+      transform: scale(.97);
+    }
+
+    .btn-amber {
+      background: var(--amber-dim);
+      color: var(--text-warn);
+      border-color: rgba(240, 161, 42, .3);
+    }
+
+    .btn-amber:hover {
+      background: rgba(240, 161, 42, .22);
+      border-color: var(--text-warn);
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: var(--text-err);
+      border-color: rgba(240, 90, 90, .3);
+    }
+
+    .btn-danger:hover {
+      background: rgba(240, 90, 90, .1);
+      border-color: var(--text-err);
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 11px;
+    }
+
+    .btn-full {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: visible;
+    }
+
+    .card-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 17px;
+      cursor: pointer;
+      user-select: none;
+      transition: background var(--t);
+      gap: 10px;
+    }
+
+    .card-hdr:hover {
+      background: var(--bg-hover);
+    }
+
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-ico {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      font-size: 14px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .card-sub {
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+    }
+
+    .card-chev {
+      color: var(--text-muted);
+      font-size: 12px;
+      transition: transform var(--t);
+      flex-shrink: 0;
+    }
+
+    .card-body {
+      padding: 0 17px 17px;
+      border-top: 1px solid var(--border);
+    }
+
+    .card.collapsed .card-body {
+      display: none;
+    }
+
+    .card.collapsed .card-chev {
+      transform: rotate(-90deg);
+    }
+
+    /* ── FIELD GRID (Compact Boxes) ── */
+    .fields-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      padding-top: 14px;
+    }
+
+    .field-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px;
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+    }
+
+    .field-row:last-child {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .field-label-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .field-key-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .field-key {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-key);
+    }
+
+    .field-unit {
+      display: inline-flex;
+      align-items: center;
+      padding: 1px 6px;
+      border-radius: 99px;
+      background: var(--bg-elevated);
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-sec);
+    }
+
+    .field-hint {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .field-input-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: auto;
+    }
+
+    input.param-input {
+      width: 100%;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      color: var(--text-primary);
+      font-family: var(--mono);
+      font-size: 13px;
+      padding: 7px 10px;
+      outline: none;
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+
+    input.param-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--accent-dim);
+    }
+
+    input.param-input.valid {
+      border-color: var(--border-ok);
+    }
+
+    input.param-input.invalid {
+      border-color: var(--text-err);
+    }
+
+    input.param-input[readonly] {
+      background: var(--bg-base);
+      color: var(--text-ro);
+      cursor: not-allowed;
+      border-style: dashed;
+    }
+
+    .validation-msg {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-err);
+      display: none;
+    }
+
+    .validation-msg.show {
+      display: block;
+    }
+
+    .validation-msg.ok {
+      color: var(--text-ok);
+    }
+
+    .ro-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+    }
+
+    /* ── PARSE ── */
+    .parse-area {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 14px;
+    }
+
+    .parse-ta {
+      width: 100%;
+      min-height: 130px;
+      background: var(--bg-elevated);
+      border: 1px dashed var(--border);
+      border-radius: var(--r);
+      color: var(--text-primary);
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 12px;
+      resize: vertical;
+      outline: none;
+      transition: border-color var(--t), background var(--t);
+    }
+
+    .parse-ta::placeholder {
+      color: var(--text-muted);
+    }
+
+    .parse-ta:focus {
+      border-color: var(--text-warn);
+      background: var(--bg-base);
+    }
+
+    .parse-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .parse-diff {
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 12px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-sec);
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 180px;
+      overflow-y: auto;
+      display: none;
+      line-height: 1.6;
+    }
+
+    .parse-diff.show {
+      display: block;
+    }
+
+    .d-ok {
+      color: var(--text-ok);
+    }
+
+    .d-warn {
+      color: var(--text-warn);
+    }
+
+    /* ── APPLY ROW ── */
+    .apply-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .apply-status {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      transition: opacity var(--t);
+    }
+
+    .apply-status.show {
+      opacity: 1;
+    }
+
+    .apply-status.ok {
+      color: var(--text-ok);
+    }
+
+    .apply-status.warn {
+      color: var(--text-warn);
+    }
+
+    /* ── TOAST ── */
+    .toast-wrap {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 9px 15px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, .5);
+      animation: tin .24s ease, tout .28s ease 2.7s forwards;
+      pointer-events: auto;
+    }
+
+    .toast.ok {
+      border-color: var(--border-ok);
+    }
+
+    .toast.warn {
+      border-color: var(--border-warn);
+    }
+
+    @keyframes tin {
+      from {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    @keyframes tout {
+      from {
+        opacity: 1;
+        transform: translateY(0)
+      }
+
+      to {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 730px) {
+      .shell {
+        grid-template-columns: 1fr;
+        grid-template-rows: 54px auto 1fr;
+        grid-template-areas: "hdr" "side" "main";
+        height: auto;
+        overflow: visible;
+      }
+
+      aside {
+        max-height: 220px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      main {
+        padding: 14px;
+      }
+
+      .fields-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .fields-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── CLINICAL TEXT FIELDS ── */
+    .text-field-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-top: 14px;
+    }
+
+    .text-field-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .text-field-hdr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .text-area-wrapper {
+      position: relative;
+    }
+
+    .clinical-ta {
+      width: 100%;
+      min-height: 100px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      color: var(--text-primary);
+      font-family: var(--ui);
+      font-size: 13px;
+      padding: 10px;
+      padding-bottom: 25px;
+      /* space for counter */
+      outline: none;
+      transition: border-color var(--t), box-shadow var(--t);
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .clinical-ta:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--accent-dim);
+    }
+
+    .char-counter {
+      position: absolute;
+      bottom: 8px;
+      right: 12px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .char-counter.amber {
+      color: var(--text-warn);
+    }
+
+    .char-counter.red {
+      color: var(--text-err);
+      font-weight: 700;
+    }
+
+    .snippet-bar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 5px;
+    }
+
+    .snippet {
+      padding: 3px 8px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      color: var(--text-sec);
+      transition: all var(--t);
+    }
+
+    .snippet:hover {
+      background: var(--bg-hover);
+      border-color: var(--text-muted);
+      color: var(--text-primary);
+    }
+
+    .clean-btn {
+      font-size: 10px;
+      color: var(--accent);
+      cursor: pointer;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .clean-btn:hover {
+      text-decoration: none;
+      opacity: .8;
+    }
+
+    /* Motivo chips */
+    .motivo-chip {
+      padding: 4px 10px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      font-size: 11px;
+      font-family: var(--mono);
+      cursor: pointer;
+      color: var(--text-sec);
+      transition: all var(--t);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      user-select: none;
+    }
+
+    .motivo-chip:hover {
+      border-color: var(--accent);
+      color: var(--text-primary);
+    }
+
+    .motivo-chip.active {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--text-key);
+    }
+
+    .motivo-chip .chip-del {
+      opacity: 0;
+      font-size: 10px;
+      color: var(--text-err);
+      transition: opacity var(--t);
+      cursor: pointer;
+    }
+
+    .motivo-chip:hover .chip-del {
+      opacity: 1;
+    }
+
+
+
+    /* ── Prescription Builder ── */
+    .rx-builder {
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .rx-builder-hdr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 12px;
+      background: var(--bg-elevated);
+      cursor: pointer;
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--text-sec);
+      transition: background var(--t);
+    }
+
+    .rx-builder-hdr:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .rx-chev {
+      font-size: 10px;
+      transition: transform var(--t);
+    }
+
+    .rx-chev.open {
+      transform: rotate(90deg);
+    }
+
+    .rx-builder-body {
+      padding: 12px;
+      background: var(--bg-card);
+    }
+
+    .rx-cols-header {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1.2fr 1.4fr 0.9fr 28px;
+      gap: 4px;
+      font-size: 9px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      padding: 0 2px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .rx-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1.2fr 1.4fr 0.9fr 28px;
+      gap: 4px;
+      margin-bottom: 4px;
+      align-items: center;
+    }
+
+    .rx-input {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      color: var(--text-primary);
+      font-size: 11px;
+      font-family: var(--mono);
+      padding: 4px 7px;
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color var(--t);
+    }
+
+    .rx-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .rx-select {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      color: var(--text-primary);
+      font-size: 11px;
+      font-family: var(--mono);
+      padding: 3px 4px;
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color var(--t);
+      cursor: pointer;
+    }
+
+    .rx-select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    /* <option> elements don't inherit CSS variables — hardcode dark values */
+    .rx-select option {
+      background: #12151e;
+      color: #e8ecf5;
+    }
+
+    .rx-select option:checked {
+      background: #1e2236;
+    }
+
+
+    .rx-del-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0;
+      line-height: 1;
+      transition: color var(--t);
+    }
+
+    .rx-del-btn:hover {
+      color: var(--text-err);
+    }
+
+    /* Snippet add-row (custom snippets for text fields) */
+
+    .snippet-add-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+      align-items: center;
+    }
+
+    .snippet-del {
+      font-size: 9px;
+      cursor: pointer;
+      margin-left: 2px;
+      opacity: 0;
+      transition: opacity var(--t);
+    }
+
+    .snippet:hover .snippet-del {
+      opacity: 1;
+      color: var(--text-err);
+    }
+
+    /* ── TAB SWITCHER ── */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 14px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 7px 14px;
+      border-radius: 7px;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      font-family: var(--ui);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--t);
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+      background: var(--bg-hover);
+    }
+
+    .tab-btn.active {
+      background: var(--accent-dim);
+      color: var(--text-key);
+      border: 1px solid rgba(74, 127, 247, .3);
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    /* ── HELP / README ── */
+
+    .help-content {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+
+    .help-content h3 {
+      color: var(--accent);
+      margin: 15px 0 8px 0;
+      font-size: 14px;
+    }
+
+    .help-content ul {
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+
+    .help-content li {
+      margin-bottom: 6px;
+    }
+
+    .help-content code {
+      background: var(--bg-elevated);
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: var(--mono);
+      color: var(--text-primary);
+    }
+
+    .help-content strong {
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+
+    <!-- HEADER -->
+    <header>
+      <div class="brand">
+        <div class="brand-icon">⚕</div>
+        <div>
+          <div class="brand-name">Azura AutoFill</div>
+          <div class="brand-sub">Editor de Somatometría</div>
+        </div>
+      </div>
+      <div class="hdr-right">
+        <div class="autosave" id="asInd">
+          <div class="as-dot"></div><span>guardado</span>
+        </div>
+        <button class="btn btn-sec btn-sm" id="btnClear">✕ Limpiar todo</button>
+        <button class="btn btn-sec btn-sm" id="btnRestore">↩ Restaurar última</button>
+      </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside>
+      <div class="side-label">Sesiones</div>
+      <div class="session-list" id="sessionList">
+        <div class="empty-s" id="emptyS">Sin sesiones guardadas.</div>
+      </div>
+      <div class="side-bottom">
+        <button class="btn btn-sec btn-sm btn-full" id="btnSave">💾 Cargar anterior</button>
+        <button class="btn btn-sec btn-sm btn-full" id="btnExport">↓ Exportar JSON</button>
+        <button class="btn btn-sec btn-sm btn-full" id="btnCopy">⎘ Copiar como texto</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main>
+
+      <!-- Help / README card -->
+      <div class="card collapsed" id="cardHelp">
+        <div class="card-hdr" onclick="toggleCard('cardHelp')">
+          <div class="card-title-row">
+            <div class="card-ico">📖</div>
+            <div>
+              <div class="card-title">Ayuda & Guía Rápida</div>
+              <div class="card-sub">Cómo usar esta herramienta y palabras clave</div>
+            </div>
+          </div>
+          <span class="card-chev">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="help-content" style="padding: 17px">
+            <p><strong>Azura AutoFill Studio</strong> agiliza el llenado de somatometría y notas clínicas en Azura.</p>
+
+            <h3>💡 Palabras clave para Parseo</h3>
+            <p style="margin-bottom: 10px;">El sistema reconoce los siguientes términos (insensible a mayúsculas):</p>
+            <div
+              style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 20px;">
+              <div><strong>🌡️ Temp:</strong> <code>temp</code>, <code>t°</code>, <code>t:</code>, <code>tª</code>,
+                <code>c°</code>
+              </div>
+              <div><strong>🫁 Resp:</strong> <code>fr</code>, <code>resp</code>, <code>rr</code>, <code>rpm</code></div>
+              <div><strong>❤️ Pulso:</strong> <code>fc</code>, <code>hr</code>, <code>bpm</code>, <code>latidos</code>
+              </div>
+              <div><strong>🩸 Gluc:</strong> <code>gluc</code>, <code>glucosa</code>, <code>hgt</code>,
+                <code>azúcar</code>
+              </div>
+              <div><strong>🩺 TA:</strong> <code>ta</code>, <code>presión</code>, <code>bp</code>, <code>pa</code>,
+                <code>t/a</code>
+              </div>
+              <div><strong>☁️ Sat O2:</strong> <code>sat</code>, <code>spo2</code>, <code>o2</code>,
+                <code>oxígeno</code>
+              </div>
+              <div><strong>⚖️ Peso:</strong> <code>peso</code>, <code>kg</code>, <code>wt</code>, <code>weight</code>
+              </div>
+              <div><strong>📏 Talla:</strong> <code>talla</code>, <code>ht</code>, <code>height</code>,
+                <code>estatura</code>
+              </div>
+              <div><strong>📑 Resultados:</strong> <code>resultados</code>, <code>estudios</code>,
+                <code>auxiliares</code>
+              </div>
+              <div><strong>💊 Tratamiento:</strong> <code>tratamiento</code>, <code>plan</code>, <code>tx</code>,
+                <code>indicaciones</code>
+              </div>
+              <div><strong>🔮 Pronóstico:</strong> <code>pronostico</code>, <code>px</code>, <code>evolucion</code>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 250px;">
+                <h3>🚀 Inicio Rápido</h3>
+                <ul>
+                  <li><strong>Llenado:</strong> Ingresa datos o usa <code>Importar desde notas</code>.</li>
+                  <li><strong>Aplicar:</strong> Clic en <code>⚡ Aplicar en Azura</code> o <code>Ctrl + Enter</code>.
+                  </li>
+                  <li><strong>Auto-Fill:</strong> Abre Azura y el script hará el resto.</li>
+                </ul>
+              </div>
+              <div style="flex: 1; min-width: 250px;">
+                <h3>📂 Gestión de Datos</h3>
+                <ul>
+                  <li><strong>Sesiones:</strong> Guarda y renombra sesiones en la barra lateral.</li>
+                  <li><strong>JSON:</strong> Usa <code>📁 Importar JSON</code> para cargar archivos.</li>
+                  <li><strong>Limpieza:</strong> <code>Limpiar texto ✨</code> normaliza tus notas.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Apply row -->
+      <div class="apply-row">
+        <button class="btn btn-apply" id="btnApply">⚡ Aplicar en Azura</button>
+        <div class="apply-status" id="applyStatus"></div>
+      </div>
+
+      <!-- Parameters card (shared — always visible) -->
+      <div class="card collapsed" id="cardParams">
+        <div class="card-hdr" onclick="toggleCard('cardParams')">
+          <div class="card-title-row">
+            <div class="card-ico">📋</div>
+            <div>
+              <div class="card-title">Somatometría</div>
+              <div class="card-sub">8 parámetros editables · 2 calculados</div>
+            </div>
+          </div>
+          <span class="card-chev">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="fields-grid" id="fieldsGrid"></div>
+        </div>
+      </div>
+
+      <!-- ── TAB SWITCHER ── -->
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tabBtnIngreso" onclick="switchTab('ingreso')">🏥 Nota de Urgencias</button>
+        <button class="tab-btn" id="tabBtnEvolucion" onclick="switchTab('evolucion')">📋 Nota de Evolución</button>
+        <button class="tab-btn" id="tabBtnHistoria" onclick="switchTab('historia')">📋 Historia Clínica</button>
+      </div>
+
+      <!-- ╍╍ NOTA DE URGENCIAS TAB ╍╍ -->
+      <div class="tab-pane active" id="tabIngreso">
+
+        <!-- Notas clínicas card (Part 4) -->
+        <!-- ══════════════════════════════════════════════════════════════════
+           Antecedentes card
+           ════════════════════════════════════════════════════════════════ -->
+        <div class="card collapsed" id="cardAnte">
+          <div class="card-hdr" onclick="toggleCard('cardAnte')">
+            <div class="card-title-row">
+              <div class="card-ico">📋</div>
+              <div>
+                <div class="card-title">Antecedentes*</div>
+                <div class="card-sub">Campo obligatorio — plantilla predeterminada lista</div>
+              </div>
+            </div>
+            <span class="card-chev">▾</span>
+          </div>
+          <div class="card-body" style="padding: 17px">
+            <div class="text-field-grid">
+              <div class="text-field-row">
+                <div class="text-field-hdr">
+                  <label class="field-key" for="antecedentes">Antecedentes* <span
+                      style="color:var(--text-muted);font-weight:400;font-size:10px;">(requerido)</span></label>
+                  <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                    <button class="clean-btn" onclick="cleanText('antecedentes')">Limpiar texto ✨</button>
+                    <button class="clean-btn" style="color:var(--text-warn);border-color:rgba(240,161,42,.4);"
+                      onclick="restoreAnteTemplate()">↺ Restaurar plantilla</button>
+                  </div>
+                </div>
+                <div class="text-area-wrapper">
+                  <textarea id="antecedentes" class="clinical-ta" maxlength="2000" rows="10"
+                    placeholder="Antecedentes personales patológicos…"></textarea>
+                  <div class="char-counter" id="cnt-antecedentes">0 / 2000</div>
+                </div>
+                <!-- Slash/blank highlight legend -->
+                <div id="ante-legend"
+                  style="display:flex;gap:10px;font-size:10px;font-family:var(--mono);color:var(--text-muted);margin-top:4px;flex-wrap:wrap;">
+                  <span><span style="background:rgba(240,161,42,.18);border-radius:3px;padding:1px 4px;">/ opción</span>
+                    —
+                    elimina la que no aplica</span>
+                  <span><span style="background:rgba(74,127,247,.18);border-radius:3px;padding:1px 4px;">___</span> —
+                    completar manualmente</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Motivo de Ingreso card -->
+        <div class="card" id="cardMotivo">
+          <div class="card-hdr" onclick="toggleCard('cardMotivo')">
+            <div class="card-title-row">
+              <div class="card-ico">🏥</div>
+              <div>
+                <div class="card-title">Motivo de ingreso</div>
+                <div class="card-sub">Selección rápida o escritura libre</div>
+              </div>
+            </div>
+            <span class="card-chev">▾</span>
+          </div>
+          <div class="card-body" style="padding: 17px">
+            <!-- Chip bar -->
+            <div id="motivoChipBar" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;"></div>
+            <!-- Add custom chip -->
+            <div style="display:flex;gap:6px;margin-bottom:10px;align-items:center;" id="motivoAddRow">
+              <input id="motivoNewChip" type="text" class="param-input" style="flex:1;font-size:11px;padding:4px 8px;"
+                placeholder="Nueva opción…" maxlength="80" />
+              <button class="btn btn-sec btn-sm" onclick="addCustomMotivoChip()">+ Agregar</button>
+              <button class="btn btn-sec btn-sm" style="color:var(--text-warn)" onclick="resetMotivoChips()">↺
+                Predeterminados</button>
+            </div>
+            <!-- Textarea + counter -->
+            <div class="text-field-row">
+              <div class="text-field-hdr">
+                <label class="field-key" for="motivoIngreso">Motivo del ingreso</label>
+                <button class="clean-btn" onclick="clearMotivoField()">Limpiar ✕</button>
+              </div>
+              <div class="text-area-wrapper">
+                <textarea id="motivoIngreso" class="clinical-ta" maxlength="2000" rows="3"
+                  placeholder="Describe el motivo de ingreso del paciente…"></textarea>
+                <div class="char-counter" id="cnt-motivoIngreso">0 / 2000</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notas clínicas card -->
+        <div class="card collapsed" id="cardNotes">
+          <div class="card-hdr" onclick="toggleCard('cardNotes')">
+            <div class="card-title-row">
+              <div class="card-ico">📝</div>
+              <div>
+                <div class="card-title">Notas clínicas</div>
+                <div class="card-sub">Tratamiento, resultados y pronóstico</div>
+              </div>
+            </div>
+            <span class="card-chev">▾</span>
+          </div>
+          <div class="card-body" style="padding: 17px">
+            <div class="text-field-grid">
+
+              <!-- Resultados -->
+              <div class="text-field-row">
+                <div class="text-field-hdr">
+                  <label class="field-key" for="resultados">Resultados de estudios</label>
+                  <button class="clean-btn" onclick="cleanText('resultados')">Limpiar texto ✨</button>
+                </div>
+                <div class="text-area-wrapper">
+                  <textarea id="resultados" class="clinical-ta" maxlength="2000"
+                    placeholder="Resultados de auxiliares de diagnóstico..."></textarea>
+                  <div class="char-counter" id="cnt-resultados">0 / 2000</div>
+                </div>
+                <div class="snippet-bar" id="snip-resultados"></div>
+                <div class="snippet-add-row" id="addRow-resultados">
+                  <input id="newSnip-resultados" class="param-input" type="text" placeholder="+ Nuevo snippet…"
+                    maxlength="200" style="flex:1;font-size:11px;padding:4px 8px;" />
+                  <button class="btn btn-sec btn-sm" onclick="addCustomSnippet('resultados')">+ Agregar</button>
+                </div>
+              </div>
+
+              <!-- Tratamiento -->
+              <div class="text-field-row">
+                <div class="text-field-hdr">
+                  <label class="field-key" for="tratamiento">Tratamiento</label>
+                  <button class="clean-btn" onclick="cleanText('tratamiento')">Limpiar texto ✨</button>
+                </div>
+
+                <!-- ── Prescription Builder ── -->
+                <div id="rxBuilder" class="rx-builder">
+                  <div class="rx-builder-hdr" onclick="toggleRxBuilder()">
+                    <span>💊 Constructor de receta</span>
+                    <span id="rxBuilderChev" class="rx-chev">▸</span>
+                  </div>
+                  <div id="rxBuilderBody" class="rx-builder-body" style="display:none;">
+                    <div class="rx-cols-header">
+                      <span>Medicamento</span>
+                      <span>Dosis</span>
+                      <span>Unidad</span>
+                      <span>Cada</span>
+                      <span>Período</span>
+                      <span>Vía</span>
+                      <span>Días total</span>
+                      <span></span>
+                    </div>
+                    <div id="rxRows"></div>
+                    <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+                      <button class="btn btn-sec btn-sm" onclick="addRxRow()">+ Agregar medicamento</button>
+                      <button class="btn btn-sec btn-sm" style="color:var(--text-warn)" onclick="clearRxRows()">✕
+                        Limpiar
+                        receta</button>
+                      <button class="btn btn-amber btn-sm" onclick="applyRxToTratamiento()" style="margin-left:auto;">⚡
+                        Generar texto</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="text-area-wrapper">
+                  <textarea id="tratamiento" class="clinical-ta" maxlength="2000"
+                    placeholder="Plan de tratamiento e indicaciones..."></textarea>
+                  <div class="char-counter" id="cnt-tratamiento">0 / 2000</div>
+                </div>
+                <div class="snippet-bar" id="snip-tratamiento"></div>
+                <div class="snippet-add-row" id="addRow-tratamiento">
+                  <input id="newSnip-tratamiento" class="param-input" type="text" placeholder="+ Nuevo snippet…"
+                    maxlength="200" style="flex:1;font-size:11px;padding:4px 8px;" />
+                  <button class="btn btn-sec btn-sm" onclick="addCustomSnippet('tratamiento')">+ Agregar</button>
+                </div>
+              </div>
+
+              <!-- Pronóstico -->
+              <div class="text-field-row">
+                <div class="text-field-hdr">
+                  <label class="field-key" for="pronostico">Pronóstico</label>
+                  <button class="clean-btn" onclick="cleanText('pronostico')">Limpiar texto ✨</button>
+                </div>
+                <div class="text-area-wrapper">
+                  <textarea id="pronostico" class="clinical-ta" maxlength="2000"
+                    placeholder="Evolución esperada..."></textarea>
+                  <div class="char-counter" id="cnt-pronostico">0 / 2000</div>
+                </div>
+                <div class="snippet-bar" id="snip-pronostico"></div>
+                <div class="snippet-add-row" id="addRow-pronostico">
+                  <input id="newSnip-pronostico" class="param-input" type="text" placeholder="+ Nuevo snippet…"
+                    maxlength="200" style="flex:1;font-size:11px;padding:4px 8px;" />
+                  <button class="btn btn-sec btn-sm" onclick="addCustomSnippet('pronostico')">+ Agregar</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div><!-- end cardNotes -->
+
+        <!-- Paste-to-parse card -->
+        <div class="card collapsed" id="cardParse">
+          <div class="card-hdr" onclick="toggleCard('cardParse')">
+            <div class="card-title-row">
+              <div class="card-ico">📝</div>
+              <div>
+                <div class="card-title">Importar desde notas</div>
+                <div class="card-sub">Pega texto libre — extraemos los valores</div>
+              </div>
+            </div>
+            <span class="card-chev">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="parse-area">
+              <textarea class="parse-ta" id="parseTA" placeholder="Pega tus notas clínicas aquí…
+
+Ejemplos reconocidos:
+  Temp 37.2   /   FC 88   /   FR 18   /   TA 120/80
+  Sat 97%   /   Peso: 72kg   /   Talla 1.68   /   Gluc 95"></textarea>
+              <div class="parse-actions">
+                <button type="button" class="btn btn-amber" id="btnParse">⚡ Parsear</button>
+                <button type="button" class="btn btn-sec btn-sm" id="btnImportJson">📁 Importar JSON</button>
+                <input type="file" id="jsonInput" accept=".json" style="display:none" />
+                <button type="button" class="btn btn-sec btn-sm" id="btnClearParse">✕ Limpiar</button>
+              </div>
+              <div class="parse-diff" id="parseDiff"></div>
+            </div>
+          </div>
+        </div><!-- end cardParse -->
+
+      </div><!-- end tabIngreso -->
+
+      <!-- ╍╍ EVOLUCIÓN TAB ╍╍ -->
+      <div class="tab-pane" id="tabEvolucion">
+
+        <div class="card" id="cardEvo">
+          <div class="card-hdr" onclick="toggleCard('cardEvo')">
+            <div class="card-title-row">
+              <div class="card-ico">📝</div>
+              <div>
+                <div class="card-title">Nota de Evolución</div>
+                <div class="card-sub">6 campos claves · hasta 4000 caracteres cada uno</div>
+              </div>
+            </div>
+            <span class="card-chev">▾</span>
+          </div>
+          <div class="card-body" style="padding:17px">
+            <div class="text-field-grid">
+
+              <!-- 1. Padecimiento actual -->
+              <div class="text-field-row">
+                <div class="text-field-hdr">
+                  <label class="field-key" for="padecimientoActual">Padecimiento actual</label>
+                  <button class="clean-btn" onclick="cleanText('padecimientoActual')">Limpiar texto ✨</button>
+                </div>
+                <div class="text-area-wrapper">
+                  <textarea id="padecimientoActual" class="clinical-ta" maxlength="4000" rows="5"
+                    placeholder="Describe el padecimiento actual del paciente…"></textarea>
+                  <div class="char-counter" id="cnt-padecimientoActual">0 / 4000</div>
+                </div>
+                <div class="snippet-bar" id="snip-padecimientoActual"></div>
+                <div class="snippet-add-row">
+                  <input id="newSnip-padecimientoActual" class="param-input" type="text" placeholder="+ Nuevo snippet…"
+                    maxlength="200" style="flex:1;font-size:11px;padding:4px 8px;" />
+                  <button class="btn btn-sec btn-sm" onclick="addCustomSnippet('padecimientoActual')">+ Agregar</button>
+                </div>
+              </div>
+
+              <!-- 1.5 Evolución y cuadro clínico -->
+              <div class="text-field-row">
+                <div class="text-field-hdr">
+                  <label class="field-key" for="objetivo">Evolución y cuadro clínico</label>
+                  <button class="clean-btn" onclick="cleanText('objetivo')">Limpiar texto ✨</button>
+                </div>
+                <div class="text-area-wrapper">
+                  <textarea id="objetivo" class="clinical-ta" maxlength="4000" rows="3"
+                    placeholder="Evolución y cuadro clínico…"></textarea>
+                  <div class="char-counter" id="cnt-objetivo">0 / 4000</div>
+                </div>
+                <div class="snippet-bar" id="snip-objetivo"></div>
+                <div class="snippet-add-row">
+                  <input id="newSnip-objetivo" class="param-input" type="text" placeholder="+ Nuevo snippet…"
+                    maxlength="200" style="flex:1;font-size:11px;padding:4px 8px;" />
+                  <button class="btn btn-sec btn-sm" onclick="addCustomSnippet('objetivo')">+ Agregar</button>
+                </div>
+              </div>
+
+              <!-- 2. Evolución y cuadro clínico (required) -->
+              <div class="text-field-row">
+                <div class="text-field-hdr">
+                  <label class="field-key" for="analisisEvolucion">Análisis* <span
+                      style="color:var(--text-muted);font-size:10px;">(requerido)</span></label>
+                  <button class="clean-btn" onclick="cleanText('analisisEvolucion')">Limpiar texto ✨</button>
+                </div>
+                <div class="text-area-wrapper">
+                  <textarea id="analisisEvolucion" class="clinical-ta" maxlength="4000" rows="5"
+                    placeholder="Evolución del paciente y cuadro clínico actual…"></textarea>
+                  <div class="char-counter" id="cnt-analisisEvolucion">0 / 4000</div>
+                </div>
+                <div class="snippet-bar" id="snip-analisisEvolucion"></div>
+                <div class="snippet-add-row">
+                  <input id="newSnip-analisisEvolucion" class="param-input" type="text" placeholder="+ Nuevo snippet…"
+                    maxlength="200" style="flex:1;font-size:11px;padding:4px 8px;" />
+                  <button class="btn btn-sec btn-sm" onclick="addCustomSnippet('analisisEvolucion')">+ Agregar</button>
+                </div>
+              </div>
+
+              <!-- 3. Plan de estudio y/o tratamiento -->
+              <div class="text-field-row">
+                <div class="text-field-hdr">
+                  <label class="field-key" for="planEstudio">Plan de estudio y/o tratamiento</label>
+                  <button class="clean-btn" onclick="cleanText('planEstudio')">Limpiar texto ✨</button>
+                </div>
+                <div class="text-area-wrapper">
+                  <textarea id="planEstudio" class="clinical-ta" maxlength="4000" rows="4"
+                    placeholder="Plan de estudios y/o tratamiento…"></textarea>
+                  <div class="char-counter" id="cnt-planEstudio">0 / 4000</div>
+                </div>
+                <div class="snippet-bar" id="snip-planEstudio"></div>
+                <div class="snippet-add-row">
+                  <input id="newSnip-planEstudio" class="param-input" type="text" placeholder="+ Nuevo snippet…"
+                    maxlength="200" style="flex:1;font-size:11px;padding:4px 8px;" />
+                  <button class="btn btn-sec btn-sm" onclick="addCustomSnippet('planEstudio')">+ Agregar</button>
+                </div>
+              </div>
+
+              <!-- 4. Resultados de servicios auxiliares -->
+              <div class="text-field-row">
+                <div class="text-field-hdr">
+                  <label class="field-key" for="resultadoLabImg">Resultados de servicios auxiliares</label>
+                  <button class="clean-btn" onclick="cleanText('resultadoLabImg')">Limpiar texto ✨</button>
+                </div>
+                <div class="text-area-wrapper">
+                  <textarea id="resultadoLabImg" class="clinical-ta" maxlength="4000" rows="4"
+                    placeholder="Laboratorio e imagen…"></textarea>
+                  <div class="char-counter" id="cnt-resultadoLabImg">0 / 4000</div>
+                </div>
+                <div class="snippet-bar" id="snip-resultadoLabImg"></div>
+                <div class="snippet-add-row">
+                  <input id="newSnip-resultadoLabImg" class="param-input" type="text" placeholder="+ Nuevo snippet…"
+                    maxlength="200" style="flex:1;font-size:11px;padding:4px 8px;" />
+                  <button class="btn btn-sec btn-sm" onclick="addCustomSnippet('resultadoLabImg')">+ Agregar</button>
+                </div>
+              </div>
+
+              <!-- 5. Pronóstico (evolución) -->
+              <div class="text-field-row">
+                <div class="text-field-hdr">
+                  <label class="field-key" for="pronostico">Pronóstico</label>
+                  <button class="clean-btn" onclick="cleanText('pronostico')">Limpiar texto ✨</button>
+                </div>
+                <div class="text-area-wrapper">
+                  <textarea id="pronostico" class="clinical-ta" maxlength="4000" rows="3"
+                    placeholder="Pronóstico del paciente…"></textarea>
+                  <div class="char-counter" id="cnt-pronostico">0 / 4000</div>
+                </div>
+                <div class="snippet-bar" id="snip-pronostico-evo"></div>
+                <div class="snippet-add-row">
+                  <input id="newSnip-pronostico-evo" class="param-input" type="text" placeholder="+ Nuevo snippet…"
+                    maxlength="200" style="flex:1;font-size:11px;padding:4px 8px;" />
+                  <button class="btn btn-sec btn-sm" onclick="addCustomSnippet('pronostico')">+ Agregar</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end tabEvolucion -->
+
+      <!-- ╍╍ HISTORIA CLÍNICA TAB ╍╍ -->
+      <div class="tab-pane" id="tabHistoriaClinica">
+
+        <!-- Sex Selector -->
+        <div class="card"
+          style="padding: 12px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+          <div style="font-weight: 600; font-size: 13px; color: var(--fg);">Sexo del paciente</div>
+          <div class="radio-group" style="display: flex; gap: 16px; font-size: 13px;">
+            <label style="cursor: pointer; display: flex; align-items: center; gap: 6px;">
+              <input type="radio" name="hc_sexo" value="M" checked id="sexo_m" onchange="updateSexPresets()"> Masculino
+            </label>
+            <label style="cursor: pointer; display: flex; align-items: center; gap: 6px;">
+              <input type="radio" name="hc_sexo" value="F" id="sexo_f" onchange="updateSexPresets()"> Femenino
+            </label>
+          </div>
+        </div>
+
+        <!-- 1. Heredo Familiares -->
+        <div class="card" id="cardHeredo">
+          <div class="card-hdr" onclick="toggleCard('cardHeredo')">
+            <div class="card-title-row">
+              <div class="card-ico">📋</div>
+              <div>
+                <div class="card-title">Antecedentes Heredo Familiares</div>
+                <div class="card-sub">2 campos</div>
+              </div>
+            </div>
+            <span class="card-chev">▾</span>
+          </div>
+          <div class="card-body" style="padding:17px">
+            <div class="text-field-grid">
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="hf_neoplasias">Neoplasias</label></div>
+                <div class="text-area-wrapper">
+                  <textarea id="hf_neoplasias" class="clinical-ta" maxlength="2500" rows="3"
+                    placeholder="NO REFIERE EL ANTECEDENTE DE ALGUNA NEOPLASIA DE IMPORTANCIA"></textarea>
+                  <div class="char-counter" id="cnt-hf_neoplasias">0 / 2500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="hf_otras">Otras</label></div>
+                <div class="text-area-wrapper">
+                  <textarea id="hf_otras" class="clinical-ta" maxlength="2500" rows="3" placeholder="..."></textarea>
+                  <div class="char-counter" id="cnt-hf_otras">0 / 2500</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Personales No Patológicos -->
+        <div class="card" id="cardNoPat">
+          <div class="card-hdr" onclick="toggleCard('cardNoPat')">
+            <div class="card-title-row">
+              <div class="card-ico">📋</div>
+              <div>
+                <div class="card-title">Personales No Patológicos</div>
+                <div class="card-sub">8 campos</div>
+              </div>
+            </div>
+            <span class="card-chev">▾</span>
+          </div>
+          <div class="card-body" style="padding:17px">
+            <div class="text-field-grid">
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="np_casa">Casa Habitación</label></div>
+                <div class="text-area-wrapper"><textarea id="np_casa" class="clinical-ta" maxlength="2500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-np_casa">0 / 2500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="np_alimentacion">Alimentación</label></div>
+                <div class="text-area-wrapper"><textarea id="np_alimentacion" class="clinical-ta" maxlength="2500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-np_alimentacion">0 / 2500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="np_deporte">Deporte</label></div>
+                <div class="text-area-wrapper"><textarea id="np_deporte" class="clinical-ta" maxlength="2500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-np_deporte">0 / 2500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="np_animales">Exposición a Animales</label>
+                </div>
+                <div class="text-area-wrapper"><textarea id="np_animales" class="clinical-ta" maxlength="2500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-np_animales">0 / 2500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="np_religion">Religión</label></div>
+                <div class="text-area-wrapper"><textarea id="np_religion" class="clinical-ta" maxlength="2500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-np_religion">0 / 2500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="np_trabajo">Trabajo / Estrés</label></div>
+                <div class="text-area-wrapper"><textarea id="np_trabajo" class="clinical-ta" maxlength="2500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-np_trabajo">0 / 2500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr">
+                  <label class="field-key" for="np_alcoholismo">Alcoholismo</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_alc" value="niega"
+                        onchange="setDualOption('np_alcoholismo', 'NIEGA EL CONSUMO DE BEBIDAS ALCOHÓLICAS')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_alc" value="social"
+                        onchange="setDualOption('np_alcoholismo', 'REFIERE EL CONSUMO DE BEBIDAS ALCOHÓLICAS DE MANERA SOCIAL')">
+                      Social</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_alc" value="recurrente"
+                        onchange="setDualOption('np_alcoholismo', 'REFIERE EL CONSUMO RECURRENTE DE ALCOHOL A RAZÓN DE * COPAS/CERVEZAS CADA')">
+                      Frecuente</label>
+                  </div>
+                </div>
+                <div class="text-area-wrapper"><textarea id="np_alcoholismo" class="clinical-ta" maxlength="2500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-np_alcoholismo">0 / 2500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="np_farmacodep">Farmacodependencia</label>
+                </div>
+                <div class="text-area-wrapper"><textarea id="np_farmacodep" class="clinical-ta" maxlength="2500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-np_farmacodep">0 / 2500</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Personales Patológicos -->
+        <div class="card" id="cardPat">
+          <div class="card-hdr" onclick="toggleCard('cardPat')">
+            <div class="card-title-row">
+              <div class="card-ico">📋</div>
+              <div>
+                <div class="card-title">Personales Patológicos</div>
+                <div class="card-sub">8 campos</div>
+              </div>
+            </div>
+            <span class="card-chev">▾</span>
+          </div>
+          <div class="card-body" style="padding:17px">
+            <div class="text-field-grid">
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="pat_alergias">Alérgicas</label></div>
+                <div class="text-area-wrapper"><textarea id="pat_alergias" class="clinical-ta" maxlength="1000"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-pat_alergias">0 / 1000</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="pat_cronicos">Crónico Degenerativas</label>
+                </div>
+                <div class="text-area-wrapper"><textarea id="pat_cronicos" class="clinical-ta" maxlength="1000"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-pat_cronicos">0 / 1000</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="pat_infancia">Enf. de Infancia</label></div>
+                <div class="text-area-wrapper"><textarea id="pat_infancia" class="clinical-ta" maxlength="1000"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-pat_infancia">0 / 1000</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="pat_neoplasias">Neoplasias</label></div>
+                <div class="text-area-wrapper"><textarea id="pat_neoplasias" class="clinical-ta" maxlength="1000"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-pat_neoplasias">0 / 1000</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="pat_otras">Otras</label></div>
+                <div class="text-area-wrapper"><textarea id="pat_otras" class="clinical-ta" maxlength="1000"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-pat_otras">0 / 1000</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="pat_quirurgicos">Quirúrgicos</label></div>
+                <div class="text-area-wrapper"><textarea id="pat_quirurgicos" class="clinical-ta" maxlength="1000"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-pat_quirurgicos">0 / 1000</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="pat_transfusiones">Transfusionales</label>
+                </div>
+                <div class="text-area-wrapper"><textarea id="pat_transfusiones" class="clinical-ta" maxlength="1000"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-pat_transfusiones">0 / 1000</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="pat_traumaticos">Traumáticos</label></div>
+                <div class="text-area-wrapper"><textarea id="pat_traumaticos" class="clinical-ta" maxlength="1000"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-pat_traumaticos">0 / 1000</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Aparatos y Sistemas -->
+        <div class="card" id="cardAparatos">
+          <div class="card-hdr" onclick="toggleCard('cardAparatos')">
+            <div class="card-title-row">
+              <div class="card-ico">📋</div>
+              <div>
+                <div class="card-title">Interrogatorio por Aparatos y Sistemas</div>
+                <div class="card-sub">14 campos</div>
+              </div>
+            </div>
+            <span class="card-chev">▾</span>
+          </div>
+          <div class="card-body" style="padding:17px">
+            <div class="text-field-grid">
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ap_cardiovascular">Cardiovascular</label>
+                </div>
+                <div class="text-area-wrapper"><textarea id="ap_cardiovascular" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ap_cardiovascular">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ap_dermatologico">Dermatológico</label></div>
+                <div class="text-area-wrapper"><textarea id="ap_dermatologico" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ap_dermatologico">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ap_digestivo">Digestivo</label></div>
+                <div class="text-area-wrapper"><textarea id="ap_digestivo" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ap_digestivo">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ap_endocrino">Endocrino</label></div>
+                <div class="text-area-wrapper"><textarea id="ap_endocrino" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ap_endocrino">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ap_hematologico">Hematológico</label></div>
+                <div class="text-area-wrapper"><textarea id="ap_hematologico" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ap_hematologico">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ap_linfatico">Linfático</label></div>
+                <div class="text-area-wrapper"><textarea id="ap_linfatico" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ap_linfatico">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ap_muscular">Muscular</label></div>
+                <div class="text-area-wrapper"><textarea id="ap_muscular" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ap_muscular">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ap_nervioso">Nervioso</label></div>
+                <div class="text-area-wrapper"><textarea id="ap_nervioso" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ap_nervioso">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ap_oseo">Óseo</label></div>
+                <div class="text-area-wrapper"><textarea id="ap_oseo" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ap_oseo">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ap_psiquiatrico">Psiquiátrico</label></div>
+                <div class="text-area-wrapper"><textarea id="ap_psiquiatrico" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ap_psiquiatrico">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ap_reproductor">Reproductor</label></div>
+                <div class="text-area-wrapper"><textarea id="ap_reproductor" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ap_reproductor">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ap_respiratorio">Respiratorio</label></div>
+                <div class="text-area-wrapper"><textarea id="ap_respiratorio" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ap_respiratorio">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ap_sentidos">Sentidos</label></div>
+                <div class="text-area-wrapper"><textarea id="ap_sentidos" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ap_sentidos">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ap_urinario">Urinario / Excretor</label></div>
+                <div class="text-area-wrapper"><textarea id="ap_urinario" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ap_urinario">0 / 500</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Exploración Física -->
+        <div class="card" id="cardExploracion">
+          <div class="card-hdr" onclick="toggleCard('cardExploracion')">
+            <div class="card-title-row">
+              <div class="card-ico">📋</div>
+              <div>
+                <div class="card-title">Exploración Física</div>
+                <div class="card-sub">4 campos</div>
+              </div>
+            </div>
+            <span class="card-chev">▾</span>
+          </div>
+          <div class="card-body" style="padding:17px">
+            <div class="text-field-grid">
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ef_inspeccion">Inspección General</label>
+                </div>
+                <div class="text-area-wrapper"><textarea id="ef_inspeccion" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ef_inspeccion">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ef_piel">Piel y Faneras</label></div>
+                <div class="text-area-wrapper"><textarea id="ef_piel" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ef_piel">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ef_linfatico">Sistema Linfático</label></div>
+                <div class="text-area-wrapper"><textarea id="ef_linfatico" class="clinical-ta" maxlength="500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-ef_linfatico">0 / 500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="ef_general">Exploración Física General</label>
+                </div>
+                <div class="text-area-wrapper"><textarea id="ef_general" class="clinical-ta" maxlength="2000"
+                    rows="5"></textarea>
+                  <div class="char-counter" id="cnt-ef_general">0 / 2000</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Padecimiento Actual -->
+        <div class="card" id="cardPadecimientoHC">
+          <div class="card-hdr" onclick="toggleCard('cardPadecimientoHC')">
+            <div class="card-title-row">
+              <div class="card-ico">📋</div>
+              <div>
+                <div class="card-title">Padecimiento Actual</div>
+                <div class="card-sub">Texto libre</div>
+              </div>
+            </div>
+            <span class="card-chev">▾</span>
+          </div>
+          <div class="card-body" style="padding:17px">
+            <div class="text-field-grid">
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="hc_padecimientoActual">Padecimiento
+                    actual</label></div>
+                <div class="text-area-wrapper"><textarea id="hc_padecimientoActual" class="clinical-ta" maxlength="2500"
+                    rows="5" placeholder="Redactar libremente..."></textarea>
+                  <div class="char-counter" id="cnt-hc_padecimientoActual">0 / 2500</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. Resultados y Diagnóstico -->
+        <div class="card" id="cardResDiag">
+          <div class="card-hdr" onclick="toggleCard('cardResDiag')">
+            <div class="card-title-row">
+              <div class="card-ico">📋</div>
+              <div>
+                <div class="card-title">Resultados y Diagnóstico</div>
+                <div class="card-sub">4 campos</div>
+              </div>
+            </div>
+            <span class="card-chev">▾</span>
+          </div>
+          <div class="card-body" style="padding:17px">
+            <div class="text-field-grid">
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="hc_resultados">Resultados Previos</label>
+                </div>
+                <div class="text-area-wrapper"><textarea id="hc_resultados" class="clinical-ta" maxlength="2500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-hc_resultados">0 / 2500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="hc_impresionDiagnostica">Impresión
+                    Diagnóstica</label></div>
+                <div class="text-area-wrapper"><textarea id="hc_impresionDiagnostica" class="clinical-ta"
+                    maxlength="4000" rows="3"></textarea>
+                  <div class="char-counter" id="cnt-hc_impresionDiagnostica">0 / 4000</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="hc_terapeutica">Plan de Tratamiento</label>
+                </div>
+                <div class="text-area-wrapper"><textarea id="hc_terapeutica" class="clinical-ta" maxlength="600"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-hc_terapeutica">0 / 600</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr"><label class="field-key" for="hc_pronostico">Pronóstico</label></div>
+                <div class="text-area-wrapper"><textarea id="hc_pronostico" class="clinical-ta" maxlength="4000"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-hc_pronostico">0 / 4000</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <script>
+    function setDualOption(id, text) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.value = text;
+        el.dispatchEvent(new Event('input'));
+      }
+    }
+  </script>
+  </main>
+  </div><!-- end shell -->
+
+
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <script>
+    // ─── FIELD DEFINITIONS ───────────────────────────────────────────────────────
+    const FIELDS = [
+      { key: 'temperatura', label: 'Temperatura', unit: '°C', max: 5, hint: 'Rango: 35–42 °C', validate: v => { const n = parseFloat(v); return isNaN(n) || v === '' ? 'ok' : (n < 35 || n > 42 ? 'Fuera de rango (35–42)' : 'ok'); } },
+      { key: 'frecresp', label: 'Frecuencia respiratoria', unit: '/min', max: 3, hint: 'Rango: 10–40 /min', validate: v => { const n = parseInt(v); return isNaN(n) || v === '' ? 'ok' : (n < 10 || n > 40 ? 'Fuera de rango (10–40)' : 'ok'); } },
+      { key: 'freccard', label: 'Frecuencia cardiaca', unit: '/min', max: 3, hint: 'Rango: 30–300 /min', validate: v => { const n = parseInt(v); return isNaN(n) || v === '' ? 'ok' : (n < 30 || n > 300 ? 'Fuera de rango (30–300)' : 'ok'); } },
+      { key: 'glucometria', label: 'Glucometría', unit: 'mg/dl', max: 5, hint: 'Rango: 50–600 mg/dl', validate: v => { const n = parseInt(v); return isNaN(n) || v === '' ? 'ok' : (n < 50 || n > 600 ? 'Fuera de rango (50–600)' : 'ok'); } },
+      { key: 'tensart', label: 'Tensión arterial', unit: '—', max: 7, hint: 'Formato: 120/80 (máx 7 ch)', validate: v => v === '' || /^\d{2,3}\/\d{2,3}$/.test(v) ? 'ok' : 'Formato: 120/80' },
+      { key: 'saturacion', label: 'Saturación de oxígeno', unit: '%', max: 3, hint: 'Rango: 0–100 %', validate: v => { const n = parseInt(v); return isNaN(n) || v === '' ? 'ok' : (n < 0 || n > 100 ? 'Fuera de rango (0–100)' : 'ok'); } },
+      { key: 'peso', label: 'Peso', unit: 'Kg', max: 6, hint: 'Rango: 1–300 Kg', validate: v => { const n = parseFloat(v); return isNaN(n) || v === '' ? 'ok' : (n < 1 || n > 300 ? 'Fuera de rango (1–300)' : 'ok'); } },
+      { key: 'talla', label: 'Talla', unit: 'm', max: 5, hint: 'Rango: 0.5–2.5 m', validate: v => { const n = parseFloat(v); return isNaN(n) || v === '' ? 'ok' : (n < 0.5 || n > 2.5 ? 'Fuera de rango (0.5–2.5)' : 'ok'); } },
+      // Read-only — auto-calculated by Azura
+      { key: 'imc', label: 'Índ. de masa corporal', unit: 'Kg/m²', readonly: true, hint: '🔒 Calculado automáticamente' },
+      { key: 'superficie', label: 'Superficie corporal', unit: 'm²', readonly: true, hint: '🔒 Calculado automáticamente' },
+    ];
+
+    // Antecedentes template constant
+    const ANTE_TEMPLATE = `ANTECEDENTES PERSONALES PATOLÓGICOS
+Enf crónico degenerativas: niega antecedentes de enfermedades crónico degenerativas
+Alergias: niega antecedentes de alergias a medicamentos y alimentos
+Traumatismos: niega antecedentes de fracturas
+Quirúrgicos: niega antecedentes de cirugías
+Transfusiones: niega antecedentes transfusionales
+Alcohol: niega consumo de alcohol / refiere alcoholismo social
+Tabaco: niega consumo de tabaco / refiere consumir ___ cigarros diariamente con un índice tabáquico de ___
+Toxicomanías: niega el consumo de otras sustancias
+
+GINECO-OBSTÉTRICOS
+G:0 P:0 A:0 C:0
+Menarca: 12 años
+FUM:`;
+
+    // Clinical Text Fields (Parts 4–6 — Ingreso page)
+    const TEXT_FIELDS = ['motivoIngreso', 'antecedentes', 'resultados', 'tratamiento', 'pronostico'];
+    // Clinical Text Fields — Nota de Evolución page
+    const EVO_FIELDS = ['padecimientoActual', 'objetivo', 'analisisEvolucion', 'planEstudio', 'resultadoLabImg', 'pronostico'];
+    // Clinical Text Fields - Historia Clinica
+    const HC_FIELDS = [
+      "hf_neoplasias", "hf_otras", "np_casa", "np_alimentacion", "np_deporte",
+      "np_animales", "np_religion", "np_trabajo", "np_alcoholismo", "np_farmacodep",
+      "pat_alergias", "pat_cronicos", "pat_infancia", "pat_neoplasias", "pat_otras",
+      "pat_quirurgicos", "pat_transfusiones", "pat_traumaticos", "ap_cardiovascular",
+      "ap_dermatologico", "ap_digestivo", "ap_endocrino", "ap_hematologico",
+      "ap_linfatico", "ap_muscular", "ap_nervioso", "ap_oseo", "ap_psiquiatrico",
+      "ap_reproductor", "ap_respiratorio", "ap_sentidos", "ap_urinario",
+      "ef_inspeccion", "ef_piel", "ef_linfatico", "ef_general", "hc_padecimientoActual",
+      "hc_resultados", "hc_impresionDiagnostica", "hc_terapeutica", "hc_pronostico"
+    ];
+
+    // ─── HC PRESET TEXT (from Preset.pdf) ────────────────────────────────────────
+    const HC_PRESETS = {
+      // Heredo Familiares
+      hf_neoplasias: 'NO REFIERE EL ANTECEDENTE DE ALGUNA NEOPLASIA DE IMPORTANCIA',
+      hf_otras: '',
+      // Personales No Patológicos
+      np_casa: 'REFIERE HABITAR EN CASA PROPIA EN MEDIO URBANO, EN LA QUE CONVIVE CON * PERSONAS Y CUENTA CON TODOS LOS SERVICIOS BÁSICOS DE URBANIZACIÓN PARA LA BUENA VIVIENDA CON UNA ADECUADA ILUMINACIÓN Y VENTILACIÓN',
+      np_alimentacion: 'REFIERE UNA DIETA BUENA EN CALIDAD Y CANTIDAD RESPECTO EL PLATO DEL BUEN COMER DE FRUTAS Y VERDURAS 5/7, CARNES ROJAS 2/7, CARNES BLANCAS COMO POLLO Y PESCADO 4/7. CONSUMO HÍDRICO DE AGUA NATURAL DIARIA DE 1 LITRO Y MEDIO DIARIAMENTE',
+      np_deporte: 'NO REQUIERE REALIZAR ACTIVIDAD FÍSICA DE MANERA RECURRENTE, POR LO QUE SE CONSIDERA PERSONA SEDENTARIA',
+      np_animales: 'NIEGA LA CONVIVENCIA RECURRENTE CON ANIMALES Y/O MASCOTAS',
+      np_religion: 'NO REFIERE PRACTICAR ALGUNA RELIGIÓN O SER CREYENTE DE UN GRUPO',
+      np_trabajo: 'REFIERE MANEJAR NIVELES MODERADOS DE ESTRÉS A RAZÓN DE',
+      np_alcoholismo: 'NIEGA EL CONSUMO DE BEBIDAS ALCOHÓLICAS',
+      np_farmacodep: 'NIEGA EL CONSUMO DE OTRAS SUSTANCIAS',
+      // Personales Patológicos
+      pat_alergias: 'NO REFIERE SER ALÉRGICA A MEDICAMENTOS, ALIMENTOS O ALGÚN OTRO FACTOR DEL ENTORNO',
+      pat_cronicos: 'NO REFIERE PADECER NINGUNA ENFERMEDAD CRÓNICO DEGENERATIVA',
+      pat_infancia: 'REFIERE NO RECORDAR ALGUNA ENFERMEDAD PATOLÓGICA DE LA INFANCIA',
+      pat_neoplasias: 'REFIERE NO TENER ANTECEDENTES DE NEOPLASIAS',
+      pat_otras: 'NIEGA ALGUNA OTRA PATOLOGÍA DE IMPORTANCIA QUE PUEDA INTERFERIR EN EL PADECIMIENTO ACTUAL',
+      pat_quirurgicos: 'REFIERE NO HABER SIDO SOMETIDO A NINGÚN PROCEDIMIENTO QUIRÚRGICO DE IMPORTANCIA PREVIO',
+      pat_transfusiones: 'REFIERE NO HABER RECIBIDO NINGÚN PAQUETE DE NINGÚN TIPO PREVIAMENTE',
+      pat_traumaticos: 'NO REFIERE HABER SUFRIDO ALGÚN EVENTO TRAUMÁTICO QUE RESULTARÁ EN ALGUNA FRACTURA DE TEJIDO ÓSEO',
+      // Aparatos y Sistemas
+      ap_cardiovascular: 'NIEGA PALPITACIONES, DOLOR PRECORDIAL, DISNEA DE ESFUERZO O PAROXÍSTICA, APNEA, CIANOSIS, TINNITUS, SÍNCOPE Y EDEMA',
+      ap_dermatologico: 'NIEGA CAMBIOS EN LA COLORACIÓN, PIGMENTACIÓN, PRURITO, CARACTERÍSTICAS DEL PELO, UÑAS, LESIONES, HIPERHIDROSIS Y XERODERMIA',
+      ap_digestivo: 'NIEGA ALTERACIONES EN EL HAMBRE, APETITO, MASTICACIÓN, DISFAGIA, HALITOSIS, NÁUSEA, VÓMITO, REGURGITACIÓN, DISTENSIÓN ABDOMINAL, HEMATEMESIS, ICTERICIA, AUMENTO O PÉRDIDA DE PESO Y MODIFICACIONES DEL HAMBRE',
+      ap_endocrino: 'NIEGA FIEBRE, INTOLERANCIA AL FRÍO O AL CALOR, DIAFORESIS, AUMENTO DEL VOLUMEN DEL CUELLO, POLIDIPSIA, POLIFAGIA, POLIURIA, CAMBIOS EN LOS CARACTERES SEXUALES SECUNDARIOS, Y AUMENTO O PÉRDIDA DE PESO',
+      ap_hematologico: 'NIEGA FIEBRE, INTOLERANCIA AL FRÍO O AL CALOR, DIAFORESIS, AUMENTO DEL VOLUMEN DEL CUELLO, POLIDIPSIA, POLIFAGIA, POLIURIA, CAMBIOS EN LOS CARACTERES SEXUALES SECUNDARIOS, Y AUMENTO O PÉRDIDA DE PESO',
+      ap_linfatico: 'SIN PRESENCIA DE FIEBRE, NI ADENOMEGALIAS O MASAS PALPABLES EN REGIÓN RETROAURICULAR, CUELLO, CLAVICULAR, AXILAR, INGUINAL, RETRO POPLÍTEA',
+      ap_muscular: 'NIEGA MIALGIAS, ARTRALGIAS, ALTERACIONES EN LA MARCHA, HIPOTONÍA, LIMITACIÓN DE MOVIMIENTO Y DEFORMIDADES. ASTENIA, ADINAMIA, PARESIAS',
+      ap_nervioso: 'NIEGA MIALGIAS, ARTRALGIAS, ALTERACIONES EN LA MARCHA, HIPOTONÍA, LIMITACIÓN DE MOVIMIENTO Y DEFORMIDADES. ASTENIA, ADINAMIA, PARESIAS',
+      ap_oseo: 'NIEGA LIMITACIONES EN LOS ARCOS DE MOVILIDAD, OSTEOPOROSIS, DOLOR ÓSEO, OSTEOARTROSIS, ARTRALGIAS, EXPOSICIÓN ÓSEA, EDEMA O ERITEMA, LIMITACIÓN A LA MARCHA',
+      ap_psiquiatrico: 'NIEGA TRISTEZA, EUFORIA, ALTERACIONES DEL SUEÑO, TERRORES NOCTURNOS, IDEACIONES, MIEDO EXAGERADO A SITUACIONES COMUNES, IRRITABILIDAD, APATÍA',
+      ap_respiratorio: 'NIEGA RINORREA, RINOLALIA, EPISTAXIS, TOS, EXPECTORACIÓN, HEMOPTISIS, CIANOSIS, DOLOR TORÁCICO, DISNEA Y SIBILANCIAS AUDIBLES O A DISTANCIA',
+      ap_sentidos: 'NIEGA ALTERACIONES DE LA VISIÓN, DE LA AUDICIÓN, DEL OLFATO, DEL GUSTO Y DEL TACTO',
+      ap_urinario: 'NIEGA DOLOR RENOURETERAL, DISURIA, ANURIA, OLIGURIA, POLIURIA, POLAQUIURIA, HEMATURIA, PIURIA, COLURIA, INCONTINENCIA. NIEGA CAMBIOS EN LAS CARACTERÍSTICAS DE LAS HECES FECALES, DIARREA, CONSTIPACIÓN, MELENA, RECTORRAGIA, ESTEATORREA, TENESMO Y PRURITO ANAL',
+      // Exploración Física — sex-dependent fields use _M and _F suffixes
+      ef_piel: 'ADECUADA IMPLANTACIÓN DEL PABELLÓN AURICULAR ACORDE A SU EDAD Y GÉNERO, MUCOSA ORAL HIDRATADA CON ADECUADA COLORACIÓN DE PIEL Y TEGUMENTOS',
+      ef_linfatico: 'SIN PRESENCIA DE FIEBRE, NI ADENOMEGALIAS O MASAS PALPABLES EN REGIÓN RETROAURICULAR, CUELLO, CLAVICULAR, AXILAR, INGUINAL, RETRO POPLÍTEA',
+      ef_general: 'CRÁNEO NORMOCÉFALO SIN PRESENCIA DE ENDO NI EXOSTOSIS, PUPILAS ISOCÓRICAS NORMOREFLEXICAS, NARINAS PERMEABLES, MUCOSA ORAL HIDRATADA. CUELLO CILÍNDRICO SIN PRESENCIA DE ADENOMEGALIAS O MASAS PALPABLES SIN DATOS DE INGURGITACIÓN YUGULAR. TÓRAX NORMOLÍNEO, SIMÉTRICO, MURMULLO VESICULAR PRESENTE, CON ADECUADOS MOVIMIENTOS DE AMPLEXIÓN Y AMPLEXACIÓN, RUIDOS CARDIACOS RÍTMICOS DE BUEN TONO E INTENSIDAD SIN AGREGADOS. ABDOMEN GLOBOSO A EXPENSAS DE PANÍCULO ADIPOSO, PERISTALSIS NORMOACTIVA, BLANDO DEPRESIBLE NO DOLOROSO A LA PALPACIÓN SUPERFICIAL, MEDIA Y PROFUNDA, SIN DATOS DE IRRITACIÓN PERITONEAL. EXTREMIDADES ÍNTEGRAS Y SIMÉTRICAS SIN LIMITACIÓN EN LOS ARCOS DE MOVIMIENTO. PULSOS PERIFÉRICOS PRESENTES. LLENADO CAPILAR DE 2 SEGUNDOS',
+    };
+
+    // Sex-dependent presets
+    const HC_SEX_PRESETS = {
+      ef_inspeccion: {
+        M: 'PACIENTE MASCULINO DE EDAD APARENTE A LA CRONOLÓGICA CON UN ADECUADO ESTADO DE ALERTA Y ORIENTACIÓN EN SUS TRES ESFERAS NEUROLÓGICAS, BUEN ESTADO NUTRICIONAL, CON BUENAS FASCIAS Y LENGUAJE. COOPERADOR AL INTERROGATORIO Y EXPLORACIÓN FÍSICA',
+        F: 'PACIENTE FEMENINO DE EDAD APARENTE A LA CRONOLÓGICA CON UN ADECUADO ESTADO DE ALERTA Y ORIENTACIÓN EN SUS TRES ESFERAS NEUROLÓGICAS, BUEN ESTADO NUTRICIONAL, CON BUENAS FASCIAS Y LENGUAJE. COOPERADOR AL INTERROGATORIO Y EXPLORACIÓN FÍSICA',
+      },
+      ap_reproductor: {
+        M: 'NIEGA ALTERACIONES DE LA LÍVIDO, PRIAPISMO, FIMOSIS, ALTERACIONES DE LA ERECCIÓN Y DE LA EYACULACIÓN, SECRECIÓN URETRAL, DOLOR TESTICULAR, ALTERACIONES ESCROTALES, SENSACIÓN DE CUERPO EXTRAÑO EN EL PERINÉ Y ENFERMEDADES DE TRANSMISIÓN SEXUAL',
+        F: 'NIEGA LEUCORREA, HEMORRAGIAS TRANSVAGINALES, ALTERACIONES MENSTRUALES, ALTERACIONES DE LA LÍVIDO, ALTERACIONES DEL SANGRADO SEXUAL, DISPAREUNIA',
+      },
+    };
+
+    // Fill empty HC textareas with preset defaults
+    function loadHCPresets() {
+      const sexo = document.querySelector('input[name="hc_sexo"]:checked')?.value || 'M';
+      for (const id of HC_FIELDS) {
+        const el = $(id);
+        if (!el || el.value.trim() !== '') continue; // skip if already has content
+        // Sex-dependent fields
+        if (HC_SEX_PRESETS[id]) {
+          el.value = HC_SEX_PRESETS[id][sexo] || '';
+        } else if (HC_PRESETS[id]) {
+          el.value = HC_PRESETS[id];
+        }
+        updateCounter(id);
+      }
+    }
+
+    let activeTab = 'ingreso'; // tracks current tab
+
+    const SNIPPETS = {
+      resultados: ['Rx tórax normal', 'Laboratorios pendientes', 'Sin hallazgos agudos', 'Electrocardiograma normal'],
+      tratamiento: ['Reposo relativo', 'Hidratación oral', 'Dieta hiposódica', 'Paracetamol 500mg c/8h', 'Control en 1 semana'],
+      pronostico: ['Favorable para la vida', 'Reservado a evolución', 'Bueno para la función', 'En vigilancia'],
+    };
+
+    const LS_DRAFT = 'azura_draft';
+    const LS_SESSIONS = 'azura_sessions';
+
+    // ─── HELPERS ─────────────────────────────────────────────────────────────────
+    const $ = id => document.getElementById(id);
+    const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    function toast(msg, type = 'ok') {
+      const t = document.createElement('div');
+      t.className = `toast ${type}`;
+      t.textContent = msg;
+      $('toastWrap').appendChild(t);
+      setTimeout(() => t.remove(), 3200);
+    }
+
+    // ─── BUILD FIELDS ────────────────────────────────────────────────────────────
+    function buildFields() {
+      const grid = $('fieldsGrid');
+      grid.innerHTML = '';
+      for (const f of FIELDS) {
+        const id = 'fi_' + f.key;
+        const row = document.createElement('div');
+        row.className = 'field-row';
+
+        const inputHtml = f.readonly
+          ? `<input class="param-input" id="${id}" data-key="${f.key}" type="text" readonly placeholder="— calculado —" />`
+          : `<input class="param-input" id="${id}" data-key="${f.key}" type="text" maxlength="${f.max}" placeholder="${f.key === 'tensart' ? '000/000' : ''}"/>`;
+
+        row.innerHTML = `
+      <div class="field-label-col">
+        <div class="field-key-row">
+          <span class="field-key">${esc(f.label)}</span>
+          <span class="field-unit">${f.readonly ? '🔒 ' : ''}${esc(f.unit)}</span>
+        </div>
+        <span class="field-hint">${esc(f.hint)}</span>
+      </div>
+      <div class="field-input-col">
+        ${inputHtml}
+        ${f.readonly ? '' : `<div class="validation-msg" id="vm_${f.key}"></div>`}
+      </div>
+    `;
+        grid.appendChild(row);
+
+        if (!f.readonly) {
+          const el = $(`fi_${f.key}`);
+          el.addEventListener('input', () => {
+            validate(f, el);
+            scheduleAutosave();
+          });
+        }
+      }
+    }
+
+    function validate(f, el) {
+      if (!f.validate) return;
+      const result = f.validate(el.value.trim());
+      const vm = $(`vm_${f.key}`);
+      if (!vm) return;
+      if (result === 'ok') {
+        el.className = 'param-input' + (el.value.trim() ? ' valid' : '');
+        vm.textContent = '';
+        vm.className = 'validation-msg';
+      } else {
+        el.className = 'param-input invalid';
+        vm.textContent = '⚠ ' + result;
+        vm.className = 'validation-msg show';
+      }
+    }
+
+    // ─── VALUES ──────────────────────────────────────────────────────────────────
+    function getValues() {
+      const out = {};
+      // Numeric fields
+      document.querySelectorAll('.param-input:not([readonly])').forEach(el => {
+        out[el.dataset.key] = el.value;
+      });
+      // Ingreso text fields
+      for (const id of TEXT_FIELDS) {
+        const el = $(id);
+        if (el) out[id] = el.value;
+      }
+      // Evolución text fields
+      for (const id of EVO_FIELDS) {
+        const el = $(id);
+        if (el) out[id] = el.value;
+      }
+      // HC text fields
+      for (const id of HC_FIELDS) {
+        const el = $(id);
+        if (el) out[id] = el.value;
+      }
+      out.hc_sexo = document.querySelector('input[name="hc_sexo"]:checked')?.value || 'M';
+
+      out._tab = activeTab;
+      return out;
+    }
+
+    function setValues(vals) {
+      // Numeric
+      for (const f of FIELDS) {
+        if (f.readonly) continue;
+        const el = $('fi_' + f.key);
+        if (el && vals[f.key] !== undefined) { el.value = vals[f.key]; validate(f, el); }
+      }
+      // All text fields (ingreso + evo + hc)
+      const allText = [...new Set([...TEXT_FIELDS, ...EVO_FIELDS, ...HC_FIELDS])];
+      for (const id of allText) {
+        const el = $(id);
+        if (el && vals[id] !== undefined) { el.value = vals[id]; updateCounter(id); }
+      }
+      if (vals.hc_sexo) {
+        const sexEl = document.getElementById(vals.hc_sexo === 'F' ? 'sexo_f' : 'sexo_m');
+        if (sexEl) sexEl.checked = true;
+      }
+
+      // Switch to correct tab if _tab saved
+      if (vals._tab && vals._tab !== activeTab) switchTab(vals._tab);
+    }
+
+    function clearValues() {
+      document.querySelectorAll('.param-input:not([readonly])').forEach(el => { el.value = ''; el.className = 'param-input'; });
+      document.querySelectorAll('.validation-msg').forEach(el => { el.textContent = ''; el.className = 'validation-msg'; });
+      const allText = [...new Set([...TEXT_FIELDS, ...EVO_FIELDS, ...HC_FIELDS])];
+      for (const id of allText) {
+        const el = $(id);
+        if (el) {
+          el.value = (id === 'antecedentes') ? ANTE_TEMPLATE : '';
+          updateCounter(id);
+        }
+      }
+      clearMotivoChipSelection();
+      scheduleAutosave();
+    }
+
+    // ─── TAB SWITCHER ───────────────────────────────────────────────────────────────
+    function switchTab(tab) {
+      activeTab = tab;
+
+      const isIngreso = tab === 'ingreso';
+      const isEvo = tab === 'evolucion';
+      const isHC = tab === 'historia';
+
+      // Map tab keys to DOM elements
+      $('tabIngreso')?.classList.toggle('active', isIngreso);
+      $('tabEvolucion')?.classList.toggle('active', isEvo);
+      $('tabHistoriaClinica')?.classList.toggle('active', isHC);
+
+      $('tabBtnIngreso')?.classList.toggle('active', isIngreso);
+      $('tabBtnEvolucion')?.classList.toggle('active', isEvo);
+      $('tabBtnHistoria')?.classList.toggle('active', isHC);
+
+      // Auto-fill HC presets when switching to Historia tab
+      if (isHC) loadHCPresets();
+
+      scheduleAutosave();
+    }
+
+    // ─── AUTOSAVE ────────────────────────────────────────────────────────────────
+    let asTimer;
+    function scheduleAutosave() {
+      clearTimeout(asTimer);
+      asTimer = setTimeout(() => {
+        localStorage.setItem(LS_DRAFT, JSON.stringify(getValues()));
+        const ind = $('asInd');
+        ind.classList.add('show');
+        setTimeout(() => ind.classList.remove('show'), 1800);
+      }, 1000);
+    }
+
+    function loadDraft() {
+      try {
+        const r = localStorage.getItem(LS_DRAFT);
+        if (r) {
+          const vals = JSON.parse(r);
+          setValues(vals);
+          // If antecedentes was saved blank, still load template
+          if (!vals.antecedentes || !vals.antecedentes.trim()) {
+            const el = $('antecedentes');
+            if (el && !el.value.trim()) { el.value = ANTE_TEMPLATE; updateCounter('antecedentes'); }
+          }
+        } else {
+          // Fresh session — pre-load antecedentes template
+          const el = $('antecedentes');
+          if (el) { el.value = ANTE_TEMPLATE; updateCounter('antecedentes'); }
+        }
+      } catch (_) { }
+    }
+
+    // ─── SESSIONS ────────────────────────────────────────────────────────────────
+    function getSessions() { try { return JSON.parse(localStorage.getItem(LS_SESSIONS)) || []; } catch (_) { return []; } }
+    function saveSessions(s) { localStorage.setItem(LS_SESSIONS, JSON.stringify(s)); }
+
+    function saveSession() {
+      const vals = getValues();
+      if (!Object.values(vals).some(v => v.trim())) { toast('Sin valores para guardar.', 'warn'); return; }
+
+      const now = new Date();
+      const defaultLabel = `Sesión ${now.toLocaleDateString('es-MX')} ${now.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
+      const label = prompt('Nombre de la sesión:', defaultLabel);
+
+      if (label === null) return; // Cancelled
+
+      const sessions = getSessions();
+      sessions.unshift({ id: Date.now(), label: label.trim() || defaultLabel, date: now.toISOString(), values: vals });
+      if (sessions.length > 20) sessions.pop();
+      saveSessions(sessions);
+      renderSessions();
+      toast('💾 Sesión guardada.', 'ok');
+    }
+
+    function renameSession(id) {
+      const sessions = getSessions();
+      const s = sessions.find(s => s.id === id);
+      if (!s) return;
+
+      const newLabel = prompt('Renombrar sesión:', s.label);
+      if (newLabel === null || !newLabel.trim()) return;
+
+      s.label = newLabel.trim();
+      saveSessions(sessions);
+      renderSessions(id);
+      toast('✏️ Sesión renombrada.', 'ok');
+    }
+
+    function loadSession(id) {
+      const s = getSessions().find(s => s.id === id);
+      if (s) { setValues(s.values); scheduleAutosave(); toast(`📂 Cargado: ${s.label}`, 'ok'); renderSessions(id); }
+    }
+
+    function deleteSession(id) {
+      saveSessions(getSessions().filter(s => s.id !== id));
+      renderSessions();
+      toast('🗑 Sesión eliminada.', 'warn');
+    }
+
+    function renderSessions(activeId = null) {
+      const list = $('sessionList');
+      const sessions = getSessions();
+      list.querySelectorAll('.s-item').forEach(e => e.remove());
+      $('emptyS').style.display = sessions.length ? 'none' : '';
+      for (const s of sessions) {
+        const item = document.createElement('div');
+        item.className = 's-item' + (s.id === activeId ? ' active' : '');
+        const d = new Date(s.date);
+        item.innerHTML = `
+      <span>📄</span>
+      <div style="flex:1;overflow:hidden">
+        <span class="s-name" title="${esc(s.label)}">${esc(s.label)}</span>
+        <span class="s-date">${d.toLocaleDateString('es-MX')} ${d.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}</span>
+      </div>
+      <button class="s-del s-ren" title="Renombrar">✏️</button>
+      <button class="s-del" title="Eliminar">✕</button>
+    `;
+        item.querySelector('.s-ren').addEventListener('click', e => { e.stopPropagation(); renameSession(s.id); });
+        item.querySelector('.s-del:not(.s-ren)').addEventListener('click', e => { e.stopPropagation(); deleteSession(s.id); });
+        item.addEventListener('click', () => loadSession(s.id));
+        list.appendChild(item);
+      }
+    }
+
+    // ─── APPLY ───────────────────────────────────────────────────────────────────
+    function applyToAzura() {
+      const vals = getValues();
+      const hasValues = Object.values(vals).some(v => v.trim());
+      if (!hasValues) { toast('⚠ Sin valores para aplicar.', 'warn'); return; }
+
+      localStorage.setItem('azuraParams', JSON.stringify(vals));
+      localStorage.setItem('azuraAutoFill', 'true');
+
+      const status = $('applyStatus');
+      status.textContent = '✅ Listo — abre Azura y el script llenará automáticamente.';
+      status.className = 'apply-status show ok';
+      setTimeout(() => status.classList.remove('show'), 6000);
+      toast('✅ Parámetros aplicados. Navega a Azura.', 'ok');
+    }
+
+    // ─── EXPORT / COPY ───────────────────────────────────────────────────────────
+    function exportJson() {
+      const vals = getValues();
+      const blob = new Blob([JSON.stringify(vals, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `azura-params-${Date.now()}.json`; a.click();
+      URL.revokeObjectURL(url);
+      toast('↓ JSON exportado.', 'ok');
+    }
+
+    async function copyAsText() {
+      const vals = getValues();
+      const LABELS = Object.fromEntries(FIELDS.map(f => [f.key, f.label]));
+      const lines = Object.entries(vals).filter(([, v]) => v.trim()).map(([k, v]) => `${LABELS[k] || k}: ${v}`);
+      if (!lines.length) { toast('Sin valores para copiar.', 'warn'); return; }
+      try { await navigator.clipboard.writeText(lines.join('\n')); toast('⎘ Copiado al portapapeles.', 'ok'); }
+      catch (_) { toast('Acceso al portapapeles denegado.', 'warn'); }
+    }
+
+    // ─── CARD TOGGLE ─────────────────────────────────────────────────────────────
+    window.toggleCard = id => document.getElementById(id).classList.toggle('collapsed');
+
+    // ─── KEYBOARD ────────────────────────────────────────────────────────────────
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); applyToAzura(); }
+    });
+
+    // ─── WIRE BUTTONS ────────────────────────────────────────────────────────────
+    $('btnApply').addEventListener('click', applyToAzura);
+    $('btnSave').addEventListener('click', saveSession);
+    $('btnExport').addEventListener('click', exportJson);
+    $('btnCopy').addEventListener('click', copyAsText);
+    $('btnClear').addEventListener('click', () => { if (confirm('¿Limpiar todos los campos?')) clearValues(); });
+    $('btnRestore').addEventListener('click', () => {
+      try { const r = localStorage.getItem(LS_DRAFT); if (r) { setValues(JSON.parse(r)); toast('↩ Últimos valores restaurados.', 'ok'); } else { toast('Sin sesión previa.', 'warn'); } }
+      catch (_) { toast('Error al restaurar.', 'warn'); }
+    });
+
+    $('btnImportJson').addEventListener('click', () => $('jsonInput').click());
+    $('jsonInput').addEventListener('change', e => {
+      importJson(e.target.files[0]);
+      e.target.value = ''; // Reset for same file re-import
+    });
+
+    $('btnParse').addEventListener('click', () => {
+      const text = $('parseTA').value;
+      if (!text.trim()) { toast('Pega notas primero.', 'warn'); return; }
+      const { found, missing } = parseNotes(text);
+
+      const current = getValues();
+      setValues({ ...current, ...found });
+      scheduleAutosave();
+
+      const LABELS = Object.fromEntries(FIELDS.map(f => [f.key, f.label]));
+      const lines = [];
+      if (Object.keys(found).length) {
+        lines.push('<span class="d-ok">✅ Encontrados:</span>');
+        for (const [k, v] of Object.entries(found)) lines.push(`<span class="d-ok">  ${esc(LABELS[k] || k)}: ${esc(v)}</span>`);
+      }
+      if (missing.length) {
+        lines.push('');
+        lines.push('<span class="d-warn">⚠ No encontrados:</span>');
+        for (const k of missing) lines.push(`<span class="d-warn">  ${esc(LABELS[k] || k)}</span>`);
+      }
+      const diff = $('parseDiff');
+      diff.innerHTML = lines.join('\n') || '<span class="d-warn">Sin datos reconocidos.</span>';
+      diff.classList.add('show');
+
+      const n = Object.keys(found).length;
+      toast(`⚡ ${n} encontrado${n !== 1 ? 's' : ''} / ${missing.length} no encontrado${missing.length !== 1 ? 's' : ''}.`, n > 0 ? 'ok' : 'warn');
+    });
+    $('btnClearParse').addEventListener('click', () => { $('parseTA').value = ''; $('parseDiff').classList.remove('show'); });
+
+    // ─── PART 4 LOGIC ────────────────────────────────────────────────────────────
+    function initPart4() {
+      const SNIPPET_FIELDS = ['resultados', 'tratamiento', 'pronostico',
+        'padecimientoActual', 'analisisEvolucion', 'planEstudio', 'resultadoLabImg'];
+      const ALL_TEXT = [...new Set([...TEXT_FIELDS, ...EVO_FIELDS, ...HC_FIELDS])];
+      for (const id of ALL_TEXT) {
+        const el = $(id);
+        if (!el) continue;
+        el.addEventListener('input', () => { updateCounter(id); scheduleAutosave(); });
+        renderSnippets(id);
+        updateCounter(id);
+      }
+      // Wire Enter key for all snippet add-row inputs
+      for (const id of SNIPPET_FIELDS) {
+        const inp = $(`newSnip-${id}`);
+        if (inp) inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addCustomSnippet(id); } });
+      }
+    }
+
+    // ─── HISTORIA CLINICA LOGIC ──────────────────────────────────────────────────
+    function updateSexPresets() {
+      const sexo = document.querySelector('input[name="hc_sexo"]:checked')?.value || 'M';
+      // Update sex-dependent fields
+      for (const [id, presets] of Object.entries(HC_SEX_PRESETS)) {
+        const el = $(id);
+        if (!el) continue;
+        // Only overwrite if it matches the OTHER sex's preset (avoid overwriting custom text)
+        const otherSex = sexo === 'M' ? 'F' : 'M';
+        if (el.value.trim() === '' || el.value === presets[otherSex]) {
+          el.value = presets[sexo];
+          updateCounter(id);
+        }
+      }
+      scheduleAutosave();
+    }
+
+
+    function updateCounter(id) {
+      const el = $(id);
+      const cnt = $(`cnt-${id}`);
+      if (!el || !cnt) return;
+      const max = parseInt(el.getAttribute('maxlength') || '2000', 10);
+      const len = el.value.length;
+      cnt.textContent = `${len} / ${max}`;
+      const warnAt = Math.floor(max * 0.9);
+      const errAt = Math.floor(max * 0.975);
+      cnt.className = 'char-counter' + (len >= errAt ? ' red' : len >= warnAt ? ' amber' : '');
+    }
+
+    const LS_SNIPPETS_PREFIX = 'azura_snips_';
+
+    function getSnippets(id) {
+      const defaults = SNIPPETS[id] || [];
+      try {
+        const custom = JSON.parse(localStorage.getItem(LS_SNIPPETS_PREFIX + id) || '[]');
+        return [...defaults, ...custom];
+      } catch (_) { return [...defaults]; }
+    }
+
+    function saveCustomSnippets(id, custom) {
+      localStorage.setItem(LS_SNIPPETS_PREFIX + id, JSON.stringify(custom));
+    }
+
+    function getCustomSnippets(id) {
+      try { return JSON.parse(localStorage.getItem(LS_SNIPPETS_PREFIX + id) || '[]'); } catch (_) { return []; }
+    }
+
+    function renderSnippets(id) {
+      const bar = $(`snip-${id}`);
+      if (!bar) return;
+      bar.innerHTML = '';
+      const defaults = SNIPPETS[id] || [];
+      const custom = getCustomSnippets(id);
+      const all = [...defaults.map(t => ({ text: t, isCustom: false })),
+      ...custom.map(t => ({ text: t, isCustom: true }))];
+      for (const { text, isCustom } of all) {
+        const span = document.createElement('span');
+        span.className = 'snippet';
+        const label = document.createElement('span');
+        label.textContent = text;
+        label.onclick = () => insertSnippet(id, text);
+        span.appendChild(label);
+        if (isCustom) {
+          const del = document.createElement('span');
+          del.className = 'snippet-del';
+          del.title = 'Eliminar';
+          del.textContent = ' ×';
+          del.onclick = (e) => { e.stopPropagation(); deleteCustomSnippet(id, text); };
+          span.appendChild(del);
+        }
+        bar.appendChild(span);
+      }
+    }
+
+    function addCustomSnippet(id) {
+      const inp = $(`newSnip-${id}`);
+      if (!inp) return;
+      const text = inp.value.trim();
+      if (!text) return;
+      const custom = getCustomSnippets(id);
+      if (!custom.includes(text)) {
+        custom.push(text);
+        saveCustomSnippets(id, custom);
+        renderSnippets(id);
+        toast(`➕ Snippet agregado.`, 'ok');
+      }
+      inp.value = '';
+    }
+
+    function deleteCustomSnippet(id, text) {
+      const custom = getCustomSnippets(id).filter(t => t !== text);
+      saveCustomSnippets(id, custom);
+      renderSnippets(id);
+      toast(`× Snippet eliminado.`, 'warn');
+    }
+
+    function insertSnippet(id, text) {
+      const el = $(id);
+      const prev = el.value.trim();
+      el.value = prev ? `${prev}. ${text}.` : `${text}.`;
+      el.focus();
+      updateCounter(id);
+      scheduleAutosave();
+      toast('Snippet insertado.', 'ok');
+    }
+
+    function cleanText(id) {
+      const el = $(id);
+      if (!el.value.trim()) return;
+      let val = el.value;
+      val = val.replace(/\s+/g, ' '); // normalizar espacios
+      val = val.replace(/\n\s*\n/g, '\n'); // normalizar saltos de línea
+      val = val.trim();
+      el.value = val;
+      updateCounter(id);
+      scheduleAutosave();
+      toast('✨ Texto normalizado.', 'ok');
+    }
+
+    function importJson(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const data = JSON.parse(e.target.result);
+          setValues(data);
+          scheduleAutosave();
+          toast('📁 JSON importado correctamente.', 'ok');
+        } catch (err) {
+          toast('❌ Error al leer el JSON.', 'warn');
+          console.error(err);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // ─── PASTE PARSER (Expanded for Part 4) ───────────────────────────────────────
+    function parseNotes(text) {
+      const found = {}, missing = [];
+      const lines = text.split(/\n/);
+
+      // Numeric Fields Aliases
+      const ALIASES = {
+        temperatura: ['temp', 'temperatura', 'temperature', 't°', 't:', 'tª', 'c°'],
+        frecresp: ['fr', 'frecresp', 'frecuencia respiratoria', 'resp', 'rr', 'rpm'],
+        freccard: ['fc', 'freccard', 'frecuencia cardiaca', 'hr', 'bpm', 'latidos'],
+        glucometria: ['gluc', 'glucometria', 'glucometría', 'glucosa', 'glucemia', 'hgt', 'azúcar'],
+        tensart: ['ta', 'tensart', 'tensión arterial', 'presión', 'bp', 'pa', 't/a'],
+        saturacion: ['sat', 'saturación de oxígeno', 'spo2', 'o2', 'oxígeno'],
+        peso: ['peso', 'weight', 'kg', 'wt'],
+        talla: ['talla', 'height', 'estatura', 'ht'],
+      };
+
+      // Text Block Keywords (Ingreso + Evolución pages)
+      const TEXT_MAP = {
+        motivoIngreso: ['motivo', 'mci', 'motivo de consulta', 'motivo de ingreso'],
+        antecedentes: ['antecedentes', 'app', 'apf', 'g:'],
+        resultados: ['resultados', 'estudios', 'auxiliares'],
+        tratamiento: ['tratamiento', 'plan', 'indicaciones', 'tx'],
+        pronostico: ['pronostico', 'pronóstico', 'px'],
+        // ── Nota de Evolución keywords ──
+        padecimientoActual: ['padecimiento actual', 'pa:', 'padecimiento:'],
+        analisisEvolucion: ['evolución', 'evo:', 'cuadro clínico', 'análisis', 'analisis'],
+        planEstudio: ['plan de estudio', 'plan estudio', 'plan:'],
+        resultadoLabImg: ['laboratorio', 'labs:', 'resultados de laboratorio', 'lab e imagen'],
+      };
+
+
+      // 1. Numeric Match
+      for (const [key, aliases] of Object.entries(ALIASES)) {
+        let matched = false;
+        for (const alias of aliases) {
+          const re = new RegExp(`${alias}\\s*[:\\-]?\\s*([\\d\\.]+(?:\\/[\\d\\.]+)?)`, 'i');
+          for (const line of lines) {
+            const m = line.match(re);
+            if (m) { found[key] = m[1].trim(); matched = true; break; }
+          }
+          if (matched) break;
+        }
+        if (!matched) missing.push(key);
+      }
+
+      // 2. Text Block Match (Section headers)
+      const sectionMarkers = [...Object.values(TEXT_MAP).flat()];
+      for (const [key, aliases] of Object.entries(TEXT_MAP)) {
+        for (const alias of aliases) {
+          const re = new RegExp(`^\\s*${alias}\\s*[:\\-]?\\s*(.*)`, 'i');
+          for (let i = 0; i < lines.length; i++) {
+            const m = lines[i].match(re);
+            if (m) {
+              let content = [m[1].trim()];
+              for (let j = i + 1; j < lines.length; j++) {
+                const nextLine = lines[j].trim();
+                const isNextHeader = sectionMarkers.some(sm => new RegExp(`^\\s*${sm}\\s*[:\\-]`, 'i').test(nextLine));
+                if (isNextHeader) break;
+                if (nextLine) content.push(nextLine);
+              }
+              found[key] = content.join(' ').trim();
+              break;
+            }
+          }
+          if (found[key]) break;
+        }
+      }
+
+      return { found, missing };
+    }
+
+
+    // ─── PRESCRIPTION BUILDER ────────────────────────────────────────────────────
+    let rxRowCount = 0;
+
+    function toggleRxBuilder() {
+      const body = $('rxBuilderBody');
+      const chev = $('rxBuilderChev');
+      const open = body.style.display === 'none';
+      body.style.display = open ? 'block' : 'none';
+      chev.classList.toggle('open', open);
+    }
+
+    function addRxRow() {
+      const container = $('rxRows');
+      const idx = rxRowCount++;
+      const row = document.createElement('div');
+      row.className = 'rx-row';
+      row.id = `rxRow-${idx}`;
+      row.innerHTML = `
+        <input class="rx-input" type="text" placeholder="Medicamento" id="rxDrug-${idx}" />
+        <input class="rx-input" type="text" placeholder="Dosis" id="rxDose-${idx}" maxlength="8" style="text-align:right" />
+        <select class="rx-select" id="rxUnit-${idx}">
+          <option value="mg">mg</option>
+          <option value="ml">ml</option>
+          <option value="mcg">mcg</option>
+          <option value="g">g</option>
+          <option value="UI">UI</option>
+          <option value="gts">gts</option>
+        </select>
+        <input class="rx-input" type="text" placeholder="Cada" id="rxDur-${idx}" maxlength="4" style="text-align:right" />
+        <select class="rx-select" id="rxPer-${idx}">
+          <option value="horas">horas</option>
+          <option value="h" selected>h (en horario)</option>
+          <option value="días">días</option>
+          <option value="semanas">semanas</option>
+          <option value="meses">meses</option>
+          <option value="dosis única">dosis única</option>
+        </select>
+        <select class="rx-select" id="rxVia-${idx}">
+          <option value="VO">VO (oral)</option>
+          <option value="IV">IV</option>
+          <option value="IM">IM</option>
+          <option value="SC">SC</option>
+          <option value="nasal">Nasal</option>
+          <option value="tópico">Tópico</option>
+          <option value="SL">SL (sublingual)</option>
+          <option value="rectal">Rectal</option>
+          <option value="inhalado">Inhalado</option>
+        </select>
+        <input class="rx-input" type="number" placeholder="Días" id="rxDays-${idx}" min="1" max="365" style="text-align:right" />
+        <button class="rx-del-btn" onclick="removeRxRow(${idx})" title="Eliminar">×</button>
+      `;
+      container.appendChild(row);
+    }
+
+    function removeRxRow(idx) {
+      const row = $(`rxRow-${idx}`);
+      if (row) row.remove();
+    }
+
+    function clearRxRows() {
+      $('rxRows').innerHTML = '';
+      rxRowCount = 0;
+      addRxRow(); addRxRow(); addRxRow();
+    }
+
+    function applyRxToTratamiento() {
+      const lines = [];
+      document.querySelectorAll('.rx-row').forEach(row => {
+        const id = row.id.replace('rxRow-', '');
+        const drug = ($(`rxDrug-${id}`)?.value || '').trim();
+        const dose = ($(`rxDose-${id}`)?.value || '').trim();
+        const unit = ($(`rxUnit-${id}`)?.value || 'mg');
+        const dur = ($(`rxDur-${id}`)?.value || '').trim();
+        const per = ($(`rxPer-${id}`)?.value || 'horas');
+        const via = ($(`rxVia-${id}`)?.value || 'VO');
+        const days = ($(`rxDays-${id}`)?.value || '').trim();
+        if (!drug) return; // skip empty rows
+        let line = `- ${drug}`;
+        if (dose) line += ` ${dose} ${unit}`;
+        if (dur) line += ` c/${dur} ${per}`;
+        line += ` ${via}`;
+        if (days) line += ` por ${days} día${days !== '1' ? 's' : ''}`;
+        lines.push(line);
+
+      });
+      if (!lines.length) { toast('Completa al menos un medicamento.', 'warn'); return; }
+      const ta = $('tratamiento');
+      const prev = ta.value.trim();
+      ta.value = prev ? prev + '\n' + lines.join('\n') : lines.join('\n');
+      updateCounter('tratamiento');
+      scheduleAutosave();
+      toast(`💊 ${lines.length} medicamento${lines.length > 1 ? 's' : ''} agregado${lines.length > 1 ? 's' : ''}.`, 'ok');
+    }
+
+    function initRxBuilder() {
+      // Start with 3 empty rows
+      addRxRow(); addRxRow(); addRxRow();
+    }
+
+    // ─── MOTIVO DE INGRESO ────────────────────────────────────────────────────────────────────
+    const MOTIVO_DEFAULTS = [
+      'Dolor abdominal', 'Accidente doméstico', 'Accidente automotorístico',
+      'Politraumatismo', 'Traumatismo craneoencefálico',
+      'Intoxicación por medicamentos', 'Reacción alérgica'
+    ];
+    const LS_MOTIVO_CHIPS = 'motivoChips';
+
+    function getMotivoChips() {
+      try {
+        const saved = localStorage.getItem(LS_MOTIVO_CHIPS);
+        return saved ? JSON.parse(saved) : [...MOTIVO_DEFAULTS];
+      } catch (_) { return [...MOTIVO_DEFAULTS]; }
+    }
+
+    function saveMotivoChips(chips) {
+      localStorage.setItem(LS_MOTIVO_CHIPS, JSON.stringify(chips));
+    }
+
+    function initMotivoChips() {
+      renderMotivoChips();
+      const ta = $('motivoIngreso');
+      if (ta) ta.addEventListener('input', () => { updateCounter('motivoIngreso'); scheduleAutosave(); });
+      const inp = $('motivoNewChip');
+      if (inp) inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addCustomMotivoChip(); } });
+    }
+
+    function renderMotivoChips() {
+      const bar = $('motivoChipBar');
+      if (!bar) return;
+      bar.innerHTML = '';
+      const chips = getMotivoChips();
+      const activeChips = getActiveMotivoChips();
+      chips.forEach((label, idx) => {
+        const span = document.createElement('span');
+        span.className = 'motivo-chip' + (activeChips.includes(label) ? ' active' : '');
+        span.innerHTML = `${escChip(label)}<span class="chip-del" title="Eliminar" onclick="deleteMotivoChip(${idx},event)">×</span>`;
+        span.onclick = (e) => { if (!e.target.classList.contains('chip-del')) toggleMotivoChip(label, span); };
+        bar.appendChild(span);
+      });
+    }
+
+    function getActiveMotivoChips() {
+      const ta = $('motivoIngreso');
+      if (!ta || !ta.value.trim()) return [];
+      const chips = getMotivoChips();
+      return chips.filter(c => ta.value.includes(c));
+    }
+
+    function toggleMotivoChip(label, span) {
+      const ta = $('motivoIngreso');
+      if (!ta) return;
+      if (span.classList.contains('active')) {
+        // Remove from textarea
+        let val = ta.value;
+        val = val.replace(new RegExp('(^|,\\s*)' + escRegex(label) + '(,\\s*|$)', 'g'), (m, p1, p2) => {
+          if (p1 && p2) return ', ';
+          return '';
+        }).trim().replace(/^,\s*|,\s*$/, '');
+        ta.value = val;
+        span.classList.remove('active');
+      } else {
+        // Append to textarea
+        const cur = ta.value.trim();
+        ta.value = cur ? cur + ', ' + label : label;
+        span.classList.add('active');
+      }
+      updateCounter('motivoIngreso');
+      scheduleAutosave();
+    }
+
+    function addCustomMotivoChip() {
+      const inp = $('motivoNewChip');
+      if (!inp) return;
+      const label = inp.value.trim();
+      if (!label) return;
+      const chips = getMotivoChips();
+      if (!chips.includes(label)) {
+        chips.push(label);
+        saveMotivoChips(chips);
+        renderMotivoChips();
+        toast(`➕ Opción “${label}” agregada.`, 'ok');
+      }
+      inp.value = '';
+    }
+
+    function deleteMotivoChip(idx, e) {
+      e.stopPropagation();
+      const chips = getMotivoChips();
+      const removed = chips.splice(idx, 1)[0];
+      saveMotivoChips(chips);
+      renderMotivoChips();
+      toast(`× Opción “${removed}” eliminada.`, 'warn');
+    }
+
+    function resetMotivoChips() {
+      if (!confirm('¿Restaurar las opciones predeterminadas? Las personalizadas se perderán.')) return;
+      localStorage.removeItem(LS_MOTIVO_CHIPS);
+      renderMotivoChips();
+      toast('↺ Opciones predeterminadas restauradas.', 'ok');
+    }
+
+    function clearMotivoField() {
+      const ta = $('motivoIngreso');
+      if (ta) { ta.value = ''; updateCounter('motivoIngreso'); scheduleAutosave(); }
+      clearMotivoChipSelection();
+    }
+
+    function clearMotivoChipSelection() {
+      document.querySelectorAll('.motivo-chip.active').forEach(c => c.classList.remove('active'));
+    }
+
+    function escChip(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    function escRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+    // ─── ANTECEDENTES HELPERS ────────────────────────────────────────────────────────────────────
+    function restoreAnteTemplate() {
+      if (!confirm('¿Restaurar la plantilla de antecedentes? Se perderá el texto actual.')) return;
+      const el = $('antecedentes');
+      if (el) { el.value = ANTE_TEMPLATE; updateCounter('antecedentes'); scheduleAutosave(); toast('↺ Plantilla restaurada.', 'ok'); }
+    }
+
+    // ─── INIT ────────────────────────────────────────────────────────────────────
+    buildFields();
+    initPart4();
+    initMotivoChips();
+    initRxBuilder();
+    loadDraft();
+    renderSessions();
+
+
+  </script>
+</body>
+
+</html>

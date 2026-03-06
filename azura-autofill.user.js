@@ -41,6 +41,7 @@ FUM:`;
         const h1s = [...document.querySelectorAll('h1')].map(el => el.textContent.trim());
         if (h1s.some(t => t.includes('Historia clínica') || t.includes('Historia Clínica'))) return 'historia';
         if (h1s.some(t => t.includes('Nota de evolución') || t.includes('Nota de Evolución'))) return 'evolucion';
+        if (h1s.some(t => t.includes('Nota de ingreso'))) return 'notaIngreso';
         if (h1s.some(t => t.includes('Nota de urgencias') || t.includes('Nota de Urgencias'))) return 'ingreso';
         return null;
     }
@@ -48,6 +49,16 @@ FUM:`;
     // ─── FIELD MAPS (vitals) ─────────────────────────────────────────────────────
     const FIELD_MAPS = {
         ingreso: {
+            temperatura: { id: 'temperatura', triggerFocus: false, triggerAjax: false },
+            frecresp: { id: 'frecresp', triggerFocus: false, triggerAjax: false },
+            freccard: { id: 'freccard', triggerFocus: false, triggerAjax: false },
+            glucometria: { id: 'glucometria', triggerFocus: false, triggerAjax: false },
+            tensart: { id: 'tensart', triggerFocus: true, triggerAjax: false },
+            saturacion: { id: 'saturacion', triggerFocus: false, triggerAjax: false },
+            peso: { id: 'peso', triggerFocus: false, triggerAjax: true },
+            talla: { id: 'talla', triggerFocus: false, triggerAjax: true },
+        },
+        notaIngreso: {
             temperatura: { id: 'temperatura', triggerFocus: false, triggerAjax: false },
             frecresp: { id: 'frecresp', triggerFocus: false, triggerAjax: false },
             freccard: { id: 'freccard', triggerFocus: false, triggerAjax: false },
@@ -87,6 +98,22 @@ FUM:`;
             resultados: { id: 'resultados' },
             tratamiento: { id: 'tratamiento' },
             pronostico: { id: 'pronostico' },
+        },
+        notaIngreso: {
+            ni_alergiasPac: { selector: '[name="alergias:alergiasVVFrom:alergiaAgregar:alergiasPac"]' },
+            ni_falloRenalSelect: { selector: '[name="falloRenalSelect"]' },
+            ni_evaluacionAdicional: { selector: '[name="evaluacionAdicionalNutricionRadioGroup"]' },
+            ni_especificarCuando: { selector: '[name="especificarCuandoRadioGroup"]' },
+            ni_especificarEvaluacion: { selector: '[name="especificarEvaluacionAdNut"]' },
+            ni_antecedentes: { selector: '[name="antecedentes"]', defaultValue: ANTE_TEMPLATE },
+            ni_motivo: { selector: '[name="motivo"]' },
+            ni_padecimientoActual: { selector: '[name="padecimientoActual"]' },
+            ni_resumen: { selector: '[name="resumen"]' },
+            ni_resultados: { selector: '[name="resultados"]' },
+            ni_impresionDiagnostica: { selector: '[name="impresionDiagnostica"]' },
+            ni_tratamiento: { selector: '[name="tratamiento"]' },
+            ni_pronostico: { selector: '[name="pronostico"]' },
+            ni_plan: { selector: '[name="plan"]' },
         },
         evolucion: {
             padecimientoActual: { selector: '[name="padecimientoActual"]' },
@@ -146,6 +173,10 @@ FUM:`;
             np_tabaquismo: {
                 rowLabel: { container: '[name="antecedentesFanNoPat:antecedentesNoPatologicos:containerTabla:formaTabla:tabla:body"]', text: '9 TABAQUISMO' },
                 defaultValue: 'NIEGA EL CONSUMO DE TABACO',
+            },
+            np_otro: {
+                rowLabel: { container: '[name="antecedentesFanNoPat:antecedentesNoPatologicos:containerTabla:formaTabla:tabla:body"]', text: 'OTRO' },
+                defaultValue: '',
             },
             // ── Section 4: Patológicos
             pat_alergias: {
@@ -241,12 +272,19 @@ FUM:`;
     // Fill order per page
     const VITAL_ORDER = ['temperatura', 'frecresp', 'freccard', 'glucometria', 'tensart', 'saturacion', 'peso', 'talla'];
     const TEXT_ORDER = {
-        ingreso: ['motivoIngreso', 'antecedentes', 'resultados', 'tratamiento', 'pronostico'],
+        ingreso: ['antecedentes', 'motivoIngreso', 'resultados', 'tratamiento', 'pronostico'],
+        notaIngreso: [
+            'ni_alergiasPac', 'ni_falloRenalSelect', 'ni_evaluacionAdicional',
+            'ni_especificarCuando', 'ni_especificarEvaluacion', 'ni_antecedentes',
+            'ni_motivo', 'ni_padecimientoActual', 'ni_resumen', 'ni_resultados',
+            'ni_impresionDiagnostica', 'ni_tratamiento', 'ni_pronostico', 'ni_plan'
+        ],
         evolucion: ['padecimientoActual', 'objetivo', 'analisisEvolucion', 'planEstudio', 'resultadoLabImg', 'pronostico'],
         historia: [
-            "hf_cronico", "hf_neoplasias", "hf_otras", "np_casa", "np_alimentacion", "np_deporte",
+            "hf_cronico", "hf_neoplasias", "hf_otras",
+            "np_casa", "np_alimentacion", "np_deporte",
             "np_animales", "np_religion", "np_trabajo", "np_alcoholismo", "np_farmacodep",
-            "np_tabaquismo",
+            "np_tabaquismo", "np_otro",
             "pat_alergias", "pat_cronicos", "pat_infancia", "pat_neoplasias", "pat_otras",
             "pat_quirurgicos", "pat_transfusiones", "pat_traumaticos", "ap_cardiovascular",
             "ap_dermatologico", "ap_digestivo", "ap_endocrino", "ap_hematologico",
@@ -584,6 +622,17 @@ FUM:`;
             results.push({ key, status: 'ok', value: value.toString().slice(0, 40) });
         }
 
+        // H1 Extraction: extract patient name from span#nombrePaciente only
+        const nombreSpan = document.querySelector('span#nombrePaciente');
+        if (nombreSpan) {
+            const extractedName = nombreSpan.textContent.trim();
+            if (extractedName) {
+                console.log('[Azura Fill] Patient name extracted:', extractedName);
+                try { localStorage.setItem('azuraCurrentPatient', extractedName); } catch (_) { }
+                try { GM_setValue('azuraCurrentPatient', extractedName); } catch (_) { }
+            }
+        }
+
         updateOverlay(results, page);
     }
 
@@ -623,15 +672,17 @@ FUM:`;
         }
 
         // For ingreso page, wait for the page H1 to appear
-        if (page === 'ingreso') {
-            badgeText.textContent = '⚕ Esperando página de urgencias…';
+        if (page === 'ingreso' || page === 'notaIngreso') {
+            badgeText.textContent = `⚕ Esperando página de ${page === 'ingreso' ? 'urgencias' : 'ingreso'}…`;
             try {
                 await waitForMarker(() => {
                     const h1s = [...document.querySelectorAll('h1')].map(el => el.textContent.trim());
-                    return h1s.some(t => t.includes('Nota de urgencias') || t.includes('Nota de Urgencias'));
+                    if (page === 'ingreso') return h1s.some(t => t.includes('Nota de urgencias') || t.includes('Nota de Urgencias'));
+                    if (page === 'notaIngreso') return h1s.some(t => t.includes('Nota de ingreso'));
+                    return false;
                 }, 15000);
             } catch (_) {
-                badgeText.textContent = '⚕ ✕ Página de urgencias no encontrada';
+                badgeText.textContent = `⚕ ✕ Página de ${page === 'ingreso' ? 'urgencias' : 'ingreso'} no encontrada`;
                 badgeDot.className = 'azf-dot warn';
                 return;
             }

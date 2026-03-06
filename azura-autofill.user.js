@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Azura Auto-Fill (Ingreso + Evolución)
 // @namespace    http://tampermonkey.net/
-// @version      3.6
+// @version      3.7
 // @description  Auto-fills Azura fields on both Ingreso and Nota de Evolución pages. Syncs cross-origin via GM_storage.
 // @author       AutoFill Studio
 // @match        https://cqs.hospisoft.mx/*
@@ -18,6 +18,9 @@
 
 (function () {
     'use strict';
+
+    const SCRIPT_VERSION = '3.7';
+    const SCRIPT_START = performance.now();
 
     const IS_EDITOR = location.pathname.includes('index.html')
         || location.href.includes('index.html')
@@ -711,10 +714,11 @@ FUM:`;
 
     // ─── ENTRY POINT ─────────────────────────────────────────────────────────────
     async function main() {
-        console.log('[Azura Fill] Script loaded. IS_EDITOR:', IS_EDITOR, 'URL:', location.href);
+        const loadTimeMs = (performance.now() - SCRIPT_START).toFixed(0);
+        console.log(`[Azura Fill] v${SCRIPT_VERSION} loaded in ${loadTimeMs}ms | IS_EDITOR: ${IS_EDITOR} | URL: ${location.href}`);
 
         if (IS_EDITOR) {
-            console.log('[Azura Fill] Editor detected — installing localStorage interceptor.');
+            console.log(`[Azura Fill] v${SCRIPT_VERSION} — Editor detected (${loadTimeMs}ms) — installing localStorage interceptor.`);
             installLocalStorageInterceptor();
             syncToGM();
             return;
@@ -745,8 +749,9 @@ FUM:`;
                 await waitForMarker(() => detectPage() !== null, 10000);
                 page = detectPage();
             } catch (_) {
-                badgeText.textContent = '⚕ ✕ Página no reconocida';
-                badgeDot.className = 'azf-dot warn';
+                badgeText.textContent = `⚕ Azura v${SCRIPT_VERSION}`;
+                badgeDot.className = 'azf-dot idle';
+                console.log(`[Azura Fill] v${SCRIPT_VERSION} — No compatible page detected. Standing by.`);
                 return;
             }
         }

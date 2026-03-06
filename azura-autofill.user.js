@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Azura Auto-Fill (Ingreso + Evolución)
 // @namespace    http://tampermonkey.net/
-// @version      3.1
+// @version      3.2
 // @description  Auto-fills Azura fields on both Ingreso and Nota de Evolución pages. Syncs cross-origin via GM_storage.
 // @author       AutoFill Studio
 // @match        https://cqs.hospisoft.mx/*

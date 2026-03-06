@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Azura Auto-Fill (Ingreso + Evolución)
 // @namespace    http://tampermonkey.net/
-// @version      3.5
+// @version      3.6
 // @description  Auto-fills Azura fields on both Ingreso and Nota de Evolución pages. Syncs cross-origin via GM_storage.
 // @author       AutoFill Studio
 // @match        https://cqs.hospisoft.mx/*
@@ -19,7 +19,9 @@
 (function () {
     'use strict';
 
-    const IS_EDITOR = location.pathname.includes('index.html') || location.href.includes('index.html');
+    const IS_EDITOR = location.pathname.includes('index.html')
+        || location.href.includes('index.html')
+        || location.hostname === 'yakat1.github.io';
 
     // ─── ANTECEDENTES DEFAULT TEMPLATE ──────────────────────────────────────────
     const ANTE_TEMPLATE = `ANTECEDENTES PERSONALES PATOLÓGICOS

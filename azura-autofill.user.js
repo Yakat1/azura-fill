@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Azura Auto-Fill (Ingreso + Evolución)
 // @namespace    http://tampermonkey.net/
-// @version      3.4
+// @version      3.5
 // @description  Auto-fills Azura fields on both Ingreso and Nota de Evolución pages. Syncs cross-origin via GM_storage.
 // @author       AutoFill Studio
 // @match        https://cqs.hospisoft.mx/*
@@ -709,6 +709,8 @@ FUM:`;
 
     // ─── ENTRY POINT ─────────────────────────────────────────────────────────────
     async function main() {
+        console.log('[Azura Fill] Script loaded. IS_EDITOR:', IS_EDITOR, 'URL:', location.href);
+
         if (IS_EDITOR) {
             console.log('[Azura Fill] Editor detected — installing localStorage interceptor.');
             installLocalStorageInterceptor();
@@ -716,13 +718,18 @@ FUM:`;
             return;
         }
 
-        // Try to load from GM_storage if not already in localStorage
-        if (!localStorage.getItem('azuraAutoFill')) loadFromGM();
+        // Always try to load from GM_storage (cross-origin bridge)
+        loadFromGM();
 
         const flag = localStorage.getItem('azuraAutoFill');
-        if (flag !== 'true') return;
+        console.log('[Azura Fill] azuraAutoFill flag:', flag);
+        if (flag !== 'true') {
+            console.log('[Azura Fill] No fill flag set — exiting.');
+            return;
+        }
 
         let params = getLatestParams();
+        console.log('[Azura Fill] Params loaded:', params ? Object.keys(params).length + ' keys' : 'null');
         if (!params) return;
 
         window.__azuraParams = params;

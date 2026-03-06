@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Azura Auto-Fill (Ingreso + Evolución)
 // @namespace    http://tampermonkey.net/
-// @version      3.2
+// @version      3.3
 // @description  Auto-fills Azura fields on both Ingreso and Nota de Evolución pages. Syncs cross-origin via GM_storage.
 // @author       AutoFill Studio
 // @match        https://cqs.hospisoft.mx/*
@@ -11,8 +11,8 @@
 // @grant        GM_getValue
 // @grant        GM_addValueChangeListener
 // @run-at       document-idle
-// @updateURL    https://raw.githubusercontent.com/Yakat1/azura-fill/master/azura-autofill.user.js
-// @downloadURL  https://raw.githubusercontent.com/Yakat1/azura-fill/master/azura-autofill.user.js
+// @updateURL    https://raw.githubusercontent.com/Yakat1/azura-fill/main/azura-autofill.user.js
+// @downloadURL  https://raw.githubusercontent.com/Yakat1/azura-fill/main/azura-autofill.user.js
 // ==/UserScript==
 
 (function () {

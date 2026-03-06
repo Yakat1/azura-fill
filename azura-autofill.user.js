@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Azura Auto-Fill (Ingreso + Evolución)
 // @namespace    http://tampermonkey.net/
-// @version      3.3
+// @version      3.4
 // @description  Auto-fills Azura fields on both Ingreso and Nota de Evolución pages. Syncs cross-origin via GM_storage.
 // @author       AutoFill Studio
 // @match        https://cqs.hospisoft.mx/*
+// @match        https://yakat1.github.io/azura-fill/*
 // @match        http://localhost:*/*
 // @match        file://*/*
 // @grant        GM_setValue
@@ -634,6 +635,76 @@ FUM:`;
         }
 
         updateOverlay(results, page);
+    }
+
+    // ─── CROSS-ORIGIN SYNC (GM_storage ↔ localStorage) ──────────────────────────
+    // These functions enable the editor (on any origin: file://, GitHub Pages, etc.)
+    // to communicate with Hospisoft (https://cqs.hospisoft.mx) via Tampermonkey's
+    // GM_setValue/GM_getValue, which work across all origins.
+
+    /**
+     * Called on the EDITOR page. Intercepts localStorage.setItem so that whenever
+     * the editor writes azuraParams or azuraAutoFill, we mirror it to GM_storage.
+     */
+    function installLocalStorageInterceptor() {
+        const origSetItem = localStorage.setItem.bind(localStorage);
+        localStorage.setItem = function (key, value) {
+            origSetItem(key, value);
+            if (key === 'azuraParams' || key === 'azuraAutoFill') {
+                try {
+                    GM_setValue(key, value);
+                    console.log(`[Azura Fill] Synced ${key} → GM_storage`);
+                } catch (e) {
+                    console.warn('[Azura Fill] GM_setValue failed:', e);
+                }
+            }
+        };
+        console.log('[Azura Fill] localStorage interceptor installed.');
+    }
+
+    /**
+     * Called on the EDITOR page. Reads current localStorage values and pushes
+     * them into GM_storage so that Hospisoft can read them on the next page load.
+     */
+    function syncToGM() {
+        try {
+            const params = localStorage.getItem('azuraParams');
+            const flag = localStorage.getItem('azuraAutoFill');
+            if (params) GM_setValue('azuraParams', params);
+            if (flag) GM_setValue('azuraAutoFill', flag);
+            console.log('[Azura Fill] Existing localStorage synced → GM_storage');
+        } catch (e) {
+            console.warn('[Azura Fill] syncToGM failed:', e);
+        }
+    }
+
+    /**
+     * Called on the HOSPISOFT page. Reads from GM_storage and writes into
+     * Hospisoft's localStorage so the fill logic can read them normally.
+     */
+    function loadFromGM() {
+        try {
+            const params = GM_getValue('azuraParams', null);
+            const flag = GM_getValue('azuraAutoFill', null);
+            if (params) localStorage.setItem('azuraParams', params);
+            if (flag) localStorage.setItem('azuraAutoFill', flag);
+            console.log('[Azura Fill] GM_storage → localStorage loaded');
+        } catch (e) {
+            console.warn('[Azura Fill] loadFromGM failed:', e);
+        }
+    }
+
+    /**
+     * Reads the azuraParams from localStorage (which loadFromGM may have populated).
+     */
+    function getLatestParams() {
+        try {
+            const raw = localStorage.getItem('azuraParams');
+            return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+            console.warn('[Azura Fill] getLatestParams parse error:', e);
+            return null;
+        }
     }
 
     // ─── ENTRY POINT ─────────────────────────────────────────────────────────────

@@ -1147,6 +1147,250 @@
     .help-content strong {
       color: var(--text-primary);
     }
+
+    /* ── RESPONSIVE MOBILE VIEW ── */
+    @media (max-width: 768px) {
+
+      /* Layout a una columna */
+      .shell {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr;
+        grid-template-areas:
+          "hdr"
+          "side"
+          "main";
+        height: auto;
+        overflow-y: auto;
+      }
+
+      body {
+        overflow-y: auto;
+      }
+
+      /* Aside (sesiones) colapsable o ajustado */
+      aside {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        max-height: 200px;
+        /* Evitar que ocupe todo el espacio vertical de golpe */
+        overflow-y: auto;
+      }
+
+      /* Opciones de Radio envolventes (Aparatos y Sistemas, No Patológicos) */
+      .text-field-hdr>div[style*="display:flex"] {
+        flex-wrap: wrap;
+        margin-top: 6px;
+      }
+
+      /* Asegurar que las cuadrículas colapsen correctamente */
+      .fields-grid,
+      .text-field-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      /* Pestañas envuelven hacia la siguiente línea */
+      .tab-bar {
+        flex-wrap: wrap;
+      }
+
+      /* Header ajustado */
+      header {
+        flex-wrap: wrap;
+        padding: 10px;
+        height: auto;
+      }
+
+      .hdr-right {
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: flex-end;
+      }
+    }
+
+    /* ─── SLOT SWITCHER ──────────────────────────────────────────── */
+    .slot-bar {
+      display: flex;
+      gap: 6px;
+      padding: 10px 12px 4px;
+    }
+
+    .slot-pill {
+      flex: 1;
+      padding: 5px 0;
+      border-radius: 6px;
+      border: none;
+      background: var(--card);
+      color: var(--text-dim);
+      font-size: .78rem;
+      cursor: pointer;
+      transition: background .15s, color .15s, transform .1s;
+    }
+
+    .slot-pill:hover {
+      background: var(--hover);
+    }
+
+    .slot-pill.active {
+      background: var(--accent);
+      color: #000;
+      font-weight: 600;
+      box-shadow: 0 0 8px rgba(255, 180, 0, .35);
+      transform: scale(1.04);
+    }
+
+    .slot-label {
+      font-size: .7rem;
+      color: var(--text-dim);
+      padding: 2px 14px 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+    }
+
+    .slot-label:hover {
+      color: var(--text);
+      text-decoration: underline;
+    }
+
+    /* ─── PRINT / PDF EXPORT ─────────────────────────────────────────── */
+    #printView {
+      display: none;
+    }
+
+    @media print {
+      body>*:not(#printView) {
+        display: none !important;
+      }
+
+      #printView {
+        display: block !important;
+        font-family: 'Georgia', serif;
+        font-size: 10.5pt;
+        color: #111;
+        padding: 24px 40px;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+
+      #printView .pr-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        border-bottom: 2px solid #111;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+      }
+
+      #printView .pr-name {
+        font-size: 16pt;
+        font-weight: bold;
+      }
+
+      #printView .pr-date {
+        font-size: 9pt;
+        color: #666;
+      }
+
+      #printView .pr-section {
+        margin-bottom: 16px;
+      }
+
+      #printView .pr-section h3 {
+        font-size: 10pt;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 8px;
+        padding-bottom: 3px;
+        color: #333;
+      }
+
+      #printView .pr-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9.5pt;
+      }
+
+      #printView .pr-table td {
+        padding: 3px 8px 3px 0;
+        vertical-align: top;
+      }
+
+      #printView .pr-label {
+        color: #555;
+        width: 45%;
+      }
+
+      #printView .pr-unit {
+        color: #888;
+        font-size: 8.5pt;
+      }
+
+      #printView .pr-text {
+        font-size: 9.5pt;
+        white-space: pre-wrap;
+        margin: 0;
+        line-height: 1.5;
+      }
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(3px);
+      display: none;
+      place-items: center;
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-overlay.show {
+      display: grid;
+      opacity: 1;
+    }
+
+    .modal-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 24px;
+      width: 400px;
+      max-width: 90vw;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      transform: scale(0.95);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-overlay.show .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .modal-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 24px;
+    }
   </style>
 </head>
 
@@ -1173,6 +1417,14 @@
 
     <!-- SIDEBAR -->
     <aside>
+      <div class="slot-bar" id="slotBar">
+        <button class="slot-pill active" id="slot0" onclick="switchSlot(0)">P1</button>
+        <button class="slot-pill" id="slot1" onclick="switchSlot(1)">P2</button>
+        <button class="slot-pill" id="slot2" onclick="switchSlot(2)">P3</button>
+        <button class="slot-pill" id="slot3" onclick="switchSlot(3)">P4</button>
+        <button class="slot-pill" id="slot4" onclick="switchSlot(4)">P5</button>
+      </div>
+      <div class="slot-label" id="slotLabel" onclick="renameSlot()">Paciente 1</div>
       <div class="side-label">Sesiones</div>
       <div class="session-list" id="sessionList">
         <div class="empty-s" id="emptyS">Sin sesiones guardadas.</div>
@@ -1181,6 +1433,13 @@
         <button class="btn btn-sec btn-sm btn-full" id="btnSave">💾 Cargar anterior</button>
         <button class="btn btn-sec btn-sm btn-full" id="btnExport">↓ Exportar JSON</button>
         <button class="btn btn-sec btn-sm btn-full" id="btnCopy">⎘ Copiar como texto</button>
+        <button class="btn btn-sec btn-sm btn-full" onclick="printNota()">⎙ Imprimir Nota</button>
+        <button class="btn btn-sec btn-sm btn-full" onclick="exportAllSlots()">💾 Backup todos los slots</button>
+        <button class="btn btn-sec btn-sm btn-full" onclick="importAllSlots()">↑ Restaurar backup</button>
+        <div style="height:10px;"></div>
+        <button class="btn btn-sec btn-sm btn-full" onclick="openSyncSettings()">⚙️ Configurar Nube</button>
+        <button class="btn btn-sec btn-sm btn-full" id="btnPush" onclick="pushToCloud()">☁️ Subir a la nube</button>
+        <button class="btn btn-sec btn-sm btn-full" id="btnPull" onclick="pullFromCloud()">☁️ Bajar de la nube</button>
       </div>
     </aside>
 
@@ -1261,9 +1520,12 @@
       </div>
 
       <!-- Apply row -->
-      <div class="apply-row">
+      <div class="apply-row" style="display: flex; gap: 10px; align-items: center;">
         <button class="btn btn-apply" id="btnApply">⚡ Aplicar en Azura</button>
-        <div class="apply-status" id="applyStatus"></div>
+        <button class="btn btn-sec" onclick="clearValues()"
+          style="color:var(--text-warn); border-color:rgba(240,161,42,0.4);"
+          title="Borra todos los campos y restaura las plantillas por defecto">↺ Restaurar campos</button>
+        <div class="apply-status" id="applyStatus" style="margin-left: auto;"></div>
       </div>
 
       <!-- Parameters card (shared — always visible) -->
@@ -1280,6 +1542,88 @@
         </div>
         <div class="card-body">
           <div class="fields-grid" id="fieldsGrid"></div>
+        </div>
+      </div>
+
+      <!-- Biometría Hemática card (shared — always visible) -->
+      <div class="card collapsed" id="cardBH">
+        <div class="card-hdr" onclick="toggleCard('cardBH')">
+          <div class="card-title-row">
+            <div class="card-ico">🩸</div>
+            <div>
+              <div class="card-title">Biometría Hemática</div>
+              <div class="card-sub">Valores de laboratorio</div>
+            </div>
+          </div>
+          <span class="card-chev">▾</span>
+        </div>
+        <div class="card-body">
+          <div style="display:flex; justify-content: flex-end; padding-top: 14px;">
+            <button class="btn btn-amber btn-sm" onclick="applyBHToResultados()">⚡ Mover a Resultados</button>
+          </div>
+          <div class="fields-grid" id="bhFieldsGrid"></div>
+        </div>
+      </div>
+
+      <!-- cardQS: Química Sanguínea -->
+      <div class="card collapsed" id="cardQS">
+        <div class="card-hdr" onclick="toggleCard('cardQS')">
+          <div class="card-title-row">
+            <div class="card-ico">🧪</div>
+            <div>
+              <div class="card-title">Química Sanguínea</div>
+              <div class="card-sub">Función renal, hepática & metabólica</div>
+            </div>
+          </div>
+          <span class="card-chev">▾</span>
+        </div>
+        <div class="card-body">
+          <div style="display:flex; justify-content: flex-end; padding-top: 14px;">
+            <button class="btn btn-amber btn-sm" onclick="applyQSToResultados()">⚡ Mover a Resultados</button>
+          </div>
+          <div class="fields-grid" id="qsFieldsGrid"></div>
+        </div>
+      </div>
+
+      <!-- cardEGO: EGO / Orina Completa -->
+      <div class="card collapsed" id="cardEGO">
+        <div class="card-hdr" onclick="toggleCard('cardEGO')">
+          <div class="card-title-row">
+            <div class="card-ico">🧴</div>
+            <div>
+              <div class="card-title">EGO / Orina Completa</div>
+              <div class="card-sub">Físico-químico, tira reactiva & sedimento</div>
+            </div>
+          </div>
+          <span class="card-chev">▾</span>
+        </div>
+        <div class="card-body">
+          <div style="display:flex; justify-content: flex-end; padding-top: 14px;">
+            <button class="btn btn-amber btn-sm" onclick="applyEGOToResultados()">⚡ Mover a Resultados</button>
+          </div>
+          <div class="fields-grid" id="egoFieldsGrid"></div>
+        </div>
+      </div>
+
+
+
+      <!-- cardCG: Coagulación / Hemostasia -->
+      <div class="card collapsed" id="cardCG">
+        <div class="card-hdr" onclick="toggleCard('cardCG')">
+          <div class="card-title-row">
+            <div class="card-ico">🩹</div>
+            <div>
+              <div class="card-title">Coagulación / Hemostasia</div>
+              <div class="card-sub">PT, INR, aPTT, Fibrinógeno, D-Dímero</div>
+            </div>
+          </div>
+          <span class="card-chev">▾</span>
+        </div>
+        <div class="card-body">
+          <div style="display:flex; justify-content: flex-end; padding-top: 14px;">
+            <button class="btn btn-amber btn-sm" onclick="applyCGToResultados()">⚡ Mover a Resultados</button>
+          </div>
+          <div class="fields-grid" id="cgFieldsGrid"></div>
         </div>
       </div>
 
@@ -1396,7 +1740,12 @@
               <div class="text-field-row">
                 <div class="text-field-hdr">
                   <label class="field-key" for="resultados">Resultados de estudios</label>
-                  <button class="clean-btn" onclick="cleanText('resultados')">Limpiar texto ✨</button>
+                  <div style="display:flex; gap:6px;">
+                    <button class="btn btn-sec btn-sm" onclick="applyClinicalSummary()"
+                      title="Genera resumen clínico con terminología médica basado en los labs capturados">✨
+                      Autocompletar Resumen</button>
+                    <button class="clean-btn" onclick="cleanText('resultados')">Limpiar texto ✨</button>
+                  </div>
                 </div>
                 <div class="text-area-wrapper">
                   <textarea id="resultados" class="clinical-ta" maxlength="2000"
@@ -1504,6 +1853,10 @@ Ejemplos reconocidos:
   Sat 97%   /   Peso: 72kg   /   Talla 1.68   /   Gluc 95"></textarea>
               <div class="parse-actions">
                 <button type="button" class="btn btn-amber" id="btnParse">⚡ Parsear</button>
+                <button type="button" class="btn btn-sec btn-sm"
+                  onclick="document.getElementById('ocrInput').click()">📷 OCR Imagen</button>
+                <input type="file" id="ocrInput" accept="image/*" style="display:none"
+                  onchange="handleOCRUpload(this)" />
                 <button type="button" class="btn btn-sec btn-sm" id="btnImportJson">📁 Importar JSON</button>
                 <input type="file" id="jsonInput" accept=".json" style="display:none" />
                 <button type="button" class="btn btn-sec btn-sm" id="btnClearParse">✕ Limpiar</button>
@@ -1732,14 +2085,36 @@ Ejemplos reconocidos:
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="np_deporte">Deporte</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="np_deporte">Deporte</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_dep" value="niega"
+                        onchange="setDualOption('np_deporte', 'NO REFIERE REALIZAR ACTIVIDAD FÍSICA DE MANERA RECURRENTE, POR LO QUE SE CONSIDERA PERSONA SEDENTARIA')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_dep" value="baja"
+                        onchange="setDualOption('np_deporte', 'REFIERE ACTIVIDAD FÍSICA OCASIONAL DE BAJA INTENSIDAD Y CORTA DURACIÓN')">
+                      Baja Actividad</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_dep" value="alta"
+                        onchange="setDualOption('np_deporte', 'REFIERE ACTIVIDAD FÍSICA DIARIA O FRECUENTE DE ALTO RENDIMIENTO')">
+                      Alta Actividad</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="np_deporte" class="clinical-ta" maxlength="2500"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-np_deporte">0 / 2500</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="np_animales">Exposición a Animales</label>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="np_animales">Exposición a Animales</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ani" value="niega"
+                        onchange="setDualOption('np_animales', 'NIEGA LA CONVIVENCIA RECURRENTE CON ANIMALES Y/O MASCOTAS')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ani" value="afirma"
+                        onchange="setDualOption('np_animales', 'REFIERE CONVIVENCIA FRECUENTE CON ANIMALES INTRA Y EXTRA DOMICILIARIOS')">
+                      Frecuente</label>
+                  </div>
                 </div>
                 <div class="text-area-wrapper"><textarea id="np_animales" class="clinical-ta" maxlength="2500"
                     rows="3"></textarea>
@@ -1781,11 +2156,43 @@ Ejemplos reconocidos:
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="np_farmacodep">Farmacodependencia</label>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="np_farmacodep">Farmacodependencia</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_farm" value="niega"
+                        onchange="setDualOption('np_farmacodep', 'NIEGA EL CONSUMO DE OTRAS SUSTANCIAS')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_farm" value="social"
+                        onchange="setDualOption('np_farmacodep', 'REFIERE EL CONSUMO RECREATIVO DE FORMA ESPORÁDICA')">
+                      Social</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_farm" value="recurrente"
+                        onchange="setDualOption('np_farmacodep', 'REFIERE EL CONSUMO RECURRENTE DE SUSTANCIAS A RAZÓN DE')">
+                      Frecuente</label>
+                  </div>
                 </div>
                 <div class="text-area-wrapper"><textarea id="np_farmacodep" class="clinical-ta" maxlength="2500"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-np_farmacodep">0 / 2500</div>
+                </div>
+              </div>
+              <div class="text-field-row">
+                <div class="text-field-hdr">
+                  <label class="field-key" for="np_tabaquismo">Tabaquismo</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_tab" value="niega"
+                        onchange="setDualOption('np_tabaquismo', 'NIEGA EL CONSUMO DE TABACO')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_tab" value="social"
+                        onchange="setDualOption('np_tabaquismo', 'REFIERE EL CONSUMO DE TABACO DE MANERA SOCIAL')">
+                      Social</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_tab" value="recurrente"
+                        onchange="setDualOption('np_tabaquismo', 'REFIERE CONSUMIR * CIGARROS DIARIAMENTE CON UN ÍNDICE TABÁQUICO DE ')">
+                      Frecuente</label>
+                  </div>
+                </div>
+                <div class="text-area-wrapper"><textarea id="np_tabaquismo" class="clinical-ta" maxlength="2500"
+                    rows="3"></textarea>
+                  <div class="char-counter" id="cnt-np_tabaquismo">0 / 2500</div>
                 </div>
               </div>
             </div>
@@ -1807,14 +2214,33 @@ Ejemplos reconocidos:
           <div class="card-body" style="padding:17px">
             <div class="text-field-grid">
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="pat_alergias">Alérgicas</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="pat_alergias">Alérgicas</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ale" value="niega"
+                        onchange="setDualOption('pat_alergias', 'NO REFIERE SER ALÉRGICA A MEDICAMENTOS, ALIMENTOS O ALGÚN OTRO FACTOR DEL ENTORNO')">
+                      Sin alergias</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ale" value="afirma"
+                        onchange="setDualOption('pat_alergias', 'REFIERE ALERGIA A LOS SIGUIENTES MEDICAMENTOS/COMPONENTES: ')">
+                      Con alergias</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="pat_alergias" class="clinical-ta" maxlength="1000"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-pat_alergias">0 / 1000</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="pat_cronicos">Crónico Degenerativas</label>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="pat_cronicos">Crónico Degenerativas</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_cro" value="niega"
+                        onchange="setDualOption('pat_cronicos', 'NO REFIERE PADECER NINGUNA ENFERMEDAD CRÓNICO DEGENERATIVA')">
+                      Sin crónico degenerativas</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_cro" value="afirma"
+                        onchange="setDualOption('pat_cronicos', 'REFIERE PADECER LAS SIGUIENTES ENFERMEDADES CRÓNICO DEGENERATIVAS DE LARGA EVOLUCIÓN: ')">
+                      Afirma crónico degenerativas</label>
+                  </div>
                 </div>
                 <div class="text-area-wrapper"><textarea id="pat_cronicos" class="clinical-ta" maxlength="1000"
                     rows="3"></textarea>
@@ -1822,14 +2248,34 @@ Ejemplos reconocidos:
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="pat_infancia">Enf. de Infancia</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="pat_infancia">Enf. de Infancia</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_inf" value="niega"
+                        onchange="setDualOption('pat_infancia', 'REFIERE NO RECORDAR ALGUNA ENFERMEDAD PATOLÓGICA DE LA INFANCIA')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_inf" value="afirma"
+                        onchange="setDualOption('pat_infancia', 'REFIERE EL ANTECEDENTE DE LAS SIGUIENTES ENFERMEDADES DURANTE LA INFANCIA: ')">
+                      Afirma</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="pat_infancia" class="clinical-ta" maxlength="1000"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-pat_infancia">0 / 1000</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="pat_neoplasias">Neoplasias</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="pat_neoplasias">Neoplasias</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_neo" value="niega"
+                        onchange="setDualOption('pat_neoplasias', 'REFIERE NO TENER ANTECEDENTES DE NEOPLASIAS')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_neo" value="afirma"
+                        onchange="setDualOption('pat_neoplasias', 'REFIERE EL ANTECEDENTE DOCUMENTADO DE ENFERMEDAD NEOPLÁSICA: ')">
+                      Afirma</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="pat_neoplasias" class="clinical-ta" maxlength="1000"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-pat_neoplasias">0 / 1000</div>
@@ -1843,14 +2289,33 @@ Ejemplos reconocidos:
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="pat_quirurgicos">Quirúrgicos</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="pat_quirurgicos">Quirúrgicos</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_qui" value="niega"
+                        onchange="setDualOption('pat_quirurgicos', 'REFIERE NO HABER SIDO SOMETIDO A NINGÚN PROCEDIMIENTO QUIRÚRGICO DE IMPORTANCIA PREVIO')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_qui" value="afirma"
+                        onchange="setDualOption('pat_quirurgicos', 'REFIERE EL ANTECEDENTE DE LOS SIGUIENTES PROCEDIMIENTOS QUIRÚRGICOS: ')">
+                      Afirma</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="pat_quirurgicos" class="clinical-ta" maxlength="1000"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-pat_quirurgicos">0 / 1000</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="pat_transfusiones">Transfusionales</label>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="pat_transfusiones">Transfusionales</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_tra" value="niega"
+                        onchange="setDualOption('pat_transfusiones', 'REFIERE NO HABER RECIBIDO NINGÚN PAQUETE DE NINGÚN TIPO PREVIAMENTE')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_tra" value="afirma"
+                        onchange="setDualOption('pat_transfusiones', 'REFIERE EL ANTECEDENTE DE TRANSFUSIÓN SANGUÍNEA/HEMOCOMPONENTE PREVIA SIN COMPLICACIONES')">
+                      Afirma</label>
+                  </div>
                 </div>
                 <div class="text-area-wrapper"><textarea id="pat_transfusiones" class="clinical-ta" maxlength="1000"
                     rows="3"></textarea>
@@ -1858,7 +2323,17 @@ Ejemplos reconocidos:
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="pat_traumaticos">Traumáticos</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="pat_traumaticos">Traumáticos</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_trm" value="niega"
+                        onchange="setDualOption('pat_traumaticos', 'NO REFIERE HABER SUFRIDO ALGÚN EVENTO TRAUMÁTICO QUE RESULTARÁ EN ALGUNA FRACTURA DE TEJIDO ÓSEO')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_trm" value="afirma"
+                        onchange="setDualOption('pat_traumaticos', 'REFIERE EL ANTECEDENTE DE TRAUMATISMO Y/O FRACTURA DE: ')">
+                      Afirma</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="pat_traumaticos" class="clinical-ta" maxlength="1000"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-pat_traumaticos">0 / 1000</div>
@@ -1883,7 +2358,16 @@ Ejemplos reconocidos:
           <div class="card-body" style="padding:17px">
             <div class="text-field-grid">
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="ap_cardiovascular">Cardiovascular</label>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="ap_cardiovascular">Cardiovascular</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap1" value="niega"
+                        onchange="setDualOption('ap_cardiovascular', 'NIEGA PALPITACIONES, DOLOR PRECORDIAL, DISNEA DE ESFUERZO O PAROXÍSTICA, ORTOPNEA, APNEA, CIANOSIS, TINNITUS, SÍNCOPE Y EDEMA')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap1" value="anormal"
+                        onchange="setDualOption('ap_cardiovascular', 'REFIERE SINTOMATOLOGÍA CARDIOVASCULAR CARACTERIZADA POR: ')">
+                      Anormal</label>
+                  </div>
                 </div>
                 <div class="text-area-wrapper"><textarea id="ap_cardiovascular" class="clinical-ta" maxlength="500"
                     rows="3"></textarea>
@@ -1891,91 +2375,221 @@ Ejemplos reconocidos:
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="ap_dermatologico">Dermatológico</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="ap_dermatologico">Dermatológico</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap2" value="niega"
+                        onchange="setDualOption('ap_dermatologico', 'NIEGA CAMBIOS EN LA COLORACIÓN, PIGMENTACIÓN, PRURITO, CARACTERÍSTICAS DEL PELO, UÑAS, LESIONES PRIMARIAS O SECUNDARIAS, HIPERHIDROSIS Y XERODERMIA')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap2" value="anormal"
+                        onchange="setDualOption('ap_dermatologico', 'REFIERE SINTOMATOLOGÍA DERMATOLÓGICA CARACTERIZADA POR: ')">
+                      Anormal</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="ap_dermatologico" class="clinical-ta" maxlength="500"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-ap_dermatologico">0 / 500</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="ap_digestivo">Digestivo</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="ap_digestivo">Digestivo</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap3" value="niega"
+                        onchange="setDualOption('ap_digestivo', 'NIEGA ALTERACIONES EN EL APETITO, DISFAGIA, PIROSIS, NÁUSEA, VÓMITO, ALTERACIONES DEL TRÁNSITO INTESTINAL, HEMATEMESIS, MELENA, RECTORRAGIA O ICTERICIA')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap3" value="anormal"
+                        onchange="setDualOption('ap_digestivo', 'REFIERE SINTOMATOLOGÍA GASTROINTESTINAL CARACTERIZADA POR: ')">
+                      Anormal</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="ap_digestivo" class="clinical-ta" maxlength="500"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-ap_digestivo">0 / 500</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="ap_endocrino">Endocrino</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="ap_endocrino">Endocrino</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap4" value="niega"
+                        onchange="setDualOption('ap_endocrino', 'NIEGA INTOLERANCIA AL FRÍO O CALOR, DIAFORESIS, POLIDIPSIA, POLIFAGIA, POLIURIA, AUMENTO O PÉRDIDA DE PESO Y CAMBIOS EN CARACTERES SEXUALES SECUNDARIOS')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap4" value="anormal"
+                        onchange="setDualOption('ap_endocrino', 'REFIERE SINTOMATOLOGÍA ENDOCRINOLÓGICA CARACTERIZADA POR: ')">
+                      Anormal</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="ap_endocrino" class="clinical-ta" maxlength="500"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-ap_endocrino">0 / 500</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="ap_hematologico">Hematológico</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="ap_hematologico">Hematológico</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap5" value="niega"
+                        onchange="setDualOption('ap_hematologico', 'NIEGA PALIDEZ, ASTENIA, ADINAMIA, SANGRADO ANORMAL, PETEQUIAS, EQUIMOSIS O HEMATOMAS FÁCILES')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap5" value="anormal"
+                        onchange="setDualOption('ap_hematologico', 'REFIERE SINTOMATOLOGÍA HEMATOLÓGICA CARACTERIZADA POR: ')">
+                      Anormal</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="ap_hematologico" class="clinical-ta" maxlength="500"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-ap_hematologico">0 / 500</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="ap_linfatico">Linfático</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="ap_linfatico">Linfático</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap6" value="niega"
+                        onchange="setDualOption('ap_linfatico', 'NIEGA ADENOMEGALIAS DOLOROSAS O NO DOLOROSAS, LOCALIZADAS O GENERALIZADAS, ACOMPAÑADAS DE FIEBRE O PÉRDIDA DE PESO')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap6" value="anormal"
+                        onchange="setDualOption('ap_linfatico', 'REFIERE ALTERACIÓN DEL SISTEMA LINFÁTICO CARACTERIZADA POR: ')">
+                      Anormal</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="ap_linfatico" class="clinical-ta" maxlength="500"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-ap_linfatico">0 / 500</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="ap_muscular">Muscular</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="ap_muscular">Muscular</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap7" value="niega"
+                        onchange="setDualOption('ap_muscular', 'NIEGA MIALGIAS, DEBILIDAD MUSCULAR, CALAMBRES, DISMINUCIÓN DEL TONO MUSCULAR O DIFICULTAD PARA LA DEAMBULACIÓN')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap7" value="anormal"
+                        onchange="setDualOption('ap_muscular', 'REFIERE SINTOMATOLOGÍA MUSCULAR CARACTERIZADA POR: ')">
+                      Anormal</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="ap_muscular" class="clinical-ta" maxlength="500"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-ap_muscular">0 / 500</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="ap_nervioso">Nervioso</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="ap_nervioso">Nervioso</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap8" value="niega"
+                        onchange="setDualOption('ap_nervioso', 'NIEGA CEFALEA, MAREO, VÉRTIGO, ALTERACIONES DEL ESTADO DE ALERTA, CRISIS CONVULSIVAS, PARESIAS, PARESTESIAS O DISAUTONOMÍAS')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap8" value="anormal"
+                        onchange="setDualOption('ap_nervioso', 'REFIERE SINTOMATOLOGÍA NEUROLÓGICA CARACTERIZADA POR: ')">
+                      Anormal</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="ap_nervioso" class="clinical-ta" maxlength="500"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-ap_nervioso">0 / 500</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="ap_oseo">Óseo</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="ap_oseo">Óseo</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap9" value="niega"
+                        onchange="setDualOption('ap_oseo', 'NIEGA ARTRALGIAS, DOLOR ÓSEO, LIMITACIÓN A LA MOVILIDAD, DEFORMIDADES ARTICULARES, CREPITACIÓN O AUMENTO DE VOLUMEN ARTICULAR')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap9" value="anormal"
+                        onchange="setDualOption('ap_oseo', 'REFIERE SINTOMATOLOGÍA OSTEOARTICULAR CARACTERIZADA POR: ')">
+                      Anormal</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="ap_oseo" class="clinical-ta" maxlength="500"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-ap_oseo">0 / 500</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="ap_psiquiatrico">Psiquiátrico</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="ap_psiquiatrico">Psiquiátrico</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap10" value="niega"
+                        onchange="setDualOption('ap_psiquiatrico', 'NIEGA TRISTEZA PROFUNDA, EUFORIA, ALTERACIONES DEL SUEÑO, IDEACIONES SUICIDAS, ANSIEDAD, IRRITABILIDAD, APATÍA O ALUCINACIONES')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap10" value="anormal"
+                        onchange="setDualOption('ap_psiquiatrico', 'REFIERE ALTERACIONES PSIQUIÁTRICAS O DEL ESTADO DE ÁNIMO CARACTERIZADAS POR: ')">
+                      Anormal</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="ap_psiquiatrico" class="clinical-ta" maxlength="500"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-ap_psiquiatrico">0 / 500</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="ap_reproductor">Reproductor</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="ap_reproductor">Reproductor</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap11" value="niega"
+                        onchange="setSexDependentOption('ap_reproductor')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap11" value="anormal"
+                        onchange="setDualOption('ap_reproductor', 'REFIERE SINTOMATOLOGÍA DEL APARATO REPRODUCTOR CARACTERIZADA POR: ')">
+                      Anormal</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="ap_reproductor" class="clinical-ta" maxlength="500"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-ap_reproductor">0 / 500</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="ap_respiratorio">Respiratorio</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="ap_respiratorio">Respiratorio</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap12" value="niega"
+                        onchange="setDualOption('ap_respiratorio', 'NIEGA RINORREA, TOS, EXPECTORACIÓN, DISNEA, HEMOPTISIS, CIANOSIS, DOLOR TORÁCICO O SIBILANCIAS')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap12" value="anormal"
+                        onchange="setDualOption('ap_respiratorio', 'REFIERE SINTOMATOLOGÍA RESPIRATORIA CARACTERIZADA POR: ')">
+                      Anormal</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="ap_respiratorio" class="clinical-ta" maxlength="500"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-ap_respiratorio">0 / 500</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="ap_sentidos">Sentidos</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="ap_sentidos">Sentidos</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap13" value="niega"
+                        onchange="setDualOption('ap_sentidos', 'NIEGA ALTERACIONES AGUDAS DE LA VISIÓN, AUDICIÓN (HIPOACUSIA/ACÚFENOS), OLFATO, GUSTO Y TACTO')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap13" value="anormal"
+                        onchange="setDualOption('ap_sentidos', 'REFIERE ALTERACIONES EN LOS ÓRGANOS DE LOS SENTIDOS CARACTERIZADA POR: ')">
+                      Anormal</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="ap_sentidos" class="clinical-ta" maxlength="500"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-ap_sentidos">0 / 500</div>
                 </div>
               </div>
               <div class="text-field-row">
-                <div class="text-field-hdr"><label class="field-key" for="ap_urinario">Urinario / Excretor</label></div>
+                <div class="text-field-hdr">
+                  <label class="field-key" for="ap_urinario">Urinario / Excretor</label>
+                  <div style="display:flex; gap:10px; font-size:11px;">
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap14" value="niega"
+                        onchange="setDualOption('ap_urinario', 'NIEGA DOLOR LUMBAR O RENOURETERAL, DISURIA, POLAQUIURIA, TENESMO VESICAL, URGENCIA MICCIONAL, HEMATURIA O COLURIA')">
+                      Niega</label>
+                    <label style="cursor:pointer"><input type="radio" name="opt_ap14" value="anormal"
+                        onchange="setDualOption('ap_urinario', 'REFIERE SINTOMATOLOGÍA URINARIA CARACTERIZADA POR: ')">
+                      Anormal</label>
+                  </div>
+                </div>
                 <div class="text-area-wrapper"><textarea id="ap_urinario" class="clinical-ta" maxlength="500"
                     rows="3"></textarea>
                   <div class="char-counter" id="cnt-ap_urinario">0 / 500</div>
@@ -2118,10 +2732,44 @@ Ejemplos reconocidos:
         el.dispatchEvent(new Event('input'));
       }
     }
+
+    function setSexDependentOption(id) {
+      const sexo = document.querySelector('input[name="hc_sexo"]:checked')?.value || 'M';
+      const text = sexo === 'M'
+        ? 'NIEGA ALTERACIONES DE LA LÍVIDO, DISFUNCIÓN ERÉCTIL, SECRECIÓN URETRAL, DOLOR TESTICULAR O MASAS ESCROTALES'
+        : 'NIEGA ALTERACIONES DEL CICLO MENSTRUAL, DISMENORREA, LEUCORREA, DISPAREUNIA, HEMORRAGIAS ANORMALES O MASAS PÉLVICAS';
+      setDualOption(id, text);
+    }
   </script>
   </main>
   </div><!-- end shell -->
 
+  <!-- SYNC MODAL -->
+  <div class="modal-overlay" id="syncModal">
+    <div class="modal-box">
+      <div class="modal-title">Sincronización en la Nube</div>
+      <div class="modal-sub">Usa un GitHub Secret Gist como base de datos gratuita de sincronización.</div>
+
+      <div class="text-field-hdr"><label class="field-key">GitHub Personal Access Token (PAT):</label></div>
+      <input class="param-input" type="password" id="ghPat" placeholder="ghp_..."
+        style="width:100%; margin-bottom:12px;">
+
+      <div class="text-field-hdr"><label class="field-key">Gist ID (ej: a1b2c3d4e5f6):</label></div>
+      <input class="param-input" type="text" id="gistId" placeholder="Copiar ID del Secret Gist" style="width:100%;">
+
+      <div class="modal-sub" style="margin-top:10px;">
+        <a href="https://github.com/settings/tokens/new?scopes=gist&description=Azura+Sync" target="_blank"
+          style="color:var(--text-accent);">1. Crear Token (requiere scope 'gist')</a> <br>
+        <a href="https://gist.github.com" target="_blank" style="color:var(--text-accent);">2. Crear Gist secreto
+          (nombrado azura-sync.json)</a>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-sec" onclick="closeSyncSettings()">Cancelar</button>
+        <button class="btn btn-apply" onclick="saveSyncSettings()">Guardar</button>
+      </div>
+    </div>
+  </div>
 
   <div class="toast-wrap" id="toastWrap"></div>
 
@@ -2139,6 +2787,83 @@ Ejemplos reconocidos:
       // Read-only — auto-calculated by Azura
       { key: 'imc', label: 'Índ. de masa corporal', unit: 'Kg/m²', readonly: true, hint: '🔒 Calculado automáticamente' },
       { key: 'superficie', label: 'Superficie corporal', unit: 'm²', readonly: true, hint: '🔒 Calculado automáticamente' },
+    ];
+
+    const BH_FIELDS = [
+      { type: 'header', label: 'Serie Roja' },
+      { key: 'bh_rbc', label: 'Eritrocitos (RBC)', unit: 'mill/.µL', max: 8, hint: '4.5-5.9 (M) / 4.0-5.2 (F)', validate: v => { const n = parseFloat(v); if (isNaN(n) || !v) return 'ok'; const s = document.querySelector('input[name="hc_sexo"]:checked')?.value || 'M'; return s === 'M' ? (n < 4.5 || n > 5.9 ? 'Fuera (4.5-5.9)' : 'ok') : (n < 4.0 || n > 5.2 ? 'Fuera (4.0-5.2)' : 'ok'); } },
+      { key: 'bh_hb', label: 'Hemoglobina (Hb)', unit: 'g/dL', max: 5, hint: '13.5-17.5 (M) / 12.0-15.5 (F)', validate: v => { const n = parseFloat(v); if (isNaN(n) || !v) return 'ok'; const s = document.querySelector('input[name="hc_sexo"]:checked')?.value || 'M'; return s === 'M' ? (n < 13.5 || n > 17.5 ? 'Fuera (13.5-17.5)' : 'ok') : (n < 12.0 || n > 15.5 ? 'Fuera (12.0-15.5)' : 'ok'); } },
+      { key: 'bh_hto', label: 'Hematocrito (Hto)', unit: '%', max: 5, hint: '41-53 (M) / 36-46 (F)', validate: v => { const n = parseFloat(v); if (isNaN(n) || !v) return 'ok'; const s = document.querySelector('input[name="hc_sexo"]:checked')?.value || 'M'; return s === 'M' ? (n < 41 || n > 53 ? 'Fuera (41-53)' : 'ok') : (n < 36 || n > 46 ? 'Fuera (36-46)' : 'ok'); } },
+      { key: 'bh_vcm', label: 'VCM', unit: 'fL', max: 5, hint: '80-100', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 80 || n > 100 ? 'Fuera (80-100)' : 'ok'); } },
+      { key: 'bh_hcm', label: 'HCM', unit: 'pg', max: 5, hint: '27-33', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 27 || n > 33 ? 'Fuera (27-33)' : 'ok'); } },
+      { key: 'bh_cmhc', label: 'CMHC', unit: 'g/dL', max: 5, hint: '31-36', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 31 || n > 36 ? 'Fuera (31-36)' : 'ok'); } },
+      { key: 'bh_rdw', label: 'ADE / RDW', unit: '%', max: 5, hint: '11.5-14.5', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 11.5 || n > 14.5 ? 'Fuera (11.5-14.5)' : 'ok'); } },
+      { type: 'header', label: 'Serie Blanca' },
+      { key: 'bh_wbc', label: 'Leucocitos (WBC)', unit: 'miles/µL', max: 8, hint: '4.5-11.0', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 4.5 || n > 11.0 ? 'Fuera (4.5-11.0)' : 'ok'); } },
+      { key: 'bh_neu_p', label: 'Neutrófilos %', unit: '%', max: 5, hint: '40-70', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 40 || n > 70 ? 'Fuera (40-70)' : 'ok'); } },
+      { key: 'bh_neu_a', label: 'Neutrófilos abs.', unit: 'cél/µL', max: 8 },
+      { key: 'bh_lin_p', label: 'Linfocitos %', unit: '%', max: 5, hint: '20-40', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 20 || n > 40 ? 'Fuera (20-40)' : 'ok'); } },
+      { key: 'bh_lin_a', label: 'Linfocitos abs.', unit: 'cél/µL', max: 8 },
+      { key: 'bh_mon_p', label: 'Monocitos %', unit: '%', max: 5, hint: '2-8', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 2 || n > 8 ? 'Fuera (2-8)' : 'ok'); } },
+      { key: 'bh_mon_a', label: 'Monocitos abs.', unit: 'cél/µL', max: 8 },
+      { key: 'bh_eos_p', label: 'Eosinófilos %', unit: '%', max: 5, hint: '1-4', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 1 || n > 4 ? 'Fuera (1-4)' : 'ok'); } },
+      { key: 'bh_eos_a', label: 'Eosinófilos abs.', unit: 'cél/µL', max: 8 },
+      { key: 'bh_bas_p', label: 'Basófilos %', unit: '%', max: 5, hint: '0-1', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 0 || n > 1 ? 'Fuera (0-1)' : 'ok'); } },
+      { key: 'bh_bas_a', label: 'Basófilos abs.', unit: 'cél/µL', max: 8 },
+      { type: 'header', label: 'Serie Plaquetaria' },
+      { key: 'bh_plt', label: 'Plaquetas (PLT)', unit: 'miles/µL', max: 8, hint: '150-450', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 150 || n > 450 ? 'Fuera (150-450)' : 'ok'); } },
+      { key: 'bh_vpm', label: 'VPM', unit: 'fL', max: 5, hint: '7-11', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 7 || n > 11 ? 'Fuera (7-11)' : 'ok'); } },
+    ];
+
+    const QS_FIELDS = [
+      { type: 'header', label: 'Función Renal' },
+      { key: 'qs_bun', label: 'BUN', unit: 'mg/dL', max: 6, hint: '7-25', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 7 || n > 25 ? 'Fuera (7-25)' : 'ok'); } },
+      { key: 'qs_cre', label: 'Creatinina', unit: 'mg/dL', max: 6, hint: '0.6-1.2 (M) / 0.5-1.1 (F)', validate: v => { const n = parseFloat(v); if (isNaN(n) || !v) return 'ok'; const s = document.querySelector('input[name="hc_sexo"]:checked')?.value || 'M'; return s === 'M' ? (n < 0.6 || n > 1.2 ? 'Fuera (0.6-1.2)' : 'ok') : (n < 0.5 || n > 1.1 ? 'Fuera (0.5-1.1)' : 'ok'); } },
+      { key: 'qs_urea', label: 'Urea', unit: 'mg/dL', max: 6, hint: '15-50', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 15 || n > 50 ? 'Fuera (15-50)' : 'ok'); } },
+      { key: 'qs_ua', label: 'Ácido Úrico', unit: 'mg/dL', max: 6, hint: '3.5-7.2 (M) / 2.5-6.0 (F)', validate: v => { const n = parseFloat(v); if (isNaN(n) || !v) return 'ok'; const s = document.querySelector('input[name="hc_sexo"]:checked')?.value || 'M'; return s === 'M' ? (n < 3.5 || n > 7.2 ? 'Fuera (3.5-7.2)' : 'ok') : (n < 2.5 || n > 6.0 ? 'Fuera (2.5-6.0)' : 'ok'); } },
+      { type: 'header', label: 'Función Hepática' },
+      { key: 'qs_alt', label: 'ALT (TGP)', unit: 'U/L', max: 6, hint: '7-56', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 7 || n > 56 ? 'Fuera (7-56)' : 'ok'); } },
+      { key: 'qs_ast', label: 'AST (TGO)', unit: 'U/L', max: 6, hint: '10-40', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 10 || n > 40 ? 'Fuera (10-40)' : 'ok'); } },
+      { key: 'qs_alb', label: 'Albúmina', unit: 'g/dL', max: 5, hint: '3.5-5.0', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 3.5 || n > 5.0 ? 'Fuera (3.5-5.0)' : 'ok'); } },
+      { key: 'qs_tb', label: 'Bilirrubina Total', unit: 'mg/dL', max: 5, hint: '0.2-1.2', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 0.2 || n > 1.2 ? 'Fuera (0.2-1.2)' : 'ok'); } },
+      { key: 'qs_db', label: 'Bilirrubina Directa', unit: 'mg/dL', max: 5, hint: '< 0.3', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n > 0.3 ? 'Fuera (< 0.3)' : 'ok'); } },
+      { type: 'header', label: 'Perfil Metabólico / Lipídico' },
+      { key: 'qs_glu', label: 'Glucosa', unit: 'mg/dL', max: 6, hint: '70-100', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 70 || n > 100 ? 'Fuera (70-100)' : 'ok'); } },
+      { key: 'qs_col', label: 'Colesterol Total', unit: 'mg/dL', max: 6, hint: '< 200', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n > 200 ? 'Fuera (< 200)' : 'ok'); } },
+      { key: 'qs_trig', label: 'Triglicéridos', unit: 'mg/dL', max: 6, hint: '< 150', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n > 150 ? 'Fuera (< 150)' : 'ok'); } },
+    ];
+
+    const EGO_FIELDS = [
+      { type: 'header', label: 'Físico-Químico (Macroscópico)' },
+      { key: 'ego_color', label: 'Color', unit: '—', max: 20, hint: 'paja / amarillo / ámbar / rojo' },
+      { key: 'ego_aspecto', label: 'Aspecto / Turbidez', unit: '—', max: 20, hint: 'claro / ligeramente turbio / turbio' },
+      { key: 'ego_dens', label: 'Densidad', unit: '—', max: 8, hint: '1.001–1.030', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 1.001 || n > 1.030 ? 'Fuera (1.001-1.030)' : 'ok'); } },
+      { key: 'ego_ph', label: 'pH', unit: '—', max: 5, hint: '4.5–8.5', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 4.5 || n > 8.5 ? 'Fuera (4.5-8.5)' : 'ok'); } },
+      { type: 'header', label: 'Tira Reactiva (Semicuantitativo)' },
+      { key: 'ego_prot', label: 'Proteínas', unit: '—', max: 15, hint: 'negativo / + / ++ / +++' },
+      { key: 'ego_glu', label: 'Glucosa', unit: '—', max: 15, hint: 'negativo / +' },
+      { key: 'ego_ceto', label: 'Cetonas', unit: '—', max: 15, hint: 'negativo / +' },
+      { key: 'ego_sang', label: 'Sangre / Hb', unit: '—', max: 15, hint: 'negativo / +' },
+      { key: 'ego_bili', label: 'Bilirrubina', unit: '—', max: 15, hint: 'negativo / +' },
+      { key: 'ego_urobil', label: 'Urobilinógeno', unit: 'mg/dL', max: 8, hint: '0.2–1.0', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 0.2 || n > 1.0 ? 'Fuera (0.2-1.0)' : 'ok'); } },
+      { key: 'ego_nitr', label: 'Nitritos', unit: '—', max: 15, hint: 'negativo / positivo' },
+      { key: 'ego_le', label: 'Leucocito esterasa', unit: '—', max: 15, hint: 'negativo / +' },
+      { type: 'header', label: 'Sedimento Urinario' },
+      { key: 'ego_leuco', label: 'Leucocituria', unit: '/campo', max: 6, hint: '< 5', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n >= 5 ? 'Elevada (≥ 5)' : 'ok'); } },
+      { key: 'ego_hem', label: 'Hematuria (RBC)', unit: '/campo', max: 6, hint: '< 3', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n >= 3 ? 'Elevada (≥ 3)' : 'ok'); } },
+      { key: 'ego_bact', label: 'Bacteriuria', unit: '—', max: 20, hint: 'negativa / escasa / moderada / abundante' },
+      { key: 'ego_cilin', label: 'Cilindros', unit: '—', max: 30, hint: 'ninguno / hialinos / granulosos / eritrocitários' },
+      { key: 'ego_epitel', label: 'Céls. epiteliales', unit: '—', max: 20, hint: 'escasas / moderadas / abundantes' },
+    ];
+
+    const CG_FIELDS = [
+      { type: 'header', label: 'Perfil de Coagulación' },
+      { key: 'cg_pt', label: 'Tiempo de Protrombina (PT)', unit: 'seg', max: 6, hint: '11–15', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 11 || n > 15 ? 'Fuera (11-15)' : 'ok'); } },
+      { key: 'cg_inr', label: 'INR', unit: '—', max: 5, hint: '0.8–1.2', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 0.8 || n > 1.2 ? 'Fuera (0.8-1.2)' : 'ok'); } },
+      { key: 'cg_aptt', label: 'aPTT', unit: 'seg', max: 6, hint: '25–35', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 25 || n > 35 ? 'Fuera (25-35)' : 'ok'); } },
+      { key: 'cg_fib', label: 'Fibrinógeno', unit: 'mg/dL', max: 6, hint: '200–400', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 200 || n > 400 ? 'Fuera (200-400)' : 'ok'); } },
+      { key: 'cg_dd', label: 'D-Dímero', unit: 'µg/mL FEU', max: 6, hint: '< 0.5', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n > 0.5 ? 'Fuera (< 0.5)' : 'ok'); } },
+      { key: 'cg_plt', label: 'Plaquetas (control)', unit: 'miles/µL', max: 8, hint: '150–450', validate: v => { const n = parseFloat(v); return isNaN(n) || !v ? 'ok' : (n < 150 || n > 450 ? 'Fuera (150-450)' : 'ok'); } },
     ];
 
     // Antecedentes template constant
@@ -2165,6 +2890,7 @@ FUM:`;
     const HC_FIELDS = [
       "hf_neoplasias", "hf_otras", "np_casa", "np_alimentacion", "np_deporte",
       "np_animales", "np_religion", "np_trabajo", "np_alcoholismo", "np_farmacodep",
+      "np_tabaquismo",
       "pat_alergias", "pat_cronicos", "pat_infancia", "pat_neoplasias", "pat_otras",
       "pat_quirurgicos", "pat_transfusiones", "pat_traumaticos", "ap_cardiovascular",
       "ap_dermatologico", "ap_digestivo", "ap_endocrino", "ap_hematologico",
@@ -2188,6 +2914,7 @@ FUM:`;
       np_trabajo: 'REFIERE MANEJAR NIVELES MODERADOS DE ESTRÉS A RAZÓN DE',
       np_alcoholismo: 'NIEGA EL CONSUMO DE BEBIDAS ALCOHÓLICAS',
       np_farmacodep: 'NIEGA EL CONSUMO DE OTRAS SUSTANCIAS',
+      np_tabaquismo: 'NIEGA EL CONSUMO DE TABACO',
       // Personales Patológicos
       pat_alergias: 'NO REFIERE SER ALÉRGICA A MEDICAMENTOS, ALIMENTOS O ALGÚN OTRO FACTOR DEL ENTORNO',
       pat_cronicos: 'NO REFIERE PADECER NINGUNA ENFERMEDAD CRÓNICO DEGENERATIVA',
@@ -2268,15 +2995,30 @@ FUM:`;
       setTimeout(() => t.remove(), 3200);
     }
 
-    // ─── BUILD FIELDS ────────────────────────────────────────────────────────────
-    function buildFields() {
-      const grid = $('fieldsGrid');
+    // ─── BUILD FIELD GROUP (unified factory) ─────────────────────────────────────
+    function buildFieldGroup(fieldDefs, gridId) {
+      const grid = $(gridId);
+      if (!grid) return;
       grid.innerHTML = '';
-      for (const f of FIELDS) {
-        const id = 'fi_' + f.key;
+      for (const f of fieldDefs) {
         const row = document.createElement('div');
-        row.className = 'field-row';
 
+        if (f.type === 'header') {
+          row.style.gridColumn = '1 / -1';
+          row.style.textAlign = 'center';
+          row.style.color = 'var(--text-dim)';
+          row.style.fontWeight = '500';
+          row.style.fontSize = '0.85rem';
+          row.style.margin = '10px 0 2px 0';
+          row.style.borderBottom = '1px solid var(--border)';
+          row.style.paddingBottom = '4px';
+          row.textContent = f.label;
+          grid.appendChild(row);
+          continue;
+        }
+
+        const id = 'fi_' + f.key;
+        row.className = 'field-row';
         const inputHtml = f.readonly
           ? `<input class="param-input" id="${id}" data-key="${f.key}" type="text" readonly placeholder="— calculado —" />`
           : `<input class="param-input" id="${id}" data-key="${f.key}" type="text" maxlength="${f.max}" placeholder="${f.key === 'tensart' ? '000/000' : ''}"/>`;
@@ -2285,9 +3027,9 @@ FUM:`;
       <div class="field-label-col">
         <div class="field-key-row">
           <span class="field-key">${esc(f.label)}</span>
-          <span class="field-unit">${f.readonly ? '🔒 ' : ''}${esc(f.unit)}</span>
+          <span class="field-unit">${f.readonly ? '🔒 ' : ''}${f.unit ? esc(f.unit) : ''}</span>
         </div>
-        <span class="field-hint">${esc(f.hint)}</span>
+        <span class="field-hint">${f.hint ? esc(f.hint) : ''}</span>
       </div>
       <div class="field-input-col">
         ${inputHtml}
@@ -2295,16 +3037,19 @@ FUM:`;
       </div>
     `;
         grid.appendChild(row);
-
         if (!f.readonly) {
-          const el = $(`fi_${f.key}`);
-          el.addEventListener('input', () => {
-            validate(f, el);
-            scheduleAutosave();
-          });
+          const el = $(id);
+          el.addEventListener('input', () => { validate(f, el); scheduleAutosave(); });
         }
       }
     }
+
+    // Thin wrappers
+    function buildFields() { buildFieldGroup(FIELDS, 'fieldsGrid'); }
+    function buildBHFields() { buildFieldGroup(BH_FIELDS, 'bhFieldsGrid'); }
+    function buildQSFields() { buildFieldGroup(QS_FIELDS, 'qsFieldsGrid'); }
+    function buildEGOFields() { buildFieldGroup(EGO_FIELDS, 'egoFieldsGrid'); }
+    function buildCGFields() { buildFieldGroup(CG_FIELDS, 'cgFieldsGrid'); }
 
     function validate(f, el) {
       if (!f.validate) return;
@@ -2357,6 +3102,26 @@ FUM:`;
         const el = $('fi_' + f.key);
         if (el && vals[f.key] !== undefined) { el.value = vals[f.key]; validate(f, el); }
       }
+      for (const f of BH_FIELDS) {
+        if (f.type) continue;
+        const el = $('fi_' + f.key);
+        if (el && vals[f.key] !== undefined) { el.value = vals[f.key]; validate(f, el); }
+      }
+      for (const f of QS_FIELDS) {
+        if (f.type) continue;
+        const el = $('fi_' + f.key);
+        if (el && vals[f.key] !== undefined) { el.value = vals[f.key]; validate(f, el); }
+      }
+      for (const f of EGO_FIELDS) {
+        if (f.type) continue;
+        const el = $('fi_' + f.key);
+        if (el && vals[f.key] !== undefined) { el.value = vals[f.key]; validate(f, el); }
+      }
+      for (const f of CG_FIELDS) {
+        if (f.type) continue;
+        const el = $('fi_' + f.key);
+        if (el && vals[f.key] !== undefined) { el.value = vals[f.key]; validate(f, el); }
+      }
       // All text fields (ingreso + evo + hc)
       const allText = [...new Set([...TEXT_FIELDS, ...EVO_FIELDS, ...HC_FIELDS])];
       for (const id of allText) {
@@ -2373,6 +3138,8 @@ FUM:`;
     }
 
     function clearValues() {
+      if (!confirm('¿Seguro que deseas restaurar todos los campos a sus valores de fábrica? Perderás los datos no guardados.')) return;
+
       document.querySelectorAll('.param-input:not([readonly])').forEach(el => { el.value = ''; el.className = 'param-input'; });
       document.querySelectorAll('.validation-msg').forEach(el => { el.textContent = ''; el.className = 'validation-msg'; });
       const allText = [...new Set([...TEXT_FIELDS, ...EVO_FIELDS, ...HC_FIELDS])];
@@ -2383,8 +3150,15 @@ FUM:`;
           updateCounter(id);
         }
       }
-      clearMotivoChipSelection();
+
+      // Also restore HC defaults
+      loadHCPresets();
+
+      if (typeof clearMotivoChipSelection === 'function') clearMotivoChipSelection();
+      if (typeof clearRxRows === 'function') clearRxRows();
+
       scheduleAutosave();
+      toast('Campos restaurados por defecto', 'warn');
     }
 
     // ─── TAB SWITCHER ───────────────────────────────────────────────────────────────
@@ -2583,7 +3357,16 @@ FUM:`;
       setValues({ ...current, ...found });
       scheduleAutosave();
 
-      const LABELS = Object.fromEntries(FIELDS.map(f => [f.key, f.label]));
+      // Auto-detect which lab card to show
+      const panel = detectPanel(text);
+      if (panel) {
+        const cb = document.querySelector(`#${panel.cardId} .card-body`);
+        if (cb && cb.style.display !== 'block') toggleCard(panel.cardId);
+        toast(`🔬 ${panel.panel === 'BH' ? 'Biometría Hemática' : panel.panel === 'QS' ? 'Química Sanguínea' : 'EGO / Orina'} detectada automáticamente`, 'ok');
+      }
+
+      const allFields = [...FIELDS, ...BH_FIELDS, ...QS_FIELDS, ...EGO_FIELDS, ...CG_FIELDS];
+      const LABELS = Object.fromEntries(allFields.map(f => [f.key, f.label]));
       const lines = [];
       if (Object.keys(found).length) {
         lines.push('<span class="d-ok">✅ Encontrados:</span>');
@@ -2731,15 +3514,12 @@ FUM:`;
 
     function cleanText(id) {
       const el = $(id);
-      if (!el.value.trim()) return;
-      let val = el.value;
-      val = val.replace(/\s+/g, ' '); // normalizar espacios
-      val = val.replace(/\n\s*\n/g, '\n'); // normalizar saltos de línea
-      val = val.trim();
-      el.value = val;
+      if (!el.value.trim()) { toast('El campo ya está vacío.', 'warn'); return; }
+      if (!confirm('¿Limpiar el contenido de este campo?')) return;
+      el.value = '';
       updateCounter(id);
       scheduleAutosave();
-      toast('✨ Texto normalizado.', 'ok');
+      toast('🧹 Campo limpiado.', 'ok');
     }
 
     function importJson(file) {
@@ -2762,7 +3542,55 @@ FUM:`;
     // ─── PASTE PARSER (Expanded for Part 4) ───────────────────────────────────────
     function parseNotes(text) {
       const found = {}, missing = [];
+
+      // ── Key Alias Map: translates common AI/OCR key variants to Azura's internal keys ──
+      const KEY_ALIASES = {
+        // BH aliases (AI commonly generates these wrong)
+        bh_ht: 'bh_hto', bh_hct: 'bh_hto',
+        bh_chcm: 'bh_cmhc', bh_mchc: 'bh_cmhc', bh_ccmh: 'bh_cmhc',
+        bh_rde: 'bh_rdw', bh_ade: 'bh_rdw',
+        bh_neu_abs: 'bh_neu_a', bh_neu_pct: 'bh_neu_p',
+        bh_lin_abs: 'bh_lin_a', bh_lin_pct: 'bh_lin_p',
+        bh_mon_abs: 'bh_mon_a', bh_mon_pct: 'bh_mon_p',
+        bh_eos_abs: 'bh_eos_a', bh_eos_pct: 'bh_eos_p',
+        bh_bas_abs: 'bh_bas_a', bh_bas_pct: 'bh_bas_p',
+        // QS aliases
+        qs_creat: 'qs_cre', qs_gluc: 'qs_glu', qs_acido_urico: 'qs_ua',
+        // CG aliases
+        cg_tp: 'cg_pt', cg_ttpa: 'cg_aptt',
+        // EGO aliases
+        ego_densidad: 'ego_dens', ego_den: 'ego_dens',
+        ego_proteinas: 'ego_prot', ego_bacterias: 'ego_bact',
+      };
+      function normalizeKey(k) { return KEY_ALIASES[k] || k; }
+
+      // 0. Try Fast JSON Parse (for AI/OCR outputs)
+      try {
+        const asJson = JSON.parse(text);
+        if (typeof asJson === 'object' && asJson !== null) {
+          const allValidPrefixes = ['bh_', 'qs_', 'ego_', 'cg_', 'temperatura', 'peso', 'talla', 'frecresp', 'freccard', 'glucometria', 'tensart', 'saturacion'];
+          for (const [k, v] of Object.entries(asJson)) {
+            if (allValidPrefixes.some(p => k.startsWith(p)) && v !== undefined && v !== null && v !== '') {
+              found[normalizeKey(k)] = String(v).trim();
+            }
+          }
+          if (Object.keys(found).length > 0) return { found, missing: [] };
+        }
+      } catch (e) { /* not valid JSON, proceed to standard parsing */ }
+
       const lines = text.split(/\n/);
+
+      // 0.5 Direct Key Match (for AI/OCR raw key lists, e.g., "bh_rbc: 5.01" dumped as text)
+      const allValidPrefixes = ['bh_', 'qs_', 'ego_', 'cg_', 'hc_', 'temperatura', 'peso', 'talla', 'frecresp', 'freccard', 'glucometria', 'tensart', 'saturacion'];
+      for (const line of lines) {
+        const m = line.match(/^\s*([a-zA-Z_0-9]+)\s*:\s*(.+)$/);
+        if (m) {
+          const k = normalizeKey(m[1].toLowerCase());
+          if (allValidPrefixes.some(p => k.startsWith(p))) {
+            found[k] = m[2].trim();
+          }
+        }
+      }
 
       // Numeric Fields Aliases
       const ALIASES = {
@@ -2792,15 +3620,50 @@ FUM:`;
 
 
       // 1. Numeric Match
+      function levenshtein(a, b) {
+        if (!a || !b) return (a || b).length;
+        let m = [];
+        for (let i = 0; i <= b.length; i++) m[i] = [i];
+        for (let j = 0; j <= a.length; j++) m[0][j] = j;
+        for (let i = 1; i <= b.length; i++) {
+          for (let j = 1; j <= a.length; j++) {
+            m[i][j] = b.charAt(i - 1) === a.charAt(j - 1) ? m[i - 1][j - 1] : Math.min(
+              m[i - 1][j - 1] + 1,
+              m[i][j - 1] + 1,
+              m[i - 1][j] + 1
+            );
+          }
+        }
+        return m[b.length][a.length];
+      }
+
       for (const [key, aliases] of Object.entries(ALIASES)) {
         let matched = false;
         for (const alias of aliases) {
-          const re = new RegExp(`${alias}\\s*[:\\-]?\\s*([\\d\\.]+(?:\\/[\\d\\.]+)?)`, 'i');
+          const re = new RegExp(`(^|[^a-zA-Z_ñÑ])${alias}\\s*[:\\-]?\\s*([\\d\\.]+(?:\\/[\\d\\.]+)?)`, 'i');
           for (const line of lines) {
             const m = line.match(re);
-            if (m) { found[key] = m[1].trim(); matched = true; break; }
+            if (m) { found[key] = m[2].trim(); matched = true; break; }
           }
           if (matched) break;
+        }
+        // Fuzzy fallback if exact regex fails
+        if (!matched) {
+          for (const alias of aliases) {
+            if (alias.length < 5) continue; // too short for fuzzy
+            for (const line of lines) {
+              const kvMatch = line.match(/^([a-zA-ZáéíóúÁÉÍÓÚñÑ\s\.]+?)[:\-]?\s*([\d\.]+(?:\/[\d\.]+)?)/);
+              if (kvMatch) {
+                const rawKey = kvMatch[1].trim().toLowerCase();
+                if (levenshtein(rawKey, alias.toLowerCase()) <= 2) {
+                  found[key] = kvMatch[2].trim();
+                  matched = true;
+                  break;
+                }
+              }
+            }
+            if (matched) break;
+          }
         }
         if (!matched) missing.push(key);
       }
@@ -2827,6 +3690,96 @@ FUM:`;
           if (found[key]) break;
         }
       }
+
+      // 3. Extract Biometría Hemática
+      function extractBH(txt) {
+        const getVal = (regex) => { const match = txt.match(regex); return match ? match[1].trim() : ''; };
+        const getDual = (regex) => { const match = txt.match(regex); return match ? { p: match[1]?.trim(), a: match[2]?.trim() } : { p: '', a: '' }; };
+        const res = {
+          bh_rbc: getVal(/(?:Eritrocitos|RBC)[^\d]*([\d\.]+)/i),
+          bh_hb: getVal(/(?:Hemoglobina|HGB|Hb(?!\w))[^\d]*([\d\.]+)/i),
+          bh_hto: getVal(/(?:Hematocrito|HCT|Hto(?!\w))[^\d]*([\d\.]+)/i),
+          bh_vcm: getVal(/VCM[^\d]*([\d\.]+)/i),
+          bh_hcm: getVal(/HCM[^\d]*([\d\.]+)/i),
+          bh_cmhc: getVal(/CMHC[^\d]*([\d\.]+)/i),
+          bh_rdw: getVal(/(?:ADE|RDW)[^\d]*([\d\.]+)/i),
+          bh_wbc: getVal(/(?:Leucocitos|WBC)[^\d]*([\d\.]+)/i),
+          bh_neu: getDual(/Neutr[oó]filos[^\d]*([\d\.]+)(?:[^\d]+([\d\.]+))?/i),
+          bh_lin: getDual(/Linfocitos[^\d]*([\d\.]+)(?:[^\d]+([\d\.]+))?/i),
+          bh_mon: getDual(/Monocitos[^\d]*([\d\.]+)(?:[^\d]+([\d\.]+))?/i),
+          bh_eos: getDual(/Eosin[oó]filos[^\d]*([\d\.]+)(?:[^\d]+([\d\.]+))?/i),
+          bh_bas: getDual(/Bas[oó]filos[^\d]*([\d\.]+)(?:[^\d]+([\d\.]+))?/i),
+          bh_plt: getVal(/(?:Plaquetas|PLT)[^\d]*([\d\.]+)/i),
+          bh_vpm: getVal(/VPM[^\d]*([\d\.]+)/i)
+        };
+        for (const [k, v] of Object.entries(res)) {
+          if (v && typeof v === 'string') found[k] = v;
+          else if (v && typeof v === 'object') {
+            if (v.p) found[k + '_p'] = v.p;
+            if (v.a) found[k + '_a'] = v.a;
+          }
+        }
+      }
+
+      extractBH(text);
+
+      // 4. Extract Química Sanguínea
+      function extractQS(txt) {
+        const getVal = (regex) => { const match = txt.match(regex); return match ? match[1].trim() : ''; };
+        const res = {
+          qs_glu: getVal(/(?:Glucosa|Gluc|Glu|glucemia)[^\d]*([\d\.]+)/i),
+          qs_bun: getVal(/(?:BUN|Nitrógeno|Nitrogeno Ureico|Nitrogeno)[^\d]*([\d\.]+)/i),
+          qs_cre: getVal(/(?:Creatinina|Creat|Cre)[^\d]*([\d\.]+)/i),
+          qs_urea: getVal(/(?:Urea)[^\d]*([\d\.]+)/i),
+          qs_ua: getVal(/(?:[AÁ]cido [UÚ]rico|Ac Urico|Urico)[^\d]*([\d\.]+)/i),
+          qs_col: getVal(/(?:Colesterol Total|Colesterol|Col)[^\d]*([\d\.]+)/i),
+          qs_trig: getVal(/(?:Triglic[eé]ridos|Trigl|Trig)[^\d]*([\d\.]+)/i),
+          qs_alt: getVal(/(?:ALT|TGP)[^\d]*([\d\.]+)/i),
+          qs_ast: getVal(/(?:AST|TGO)[^\d]*([\d\.]+)/i),
+          qs_alb: getVal(/(?:Alb[úu]mina|Alb)[^\d]*([\d\.]+)/i),
+          qs_tb: getVal(/(?:Bilirrubina Total|BT|Bili Total)[^\d]*([\d\.]+)/i),
+          qs_db: getVal(/(?:Bilirrubina Directa|BD|Bili Directa)[^\d]*([\d\.]+)/i)
+        };
+        for (const [k, v] of Object.entries(res)) {
+          if (v) found[k] = v;
+        }
+      }
+      extractQS(text);
+
+      // 5. Extract EGO
+      function extractEGO(txt) {
+        const getVal = (regex) => { const match = txt.match(regex); return match ? match[1].trim() : ''; };
+        const res = {
+          ego_color: getVal(/Color[^\w]*([a-zA-ZáéíóúÁÉÍÓÚñÑ]+)/i),
+          ego_aspecto: getVal(/Aspecto[^\w]*([a-zA-ZáéíóúÁÉÍÓÚñÑ]+)/i),
+          ego_ph: getVal(/pH[^\d]*([\d\.]+)/i),
+          ego_den: getVal(/(?:Densidad|Den)[^\d]*([\d\.]+)/i),
+          ego_glu: getVal(/Glucosa[^\d\w\+]*([A-Za-z\+]+|[\d\.]+)/i),
+          ego_prot: getVal(/Prote[íi]nas[^\d\w\+]*([A-Za-z\+]+|[\d\.]+)/i),
+          ego_bact: getVal(/Bacterias[^\d\w\+]*([A-Za-z\+]+|[\d\.]+)/i)
+        };
+        for (const [k, v] of Object.entries(res)) {
+          // ensure we don't overwrite QS glucose if EGO glucose isn't explicit
+          if (v && !found[k]) found[k] = v;
+        }
+      }
+      extractEGO(text);
+
+      // 6. Extract Coagulación
+      function extractCG(txt) {
+        const getVal = (regex) => { const match = txt.match(regex); return match ? match[1].trim() : ''; };
+        const res = {
+          cg_pt: getVal(/(?:TP|PT|Tiempo de Protrombina)[^\d]*([\d\.]+)/i),
+          cg_inr: getVal(/INR[^\d]*([\d\.]+)/i),
+          cg_aptt: getVal(/(?:TTPa|aPTT|TTP)[^\d]*([\d\.]+)/i),
+          cg_fib: getVal(/(?:Fibrin[oó]geno|Fib)[^\d]*([\d\.]+)/i),
+          cg_dd: getVal(/(?:D-D[ií]mero|DD)[^\d]*([\d\.]+)/i)
+        };
+        for (const [k, v] of Object.entries(res)) {
+          if (v) found[k] = v;
+        }
+      }
+      extractCG(text);
 
       return { found, missing };
     }
@@ -3053,16 +4006,436 @@ FUM:`;
       if (el) { el.value = ANTE_TEMPLATE; updateCounter('antecedentes'); scheduleAutosave(); toast('↺ Plantilla restaurada.', 'ok'); }
     }
 
+    function getActiveResultadosID() {
+      if (document.getElementById('tabBtnEvolucion')?.classList.contains('active')) return 'resultadoLabImg';
+      if (document.getElementById('tabBtnHistoria')?.classList.contains('active')) return 'hc_resultados';
+      return 'resultados';
+    }
+
+    function applyBHToResultados() {
+      const v = getValues();
+      const block = [];
+      if (v.bh_rbc) block.push(`- Eritrocitos (RBC): ${v.bh_rbc} millones/µL`);
+      if (v.bh_hb) block.push(`- Hemoglobina (Hb): ${v.bh_hb} g/dL`);
+      if (v.bh_hto) block.push(`- Hematocrito (Hto): ${v.bh_hto} %`);
+      if (v.bh_vcm) block.push(`- VCM: ${v.bh_vcm} fL`);
+      if (v.bh_hcm) block.push(`- HCM: ${v.bh_hcm} pg`);
+      if (v.bh_cmhc) block.push(`- CMHC: ${v.bh_cmhc} g/dL`);
+      if (v.bh_rdw) block.push(`- RDW/ADE: ${v.bh_rdw} %`);
+      if (v.bh_wbc) block.push(`- Leucocitos (WBC): ${v.bh_wbc} miles/µL`);
+      const addDiff = (name, pKey, aKey) => {
+        if (v[pKey]) {
+          let str = `  * ${name}: ${v[pKey]}%`;
+          if (v[aKey]) str += ` (${v[aKey]} cél/µL)`;
+          block.push(str);
+        }
+      };
+      addDiff('Neutrófilos', 'bh_neu_p', 'bh_neu_a');
+      addDiff('Linfocitos', 'bh_lin_p', 'bh_lin_a');
+      addDiff('Monocitos', 'bh_mon_p', 'bh_mon_a');
+      addDiff('Eosinófilos', 'bh_eos_p', 'bh_eos_a');
+      addDiff('Basófilos', 'bh_bas_p', 'bh_bas_a');
+      if (v.bh_plt) block.push(`- Plaquetas (PLT): ${v.bh_plt} miles/µL`);
+      if (v.bh_vpm) block.push(`- VPM: ${v.bh_vpm} fL`);
+      if (block.length === 0) { toast('No hay valores de BH para generar', 'warn'); return; }
+      block.unshift('Biometría Hemática:');
+      const t = block.join('\n');
+      const targetId = getActiveResultadosID();
+      const el = $(targetId);
+      if (el) { el.value = el.value ? el.value + '\n\n' + t : t; updateCounter(targetId); scheduleAutosave(); toast('✅ Biometría movida a resultados', 'ok'); }
+    }
+
+    function applyQSToResultados() {
+      const v = getValues();
+      const block = [];
+      const addQS = (label, key, unit) => { if (v[key]) block.push(`- ${label}: ${v[key]} ${unit}`); };
+      addQS('BUN', 'qs_bun', 'mg/dL');
+      addQS('Creatinina', 'qs_cre', 'mg/dL');
+      addQS('Urea', 'qs_urea', 'mg/dL');
+      addQS('Ácido Úrico', 'qs_ua', 'mg/dL');
+      addQS('ALT (TGP)', 'qs_alt', 'U/L');
+      addQS('AST (TGO)', 'qs_ast', 'U/L');
+      addQS('Albúmina', 'qs_alb', 'g/dL');
+      addQS('Bilirrubina Total', 'qs_tb', 'mg/dL');
+      addQS('Bilirrubina Directa', 'qs_db', 'mg/dL');
+      addQS('Glucosa', 'qs_glu', 'mg/dL');
+      addQS('Colesterol Total', 'qs_col', 'mg/dL');
+      addQS('Triglicéridos', 'qs_trig', 'mg/dL');
+      if (block.length === 0) { toast('No hay valores de QS para generar', 'warn'); return; }
+      block.unshift('Química Sanguínea:');
+      const t = block.join('\n');
+      const targetId = getActiveResultadosID();
+      const el = $(targetId);
+      if (el) { el.value = el.value ? el.value + '\n\n' + t : t; updateCounter(targetId); scheduleAutosave(); toast('✅ Química Sanguínea movida a resultados', 'ok'); }
+    }
+
+    function applyEGOToResultados() {
+      const v = getValues();
+      const block = [];
+      const ego = (label, key, unit) => { if (v[key]) block.push(`- ${label}: ${v[key]}${unit ? ' ' + unit : ''}`); };
+      ego('Color', 'ego_color', '');
+      ego('Aspecto', 'ego_aspecto', '');
+      ego('Densidad', 'ego_dens', '');
+      ego('pH', 'ego_ph', '');
+      ego('Proteínas', 'ego_prot', '');
+      ego('Glucosa', 'ego_glu', '');
+      ego('Cetonas', 'ego_ceto', '');
+      ego('Sangre/Hb', 'ego_sang', '');
+      ego('Bilirrubina', 'ego_bili', '');
+      ego('Urobilinógeno', 'ego_urobil', 'mg/dL');
+      ego('Nitritos', 'ego_nitr', '');
+      ego('Leucocito esterasa', 'ego_le', '');
+      ego('Leucocituria', 'ego_leuco', '/campo');
+      ego('Hematuria (RBC)', 'ego_hem', '/campo');
+      ego('Bacteriuria', 'ego_bact', '');
+      ego('Cilindros', 'ego_cilin', '');
+      ego('Céls. epiteliales', 'ego_epitel', '');
+      if (block.length === 0) { toast('No hay valores de EGO para generar', 'warn'); return; }
+      block.unshift('EGO / Orina Completa:');
+      const t = block.join('\n');
+      const targetId = getActiveResultadosID();
+      const el = $(targetId);
+      if (el) { el.value = el.value ? el.value + '\n\n' + t : t; updateCounter(targetId); scheduleAutosave(); toast('✅ EGO movido a resultados', 'ok'); }
+    }
+
+    function applyCGToResultados() {
+      const v = getValues();
+      const block = [];
+      const add = (label, key, unit) => { if (v[key]) block.push(`- ${label}: ${v[key]} ${unit}`); };
+      add('PT', 'cg_pt', 'seg');
+      add('INR', 'cg_inr', '');
+      add('aPTT', 'cg_aptt', 'seg');
+      add('Fibrinógeno', 'cg_fib', 'mg/dL');
+      add('D-Dímero', 'cg_dd', 'µg/mL FEU');
+      add('Plaquetas (control)', 'cg_plt', 'miles/µL');
+      if (block.length === 0) { toast('No hay valores de Coagulación para generar', 'warn'); return; }
+      block.unshift('Coagulación / Hemostasia:');
+      const t = block.join('\n');
+      const targetId = getActiveResultadosID();
+      const el = $(targetId);
+      if (el) { el.value = el.value ? el.value + '\n\n' + t : t; updateCounter(targetId); scheduleAutosave(); toast('✅ Coagulación movida a resultados', 'ok'); }
+    }
+
+    // ─── LAB AUTO-DETECTION ──────────────────────────────────────────────────────
+    function detectPanel(text) {
+      const lower = text.toLowerCase();
+      const signatures = [
+        { panel: 'BH', cardId: 'cardBH', keywords: ['eritrocitos', 'hemoglobina', 'leucocitos', 'plaquetas', 'rbc', 'wbc', 'plt', 'hematocrito'] },
+        { panel: 'QS', cardId: 'cardQS', keywords: ['creatinina', 'bun', 'urea', 'alt', 'ast', 'bilirrubina', 'albúmina', 'albumina', 'colesterol', 'trigliceridos', 'triglicéridos'] },
+        { panel: 'EGO', cardId: 'cardEGO', keywords: ['ph', 'densidad', 'nitritos', 'leucocituria', 'bacteriuria', 'cilindros', 'urobilinógeno', 'urobilinogeno', 'leucocito esterasa', 'hematuria', 'turbidez', 'sedimento'] },
+        { panel: 'CG', cardId: 'cardCG', keywords: ['pt', 'inr', 'aptt', 'tromboplastina', 'fibrinogeno', 'fibrinógeno', 'd-dímero', 'coagulacion', 'coagulación', 'protrombina'] },
+      ];
+      let best = null, bestScore = 0;
+      for (const s of signatures) {
+        const score = s.keywords.filter(k => lower.includes(k)).length;
+        if (score > bestScore) { bestScore = score; best = s; }
+      }
+      return bestScore >= 2 ? best : null;
+    }
+
+    // ─── PRINT / PDF EXPORT ──────────────────────────────────────────────────────
+    function printNota() {
+      const v = getValues();
+      const sessionName = document.querySelector('.session-name')?.textContent || 'Nota clínica';
+      const now = new Date().toLocaleString('es-MX', { dateStyle: 'long', timeStyle: 'short' });
+
+      const section = (title, lines) => {
+        const filled = lines.filter(l => l.value);
+        if (!filled.length) return '';
+        return `<div class="pr-section"><h3>${title}</h3><table class="pr-table">${filled.map(l => `<tr><td class="pr-label">${l.label}</td><td>${esc(String(l.value))}${l.unit ? ' <span class="pr-unit">' + esc(l.unit) + '</span>' : ''}</td></tr>`).join('')}</table></div>`;
+      };
+      const textBlock = (title, text) => text ? `<div class="pr-section"><h3>${title}</h3><p class="pr-text">${esc(text).replace(/\n/g, '<br>')}</p></div>` : '';
+
+      const showBH = QS_FIELDS.concat(BH_FIELDS).filter(f => !f.type && v[f.key]);
+
+      const html = `
+        <div class="pr-header">
+          <div class="pr-name">${esc(sessionName)}</div>
+          <div class="pr-date">${esc(now)}</div>
+        </div>
+        ${section('Somatometría', FIELDS.filter(f => !f.readonly).map(f => ({ label: f.label, value: v[f.key], unit: f.unit })))}
+        ${section('Biometría Hemática', BH_FIELDS.filter(f => !f.type).map(f => ({ label: f.label, value: v[f.key], unit: f.unit })))}
+        ${section('Química Sanguínea', QS_FIELDS.filter(f => !f.type).map(f => ({ label: f.label, value: v[f.key], unit: f.unit })))}
+        ${section('EGO / Orina', EGO_FIELDS.filter(f => !f.type).map(f => ({ label: f.label, value: v[f.key], unit: f.unit })))}
+        ${section('Coagulación', CG_FIELDS.filter(f => !f.type).map(f => ({ label: f.label, value: v[f.key], unit: f.unit })))}
+        ${textBlock('Resultados de Estudios', v.resultados)}
+        ${textBlock('Tratamiento', v.tratamiento)}
+        ${textBlock('Pronóstico', v.pronostico)}
+        ${textBlock('Motivo de Ingreso', v.motivoIngreso)}
+        <div style="text-align:center; margin-top:20px;">
+          <button onclick="navigator.clipboard.writeText(document.getElementById('printView').innerText).then(()=>{this.textContent='✅ Copiado!'; setTimeout(()=>this.textContent='📋 Copiar texto',2000)})" style="padding:6px 16px; cursor:pointer; border-radius:6px; border:1px solid #999; font-size:12px;">📋 Copiar texto</button>
+        </div>
+      `;
+
+      let pv = $('printView');
+      if (!pv) { pv = document.createElement('div'); pv.id = 'printView'; document.body.appendChild(pv); }
+      pv.innerHTML = html;
+      window.print();
+    }
+
+    // ─── MULTI-PATIENT SLOT MANAGEMENT ───────────────────────────────────────────
+    const SLOT_COUNT = 5;
+    let activeSlot = parseInt(localStorage.getItem('LS_ACTIVE_SLOT') || '0');
+
+    function switchSlot(n) {
+      localStorage.setItem(`LS_SLOT_${activeSlot}`, JSON.stringify(getValues()));
+      activeSlot = n;
+      localStorage.setItem('LS_ACTIVE_SLOT', String(n));
+      const raw = localStorage.getItem(`LS_SLOT_${n}`);
+      const vals = raw ? JSON.parse(raw) : {};
+      document.querySelectorAll('.param-input, textarea, input[type=text]').forEach(el => {
+        if (!el.readOnly && !el.id?.startsWith('slot')) el.value = '';
+      });
+      setValues(vals);
+      document.querySelectorAll('.slot-pill').forEach((p, i) => p.classList.toggle('active', i === n));
+      const meta = JSON.parse(localStorage.getItem(`LS_SLOT_META_${n}`) || '{}');
+      $('slotLabel').textContent = meta.name || `Paciente ${n + 1}`;
+      toast(`📋 Slot ${n + 1} cargado`, 'ok');
+    }
+
+    function renameSlot() {
+      const current = JSON.parse(localStorage.getItem(`LS_SLOT_META_${activeSlot}`) || '{}');
+      const name = prompt('Nombre del paciente / cama:', current.name || '');
+      if (name === null) return;
+      localStorage.setItem(`LS_SLOT_META_${activeSlot}`, JSON.stringify({ name }));
+      $('slotLabel').textContent = name || `Paciente ${activeSlot + 1}`;
+    }
+
+    function initSlots() {
+      document.querySelectorAll('.slot-pill').forEach((p, i) => p.classList.toggle('active', i === activeSlot));
+      const meta = JSON.parse(localStorage.getItem(`LS_SLOT_META_${activeSlot}`) || '{}');
+      $('slotLabel').textContent = meta.name || `Paciente ${activeSlot + 1}`;
+    }
+
+    function exportAllSlots() {
+      localStorage.setItem(`LS_SLOT_${activeSlot}`, JSON.stringify(getValues()));
+      const data = {};
+      for (let i = 0; i < SLOT_COUNT; i++) {
+        data[`slot_${i}`] = JSON.parse(localStorage.getItem(`LS_SLOT_${i}`) || '{}');
+        data[`slot_${i}_meta`] = JSON.parse(localStorage.getItem(`LS_SLOT_META_${i}`) || '{}');
+      }
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `azura-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      toast('✅ Backup descargado', 'ok');
+    }
+
+    function importAllSlots() {
+      const input = document.createElement('input');
+      input.type = 'file'; input.accept = '.json';
+      input.onchange = e => {
+        const reader = new FileReader();
+        reader.onload = ev => {
+          try {
+            const data = JSON.parse(ev.target.result);
+            for (let i = 0; i < SLOT_COUNT; i++) {
+              if (data[`slot_${i}`]) localStorage.setItem(`LS_SLOT_${i}`, JSON.stringify(data[`slot_${i}`]));
+              if (data[`slot_${i}_meta`]) localStorage.setItem(`LS_SLOT_META_${i}`, JSON.stringify(data[`slot_${i}_meta`]));
+            }
+            switchSlot(activeSlot);
+            toast('✅ Backup restaurado', 'ok');
+          } catch (err) { toast('❌ Error al leer backup', 'err'); }
+        };
+        reader.readAsText(e.target.files[0]);
+      };
+      input.click();
+    }
+
+    // ─── CLOUD SYNC (GITHUB GISTS) ───────────────────────────────────────────────
+    function openSyncSettings() {
+      $('ghPat').value = localStorage.getItem('GITHUB_PAT') || '';
+      $('gistId').value = localStorage.getItem('GIST_ID') || '';
+      $('syncModal').classList.add('show');
+    }
+    function closeSyncSettings() { $('syncModal').classList.remove('show'); }
+    function saveSyncSettings() {
+      localStorage.setItem('GITHUB_PAT', $('ghPat').value.trim());
+      localStorage.setItem('GIST_ID', $('gistId').value.trim());
+      closeSyncSettings();
+      toast('✅ Credenciales de nube guardadas', 'ok');
+    }
+
+    async function pushToCloud() {
+      const pat = localStorage.getItem('GITHUB_PAT');
+      const gistId = localStorage.getItem('GIST_ID');
+      if (!pat || !gistId) return toast('Faltan credenciales. Configura la nube primero.', 'warn');
+
+      localStorage.setItem(`LS_SLOT_${activeSlot}`, JSON.stringify(getValues()));
+      const data = {};
+      for (let i = 0; i < SLOT_COUNT; i++) {
+        data[`slot_${i}`] = JSON.parse(localStorage.getItem(`LS_SLOT_${i}`) || '{}');
+        data[`slot_${i}_meta`] = JSON.parse(localStorage.getItem(`LS_SLOT_META_${i}`) || '{}');
+      }
+
+      toast('Subiendo a la nube...', 'ok');
+      const btn = $('btnPush');
+      const origText = btn.innerHTML;
+      btn.innerHTML = 'Subiendo...';
+      btn.style.opacity = '0.5';
+
+      try {
+        const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+          method: 'PATCH',
+          headers: { 'Authorization': `token ${pat}`, 'Accept': 'application/vnd.github.v3+json' },
+          body: JSON.stringify({
+            files: { 'azura-sync.json': { content: JSON.stringify(data, null, 2) } }
+          })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        toast('✅ Slots sincronizados arriba', 'ok');
+      } catch (err) {
+        toast('❌ Error al subir: ' + err.message, 'err');
+      } finally {
+        btn.innerHTML = origText;
+        btn.style.opacity = '1';
+      }
+    }
+
+    async function pullFromCloud() {
+      const pat = localStorage.getItem('GITHUB_PAT');
+      const gistId = localStorage.getItem('GIST_ID');
+      if (!pat || !gistId) return toast('Faltan credenciales. Configura la nube primero.', 'warn');
+
+      toast('Descargando de la nube...', 'ok');
+      const btn = $('btnPull');
+      const origText = btn.innerHTML;
+      btn.innerHTML = 'Descargando...';
+      btn.style.opacity = '0.5';
+
+      try {
+        const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+          method: 'GET',
+          headers: { 'Authorization': `token ${pat}`, 'Accept': 'application/vnd.github.v3+json' }
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const gist = await res.json();
+        const file = gist.files['azura-sync.json'];
+        if (!file) throw new Error('azura-sync.json no encontrado en el Gist');
+
+        const data = JSON.parse(file.content);
+        for (let i = 0; i < SLOT_COUNT; i++) {
+          if (data[`slot_${i}`]) localStorage.setItem(`LS_SLOT_${i}`, JSON.stringify(data[`slot_${i}`]));
+          if (data[`slot_${i}_meta`]) localStorage.setItem(`LS_SLOT_META_${i}`, JSON.stringify(data[`slot_${i}_meta`]));
+        }
+        switchSlot(activeSlot);
+        toast('✅ Slots restaurados desde la nube', 'ok');
+      } catch (err) {
+        toast('❌ Error al bajar: ' + err.message, 'err');
+      } finally {
+        btn.innerHTML = origText;
+        btn.style.opacity = '1';
+      }
+    }
+
     // ─── INIT ────────────────────────────────────────────────────────────────────
     buildFields();
+    buildBHFields();
+    buildQSFields();
+    buildEGOFields();
+    buildCGFields();
     initPart4();
     initMotivoChips();
     initRxBuilder();
     loadDraft();
     renderSessions();
+    initSlots();
 
+    document.addEventListener('keydown', (e) => {
+      if (!e.ctrlKey) return;
+      const k = e.key.toLowerCase();
+      if (k === 'b') {
+        e.preventDefault();
+        const cardBody = document.querySelector('#cardBH .card-body');
+        if (cardBody && cardBody.style.display !== 'block') toggleCard('cardBH');
+        const firstInput = $('fi_bh_rbc');
+        if (firstInput) firstInput.focus();
+      } else if (k === 'q') {
+        e.preventDefault();
+        const cardBody = document.querySelector('#cardQS .card-body');
+        if (cardBody && cardBody.style.display !== 'block') toggleCard('cardQS');
+        const firstInput = $('fi_qs_bun');
+        if (firstInput) firstInput.focus();
+      } else if (k === 'e') {
+        e.preventDefault();
+        const cardBody = document.querySelector('#cardEGO .card-body');
+        if (cardBody && cardBody.style.display !== 'block') toggleCard('cardEGO');
+        const firstInput = $('fi_ego_color');
+        if (firstInput) firstInput.focus();
+      } else if (k === 'g') {
+        e.preventDefault();
+        const cardBody = document.querySelector('#cardCG .card-body');
+        if (cardBody && cardBody.style.display !== 'block') toggleCard('cardCG');
+        const firstInput = $('fi_cg_pt');
+        if (firstInput) firstInput.focus();
+      } else if (k >= '1' && k <= '5') {
+        e.preventDefault();
+        switchSlot(parseInt(k) - 1);
+      }
+    });
+
+    // ─── OCR FROM SCREENSHOT (Tesseract.js) ───────────────────────────────────
+    document.addEventListener('paste', async (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+      let imageBlob = null;
+      for (let item of items) {
+        if (item.type.indexOf('image') === 0) { imageBlob = item.getAsFile(); break; }
+      }
+      if (imageBlob) {
+        e.preventDefault();
+        toast('🔍 Analizando imagen con OCR local…', 'ok');
+        try {
+          const result = await Tesseract.recognize(imageBlob, 'spa');
+          const text = result.data.text;
+          toast('✅ OCR completado. Procesando valores…', 'ok');
+          const ta = $('pasteArea');
+          if (ta) { ta.value = text; }
+          const { found } = parseNotes(text);
+          setValues({ ...getValues(), ...found });
+          scheduleAutosave();
+        } catch (err) {
+          toast('❌ Error en OCR: ' + err.message, 'err');
+        }
+      }
+    });
+
+    async function handleOCRUpload(input) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      toast('🔍 Analizando imagen con OCR local…', 'ok');
+      try {
+        const result = await Tesseract.recognize(file, 'spa');
+        const text = result.data.text;
+        toast('✅ OCR completado. Procesando valores…', 'ok');
+        const ta = $('parseTA');
+        if (ta) { ta.value = text; }
+        const { found } = parseNotes(text);
+        setValues({ ...getValues(), ...found });
+        scheduleAutosave();
+      } catch (err) {
+        toast('❌ Error en OCR: ' + err.message, 'err');
+      }
+      input.value = '';
+    }
+
+    // ─── CLINICAL SUMMARY WRAPPER ────────────────────────────────────────────
+    function applyClinicalSummary() {
+      const summary = generateClinicalSummary(getValues());
+      if (!summary) { toast('No hay hallazgos anormales para generar resumen', 'warn'); return; }
+      const el = $('resultados');
+      if (el) {
+        el.value = el.value ? el.value + '\n\n' + summary : summary;
+        updateCounter('resultados');
+        scheduleAutosave();
+        toast('✨ Resumen clínico generado', 'ok');
+      }
+    }
 
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="clinical-formatter.js"></script>
 </body>
 
 </html>

@@ -14,7 +14,7 @@
 
 | File | Purpose |
 |---|---|
-| `editor.html` | **The Editor**: All-in-one app (CSS, JS, Parser included) — Open locally. |
+| `index.html` | **The Editor**: All-in-one app (CSS, JS, Parser included) — Open locally. |
 | `azura-autofill.user.js` | **The Bridge**: Tampermonkey userscript — Install in browser. |
 | `normal-session.json` | **Sample Data**: A healthy patient profile to test the system. |
 
@@ -23,7 +23,7 @@
 ## 📦 How to Share / Cómo Compartir
 
 ### Option 1: The ZIP Bundle (Easiest for most)
-1. Select `editor.html` and `azura-autofill.user.js`.
+1. Select `index.html` and `azura-autofill.user.js`.
 2. Right-click → **Compress to ZIP file**.
 3. Send the ZIP to your colleague. 
 4. **Recuerda**: Dile que extraiga todo antes de abrir el HTML.
@@ -31,9 +31,9 @@
 ### Option 2: GitHub (Best for updates)
 If you have a GitHub account:
 1. Create a repository (e.g., `azura-autofill`).
-2. Upload `editor.html` and `azura-autofill.user.js`.
+2. Upload `index.html` and `azura-autofill.user.js`.
 3. Enable **GitHub Pages** for the repository to host the editor online.
-4. Share the link to the `editor.html` and the "Raw" link of the `.user.js` file.
+4. Share the link to the `index.html` and the "Raw" link of the `.user.js` file.
 
 ---
 
@@ -73,7 +73,7 @@ Install [Tampermonkey](https://www.tampermonkey.net/) for Chrome, Firefox, or Ed
 
 ### 3 — Open the Editor
 
-Open `editor.html` in your browser (no internet connection required).
+Open `index.html` in your browser (no internet connection required).
 
 ### 4 — Enter Values & Apply
 

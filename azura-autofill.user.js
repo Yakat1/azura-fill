@@ -18,7 +18,7 @@
 (function () {
     'use strict';
 
-    const IS_EDITOR = location.pathname.includes('editor.html') || location.href.includes('editor.html');
+    const IS_EDITOR = location.pathname.includes('index.html') || location.href.includes('index.html');
 
     // ─── ANTECEDENTES DEFAULT TEMPLATE ──────────────────────────────────────────
     const ANTE_TEMPLATE = `ANTECEDENTES PERSONALES PATOLÓGICOS

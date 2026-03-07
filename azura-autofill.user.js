@@ -777,26 +777,12 @@ FUM:`;
         await runFill(page);
 
         // Listen for remote editor triggers (cross-tab)
-        // Uses timestamp nonce so the value always changes → fires on every trigger
+        // Auto-refresh the page so it picks up fresh params on a clean DOM
         try {
             GM_addValueChangeListener('azuraAutoFill', (name, oldVal, newVal, remote) => {
                 if (remote && newVal) {
-                    console.log('[Azura Fill] Received remote trigger (nonce:', newVal, ')');
-                    loadFromGM();
-                    const curPage = detectPage();
-                    if (curPage) runFill(curPage);
-                }
-            });
-        } catch (e) { }
-
-        // Safety-net: also listen for azuraParams changes directly
-        try {
-            GM_addValueChangeListener('azuraParams', (name, oldVal, newVal, remote) => {
-                if (remote && newVal) {
-                    console.log('[Azura Fill] Received remote params update');
-                    loadFromGM();
-                    const curPage = detectPage();
-                    if (curPage) runFill(curPage);
+                    console.log('[Azura Fill] Remote trigger received — reloading page…');
+                    location.reload();
                 }
             });
         } catch (e) { }

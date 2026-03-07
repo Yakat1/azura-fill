@@ -341,41 +341,7 @@ FUM:`;
         hc_terapeutica: 'Terapéutica', hc_pronostico: 'Pronóstico'
     };
 
-    // ─── BRIDGE & STORAGE ────────────────────────────────────────────────────────
-    function installLocalStorageInterceptor() {
-        const _origSet = localStorage.__proto__.setItem;
-        localStorage.__proto__.setItem = function (key, value) {
-            _origSet.call(this, key, value);
-            if (key === 'azuraParams' || key === 'azuraAutoFill') {
-                syncToGM();
-            }
-        };
-    }
-
-    function syncToGM() {
-        try {
-            const params = localStorage.getItem('azuraParams');
-            const flag = localStorage.getItem('azuraAutoFill');
-            if (params) GM_setValue('azuraParams', params);
-            if (flag) GM_setValue('azuraAutoFill', flag);
-        } catch (_) { }
-    }
-
-    function loadFromGM() {
-        try {
-            const params = GM_getValue('azuraParams', null);
-            const flag = GM_getValue('azuraAutoFill', null);
-            if (params) localStorage.setItem('azuraParams', params);
-            if (flag) localStorage.setItem('azuraAutoFill', flag);
-        } catch (_) { }
-    }
-
-    function getLatestParams() {
-        loadFromGM(); // Ensure local is synced
-        let params = null;
-        try { params = JSON.parse(localStorage.getItem('azuraParams')); } catch (_) { }
-        return params || window.__azuraParams;
-    }
+    // ─── BRIDGE & STORAGE (see functions below line 650+) ─────────────────────────
 
     // ─── SLEEP ───────────────────────────────────────────────────────────────────
     const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -648,23 +614,29 @@ FUM:`;
     // GM_setValue/GM_getValue, which work across all origins.
 
     /**
-     * Called on the EDITOR page. Intercepts localStorage.setItem so that whenever
-     * the editor writes azuraParams or azuraAutoFill, we mirror it to GM_storage.
+     * Called on the EDITOR page. Polls localStorage every 500ms and syncs
+     * changes to GM_storage. This is more reliable than intercepting
+     * localStorage.setItem, which fails in Greasemonkey's sandbox.
      */
-    function installLocalStorageInterceptor() {
-        const origSetItem = localStorage.setItem.bind(localStorage);
-        localStorage.setItem = function (key, value) {
-            origSetItem(key, value);
-            if (key === 'azuraParams' || key === 'azuraAutoFill') {
-                try {
-                    GM_setValue(key, value);
-                    console.log(`[Azura Fill] Synced ${key} → GM_storage`);
-                } catch (e) {
-                    console.warn('[Azura Fill] GM_setValue failed:', e);
+    function startEditorPolling() {
+        let lastFlag = localStorage.getItem('azuraAutoFill') || '';
+        let lastParams = localStorage.getItem('azuraParams') || '';
+        setInterval(() => {
+            try {
+                const curFlag = localStorage.getItem('azuraAutoFill') || '';
+                const curParams = localStorage.getItem('azuraParams') || '';
+                if (curFlag !== lastFlag || curParams !== lastParams) {
+                    if (curParams) GM_setValue('azuraParams', curParams);
+                    if (curFlag) GM_setValue('azuraAutoFill', curFlag);
+                    console.log('[Azura Fill] Poll detected change — synced to GM_storage');
+                    lastFlag = curFlag;
+                    lastParams = curParams;
                 }
+            } catch (e) {
+                console.warn('[Azura Fill] Editor poll sync failed:', e);
             }
-        };
-        console.log('[Azura Fill] localStorage interceptor installed.');
+        }, 500);
+        console.log('[Azura Fill] Editor polling started (500ms interval).');
     }
 
     /**
@@ -718,9 +690,9 @@ FUM:`;
         console.log(`[Azura Fill] v${SCRIPT_VERSION} loaded in ${loadTimeMs}ms | IS_EDITOR: ${IS_EDITOR} | URL: ${location.href}`);
 
         if (IS_EDITOR) {
-            console.log(`[Azura Fill] v${SCRIPT_VERSION} — Editor detected (${loadTimeMs}ms) — installing localStorage interceptor.`);
-            installLocalStorageInterceptor();
+            console.log(`[Azura Fill] v${SCRIPT_VERSION} — Editor detected (${loadTimeMs}ms) — starting localStorage polling.`);
             syncToGM();
+            startEditorPolling();
             return;
         }
 

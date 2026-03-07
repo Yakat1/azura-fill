@@ -3587,7 +3587,7 @@ FUM:`;
       if (!hasValues) { toast('⚠ Sin valores para aplicar.', 'warn'); return; }
 
       localStorage.setItem('azuraParams', JSON.stringify(vals));
-      localStorage.setItem('azuraAutoFill', 'true');
+      localStorage.setItem('azuraAutoFill', Date.now().toString());
 
       const status = $('applyStatus');
       status.textContent = '✅ Listo — abre Azura y el script llenará automáticamente.';

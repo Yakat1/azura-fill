@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Azura Auto-Fill (Ingreso + Evolución)
 // @namespace    http://tampermonkey.net/
-// @version      3.7
+// @version      3.7.1
 // @description  Auto-fills Azura fields on both Ingreso and Nota de Evolución pages. Syncs cross-origin via GM_storage.
 // @author       AutoFill Studio
 // @match        https://cqs.hospisoft.mx/*
@@ -19,7 +19,7 @@
 (function () {
     'use strict';
 
-    const SCRIPT_VERSION = '3.7';
+    const SCRIPT_VERSION = '3.7.1';
     const SCRIPT_START = performance.now();
 
     const IS_EDITOR = location.pathname.includes('index.html')
@@ -729,7 +729,7 @@ FUM:`;
 
         const flag = localStorage.getItem('azuraAutoFill');
         console.log('[Azura Fill] azuraAutoFill flag:', flag);
-        if (flag !== 'true') {
+        if (!flag) {
             console.log('[Azura Fill] No fill flag set — exiting.');
             return;
         }
@@ -777,10 +777,24 @@ FUM:`;
         await runFill(page);
 
         // Listen for remote editor triggers (cross-tab)
+        // Uses timestamp nonce so the value always changes → fires on every trigger
         try {
             GM_addValueChangeListener('azuraAutoFill', (name, oldVal, newVal, remote) => {
-                if (remote && newVal === 'true') {
-                    console.log('[Azura Fill] Received remote trigger');
+                if (remote && newVal) {
+                    console.log('[Azura Fill] Received remote trigger (nonce:', newVal, ')');
+                    loadFromGM();
+                    const curPage = detectPage();
+                    if (curPage) runFill(curPage);
+                }
+            });
+        } catch (e) { }
+
+        // Safety-net: also listen for azuraParams changes directly
+        try {
+            GM_addValueChangeListener('azuraParams', (name, oldVal, newVal, remote) => {
+                if (remote && newVal) {
+                    console.log('[Azura Fill] Received remote params update');
+                    loadFromGM();
                     const curPage = detectPage();
                     if (curPage) runFill(curPage);
                 }

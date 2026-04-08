@@ -2188,19 +2188,19 @@ Ejemplos reconocidos:
               <!-- 5. Pronóstico (evolución) -->
               <div class="text-field-row">
                 <div class="text-field-hdr">
-                  <label class="field-key" for="pronostico">Pronóstico</label>
-                  <button class="clean-btn" onclick="cleanText('pronostico')">Limpiar texto ✨</button>
+                  <label class="field-key" for="ev_pronostico">Pronóstico</label>
+                  <button class="clean-btn" onclick="cleanText('ev_pronostico')">Limpiar texto ✨</button>
                 </div>
                 <div class="text-area-wrapper">
-                  <textarea id="pronostico" class="clinical-ta" maxlength="4000" rows="3"
+                  <textarea id="ev_pronostico" class="clinical-ta" maxlength="4000" rows="3"
                     placeholder="Pronóstico del paciente…"></textarea>
-                  <div class="char-counter" id="cnt-pronostico">0 / 4000</div>
+                  <div class="char-counter" id="cnt-ev_pronostico">0 / 4000</div>
                 </div>
-                <div class="snippet-bar" id="snip-pronostico-evo"></div>
+                <div class="snippet-bar" id="snip-ev_pronostico"></div>
                 <div class="snippet-add-row">
-                  <input id="newSnip-pronostico-evo" class="param-input" type="text" placeholder="+ Nuevo snippet…"
+                  <input id="newSnip-ev_pronostico" class="param-input" type="text" placeholder="+ Nuevo snippet…"
                     maxlength="200" style="flex:1;font-size:11px;padding:4px 8px;" />
-                  <button class="btn btn-sec btn-sm" onclick="addCustomSnippet('pronostico')">+ Agregar</button>
+                  <button class="btn btn-sec btn-sm" onclick="addCustomSnippet('ev_pronostico')">+ Agregar</button>
                 </div>
               </div>
 
@@ -3113,7 +3113,7 @@ FUM:`;
     // Clinical Text Fields (Parts 4–6 — Ingreso page)
     const TEXT_FIELDS = ['motivoIngreso', 'antecedentes', 'resultados', 'tratamiento', 'pronostico'];
     // Clinical Text Fields — Nota de Evolución page
-    const EVO_FIELDS = ['padecimientoActual', 'objetivo', 'analisisEvolucion', 'planEstudio', 'resultadoLabImg', 'pronostico'];
+    const EVO_FIELDS = ['padecimientoActual', 'objetivo', 'analisisEvolucion', 'planEstudio', 'resultadoLabImg', 'ev_pronostico'];
     // Clinical Text Fields - Nota de Ingreso
     const NI_FIELDS = [
       'ni_alergiasPac', 'ni_especificarEvaluacion', 'ni_antecedentes', 'ni_motivo',
@@ -3400,7 +3400,7 @@ FUM:`;
       document.querySelectorAll('.validation-msg').forEach(el => { el.textContent = ''; el.className = 'validation-msg'; });
 
       // Clear Nota de Evolución
-      const eIds = ['padecimientoActual', 'objetivo', 'analisisEvolucion', 'planEstudio', 'resultadoLabImg', 'pronostico'];
+      const eIds = ['padecimientoActual', 'objetivo', 'analisisEvolucion', 'planEstudio', 'resultadoLabImg', 'ev_pronostico'];
       eIds.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
@@ -4460,7 +4460,7 @@ FUM:`;
         ${section('Coagulación', CG_FIELDS.filter(f => !f.type).map(f => ({ label: f.label, value: v[f.key], unit: f.unit })))}
         ${textBlock('Resultados de Estudios', v.resultados)}
         ${textBlock('Tratamiento', v.tratamiento)}
-        ${textBlock('Pronóstico', v.pronostico)}
+        ${textBlock('Pronóstico', v.pronostico || v.ev_pronostico)}
         ${textBlock('Motivo de Ingreso', v.motivoIngreso)}
         <div style="text-align:center; margin-top:20px;">
           <button onclick="navigator.clipboard.writeText(document.getElementById('printView').innerText).then(()=>{this.textContent='✅ Copiado!'; setTimeout(()=>this.textContent='📋 Copiar texto',2000)})" style="padding:6px 16px; cursor:pointer; border-radius:6px; border:1px solid #999; font-size:12px;">📋 Copiar texto</button>

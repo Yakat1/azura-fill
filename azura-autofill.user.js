@@ -127,7 +127,7 @@ FUM:`;
             analisisEvolucion: { selector: '[name="analisisEvolucion"]' },
             planEstudio: { selector: '[name="planEstudio"]' },
             resultadoLabImg: { selector: '[name="resultadoLabImg"]' },
-            pronostico: { selector: '[name="pronostico"]' },
+            ev_pronostico: { selector: '[name="pronostico"]' },
         },
         historia: {
             // ── Section 2: Heredo Familiares
@@ -285,7 +285,7 @@ FUM:`;
             'ni_motivo', 'ni_padecimientoActual', 'ni_resumen', 'ni_resultados',
             'ni_impresionDiagnostica', 'ni_tratamiento', 'ni_pronostico', 'ni_plan'
         ],
-        evolucion: ['padecimientoActual', 'objetivo', 'analisisEvolucion', 'planEstudio', 'resultadoLabImg', 'pronostico'],
+        evolucion: ['padecimientoActual', 'objetivo', 'analisisEvolucion', 'planEstudio', 'resultadoLabImg', 'ev_pronostico'],
         historia: [
             "hf_cronico", "hf_neoplasias", "hf_otras",
             "np_casa", "np_alimentacion", "np_deporte",
@@ -317,7 +317,7 @@ FUM:`;
         peso: 'Peso', talla: 'Talla',
         padecimientoActual: 'Padecimiento actual', objetivo: 'Objetivo', analisisEvolucion: 'Evolución/Análisis',
         planEstudio: 'Plan de estudio', resultadoLabImg: 'Resultados auxiliares',
-        pronostico: 'Pronóstico',
+        ev_pronostico: 'Pronóstico',
     };
     const LABELS_HISTORIA = {
         temperatura: 'Temperatura', frecresp: 'Frec. resp.', freccard: 'Frec. card.',

@@ -1,0 +1,11 @@
+# Ignore everything by default
+*
+
+# Track the main project files
+!.gitignore
+!index.html
+!azura-autofill.user.js
+!azura-scout.js
+!README.md
+!clinical-formatter.js
+!paste-parser.js

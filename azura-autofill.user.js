@@ -133,7 +133,7 @@ FUM:`;
             // ── Section 2: Heredo Familiares
             hf_cronico: {
                 rowLabel: { container: '[name="antecedentesFanNoPat:herdoFamiliares:containerTabla:formaTabla:tabla:body"]', text: 'ENF. CRONICO DEGENERATIVAS' },
-                defaultValue: '',
+                defaultValue: 'No refiere antecedentes heredofamiliares dentro de su primer rama de ascendencia',
             },
             hf_neoplasias: {
                 rowLabel: { container: '[name="antecedentesFanNoPat:herdoFamiliares:containerTabla:formaTabla:tabla:body"]', text: 'NEOPLASIAS' },
@@ -141,7 +141,7 @@ FUM:`;
             },
             hf_otras: {
                 rowLabel: { container: '[name="antecedentesFanNoPat:herdoFamiliares:containerTabla:formaTabla:tabla:body"]', text: 'OTRAS' },
-                defaultValue: '',
+                defaultValue: 'REFIERE LA ADMINISTRACIÓN DE TODO SU CARNET DE VACUNACIÓN (SIN MOSTRAR EVIDENCIA), Y LA ADMINISTRACIÓN DE • VACUNAS COVID DE LA FARMACÉUTICA*, ASÍ COMO SU ÚLTIMA DOSIS DE INFLUENZA EN *',
             },
             // ── Section 3: No Patológicos
             np_casa: {

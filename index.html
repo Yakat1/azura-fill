@@ -3138,8 +3138,9 @@ FUM:`;
     // ─── HC PRESET TEXT (from Preset.pdf) ────────────────────────────────────────
     const HC_PRESETS = {
       // Heredo Familiares
+      hf_cronico: 'No refiere antecedentes heredofamiliares dentro de su primer rama de ascendencia',
       hf_neoplasias: 'NO REFIERE EL ANTECEDENTE DE ALGUNA NEOPLASIA DE IMPORTANCIA',
-      hf_otras: '',
+      hf_otras: 'REFIERE LA ADMINISTRACIÓN DE TODO SU CARNET DE VACUNACIÓN (SIN MOSTRAR EVIDENCIA), Y LA ADMINISTRACIÓN DE • VACUNAS COVID DE LA FARMACÉUTICA*, ASÍ COMO SU ÚLTIMA DOSIS DE INFLUENZA EN *',
       // Personales No Patológicos
       np_casa: 'REFIERE HABITAR EN CASA PROPIA EN MEDIO URBANO, EN LA QUE CONVIVE CON * PERSONAS Y CUENTA CON TODOS LOS SERVICIOS BÁSICOS DE URBANIZACIÓN PARA LA BUENA VIVIENDA CON UNA ADECUADA ILUMINACIÓN Y VENTILACIÓN',
       np_alimentacion: 'REFIERE UNA DIETA BUENA EN CALIDAD Y CANTIDAD RESPECTO EL PLATO DEL BUEN COMER DE FRUTAS Y VERDURAS 5/7, CARNES ROJAS 2/7, CARNES BLANCAS COMO POLLO Y PESCADO 4/7. CONSUMO HÍDRICO DE AGUA NATURAL DIARIA DE 1 LITRO Y MEDIO DIARIAMENTE',
@@ -3202,6 +3203,26 @@ FUM:`;
           el.value = HC_SEX_PRESETS[id][sexo] || '';
         } else if (HC_PRESETS[id]) {
           el.value = HC_PRESETS[id];
+        }
+        updateCounter(id);
+      }
+    }
+
+    const EVO_PRESETS = {
+      padecimientoActual: 'PACIENTE MASCULINO/FEMENINO DE ____ AÑOS DE EDAD, EL CUAL SE ENCUENTRA EN SUS PRIMERAS HORAS DE PERIODO POSTOPERATORIO SECUNDARIO A ______________ CON EL/LOS SIGUIENTE(S) ANTECEDENTE(S) DIAGNÓSTICO(S) __________ Y CON LOS SIGUIENTES HALLAZGOS TRANSOPERATORIOS/ EL CUAL SE ENCUENTRA EN SU _____ DIA/HORA(S) DE ESTANCIA HOSPITALARIA CON LOS SIGUIENTES ANTECEDENTE(S) DIAGNÓSTICO(S).',
+      objetivo: 'S: AL PASE DE VISITA EL/LA PACIENTE SE REFIERE ASINTOMÁTICO. NIEGA DOLOR, CEFALEA, NÁUSEAS, VÓMITO, ASTENIA, ADINAMIA, FIEBRE, ESCALOFRÍOS, HIDROSIS, ANOREXIA, MIALGIAS Y MALESTAR GENERAL.\n\nPACIENTE MASCULINO/FEMENINO DE EDAD APARENTE A LA CRONOLÓGICA, ALERTA, DESPIERTO/A, ACTIVO, REACTIVO/A A ESTÍMULOS EXTERNOS, ORIENTADO/A EN SUS 3 ESFERAS NEUROLÓGICAS/ EL/LA CUAL SE ENCUENTRA AUN BAJO EFECTO DE RESTOS DE ANESTESIA RAMSEY ___/ EL CUAL SE ENCUENTRA ESTUPOROSO/A GLASGOW DE ___, A LA INSPECCIÓN EN DECÚBITO SUPINO/ EN SEDESTACIÓN, POSICIÓN SEMIFOWLER, LIBREMENTE ESCOGIDA, SIN FACIES CARACTERÍSTICAS/CON FACIE ____, A LA INSPECCIÓN CON CRANEO NORMOCEFALO, SIN PRESENCIA DE ENDO NI EXOSTOSIS, PUPILAS ISOCÓRICAS ISOMÉTRICAS, NORMORREACTIVAS, NARINAS PERMEABLES (CON PRESENCIA DE OXÍGENO SUPLEMENTARIO POR MEDIO DE PUNTAS NASALES/BOLSA RESERVORIO/PUNTAS DE ALTO FLUJO), MUCOSA ORAL HIDRATADA/SEMIHIDRATADA/DESHIDRATADA. CUELLO CILÍNDRICO, SIMÉTRICO, SIN PRESENCIA DE ADENOMEGALIAS O MASAS PALPABLES SIN DATOS DE INGURGITACIÓN YUGULAR. TÓRAX NORMOLÍNEO, SIMÉTRICO, SIN USO DE MÚSCULOS ACCESORIOS PARA LA RESPIRACIÓN, (CON PRESENCIA DE DISOCIACIÓN TORACO ABDOMINAL/ RETRACCIÓN XIFOIDEA), CON ADECUADOS MOVIMIENTOS DE AMPLEXIÓN Y AMPLEXACIÓN, MURMULLO VESICULAR PRESENTE, SIN/CON PRESENCIA DE SIBILANCIAS, ESTERTORES, CREPITANTES, SUBCREPITANTES, RUIDOS CARDIACOS RÍTMICOS DE BUEN TONO E INTENSIDAD, SIN AGREGADOS (SOPLO, GALOPE, FROTE). ABDOMEN GLOBOSO A EXPENSAS DE PANÍCULO ADIPOSO/ GRÁVIDO A EXPENSAS DE UTERO GESTANTE/ PLANO, PERISTALSIS NORMOACTIVA/HIPOACTIVA/AUMENTADA, SE OBSERVA HERIDA QUIRÚRGICA/PUERTOS QUIRÚRGICOS EN _________, SIN DATOS DE INFECCIÓN (AUMENTO DE VOLUMEN, AUMENTO DE TEMPERATURA, CAMBIO DE COLORACIÓN, ), CON LOS BORDES BIEN AFRONTADOS, LIMPIA/CON EXUDADO DE TIPO _____, CON/SIN PRESENCIA DE DRENAJE TIPO PRATT/BLAKE/PENROSE, BLANDO, DEPRESIBLE NO DOLOROSO A LA PALPACIÓN SUPERFICIAL, MEDIA Y PROFUNDA, SIN DATOS DE IRRITACIÓN PERITONEAL. EXTREMIDADES ÍNTEGRAS Y SIMÉTRICAS SIN LIMITACIÓN EN LOS ARCOS DE MOVIMIENTO. PULSOS PERIFÉRICOS PRESENTES. LLENADO CAPILAR DE 2 SEGUNDOS. (CON PRESENCIA DE EDEMA)',
+      analisisEvolucion: 'PACIENTE MASCULINO/FEMENINO DE LA ________ DÉCADA DE LA VIDA EL/LA CUAL SE ENCUENTRA NEUROLÓGICAMENTE ÍNTEGRO/INTEGRA,  HEMODINÁMICAMENTE ESTABLE CON TAM PERFUSORAS SIN DATOS DE BAJO GASTO CARDIACO, TOLERANDO LA VIA ORAL/ EN AYUNO POR PROCEDIMIENTO/ SIN TOLERANCIA ALA VIA ORAL, EN LO RESPIRATORIO SIN DATOS DE INSUFICIENCIA RESPIRATORIA, EN LO GASTROMETBOLICO CON CANALIZACIÓN DE GASES PRESENTE, SIN/EVACUACIONES AL CORRIENTE, GENITOURINARIO CON DIURESIS ESPONTÁNEA AL CORRIENTE, CON PRESENCIA DE SONDA FOLEY A DERIVACIÓN CON UN GASTO DE ____ CC AL PASE DE VISITA, HEMATOINFECCIOSO AFEBRIL, RESTO SIN ALTERACIONES. SE CONTINUA MANEJO DE ACUERDO A PLAN ESTABLECIDO POR MÉDICO TRATANTE Y BAJO LINEAMIENTO DE GUÍAS DE PRÁCTICA CLÍNICA.',
+      planEstudio: '- TRATAMIENTO FARMACOLÓGICO\n\nSOLUCIÓN CC A ML/MIN PARA ___ HRS/ MANTENER VENA PERMEABLE\nPARACETAMOL 1 G IV CADA 8 HORAS\nONDANSETRON 8 MG IV CADA 8 HRS /POR RAZÓN NECESARIA\nOMEPRAZOL 20 MG IV C/24 HRS\nANTIBIÓTICO\nCE/PLAQUETAS/PFC\n\n- TRATAMIENTO NO FARMACOLÓGICO\n\nDIETA:\nTOMA DE SIGNOS VITALES POR TURNO\nCUIDADOS GENERALES DE ENFERMERÍA\nCUIDADOS DE SONDA FOLEY, CON CUANTIFICACIÓN DE GASTO POR TURNO\nCUIDADOS DE HERIDA QUIRÚRGICA, VIGILAR DATOS DE SANGRADO ACTIVO\nNOTIFICAR EVENTUALIDADES\nMOVILIZAR EN CAMA\nBAÑO EN CAMA O REGADERA\nDEAMBULACIÓN ASISTIDA POR FAMILIAR',
+      resultadoLabImg: 'TRAÍDOS POR EL/LA PACIENTE Y AGREGADOS AL EXPEDIENTE\nTOMADOS EN ESTA UNIDAD __/__/___\nBH:\nQS:\nTIEMPOS DE COAGULACIÓN:\nEGO:\n\nRX:\nRM:\nTAC:',
+      ev_pronostico: 'El estado clínico del paciente se considera reservado a la evolución, no exento de presentar complicaciones a corto, mediano o largo plazo, de acuerdo con los factores de riesgo individuales, el cuadro clínico actual y la evidencia establecida en Guías de Práctica Clínica vigentes.\nSe mantendrá vigilancia estrecha, identificación oportuna de signos de alarma y ajustes terapéuticos conforme a la evolución clínica. El pronóstico podrá modificarse según la respuesta al tratamiento, aparición de complicaciones o nuevos hallazgos diagnósticos.\n\nCumplimiento normativo:\nLa presente valoración y su registro se realizan en apego a lo establecido por la NOM-004-SSA3-2012, Del Expediente Clínico, que requiere documentar de forma clara y objetiva la evolución, valoración y pronóstico del paciente en expedientes clínicos físicos y electrónicos.\nAsimismo, se siguen los lineamientos aplicables de la NOM-024-SSA3-2012, referentes a los sistemas de información y expedientes clínicos electrónicos, garantizando integridad, seguridad y trazabilidad de la información para su uso en formato digital.\nLa calificación del pronóstico se fundamenta en recomendaciones de las Guías de Práctica Clínica (CENETEC / Catálogo Maestro de GPC) en relación con la identificación y manejo de complicaciones potenciales según la condición clínica del paciente.'
+    };
+
+    function loadEvoPresets() {
+      for (const id of EVO_FIELDS) {
+        const el = $(id);
+        if (!el || el.value.trim() !== '') continue;
+        if (EVO_PRESETS[id]) {
+          el.value = EVO_PRESETS[id];
         }
         updateCounter(id);
       }
@@ -3441,8 +3462,9 @@ FUM:`;
         updateCounter(id);
       });
 
-      // Also restore HC defaults
+      // Also restore HC/Evo defaults
       loadHCPresets();
+      loadEvoPresets();
 
       if (typeof clearMotivoChipSelection === 'function') clearMotivoChipSelection();
       if (typeof clearRxRows === 'function') clearRxRows();
@@ -3469,6 +3491,7 @@ FUM:`;
         toggleActive('tabNotaIngreso', 'tabBtnNotaIngreso');
       } else if (tabId === 'evolucion') {
         toggleActive('tabEvolucion', 'tabBtnEvolucion');
+        loadEvoPresets(); // Auto-fill Evolucion presets when switching to Evolucion tab
       } else if (tabId === 'historia') {
         toggleActive('tabHistoriaClinica', 'tabBtnHistoria');
         loadHCPresets(); // Auto-fill HC presets when switching to Historia tab

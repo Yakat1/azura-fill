@@ -745,16 +745,28 @@ FUM:`;
             }
         }
 
-        await sleep(300);
-        await runFill(page);
+        badgeText.textContent = `⚕ Listo para llenar: ${page === 'ingreso' ? 'Urgencias' : page === 'historia' ? 'Historia' : 'Evolución'}`;
+        badgeDot.className = 'azf-dot idle';
 
+        // Wait for manual trigger, do not auto-fill on page entry
         // Listen for remote editor triggers (cross-tab)
-        // Auto-refresh the page so it picks up fresh params on a clean DOM
         try {
-            GM_addValueChangeListener('azuraAutoFill', (name, oldVal, newVal, remote) => {
-                if (remote && newVal) {
-                    console.log('[Azura Fill] Remote trigger received — reloading page…');
-                    location.reload();
+            GM_addValueChangeListener('azuraAutoFill', async (name, oldVal, newVal, remote) => {
+                if (remote && newVal && newVal !== oldVal) {
+                    console.log('[Azura Fill] Remote manual trigger received — running fill without reload…');
+                    
+                    // Reload parameters into window space before running fill
+                    const latestParams = getLatestParams();
+                    if (latestParams) {
+                        window.__azuraParams = latestParams;
+                    }
+
+                    const currentPage = detectPage();
+                    if (currentPage) {
+                        badgeText.textContent = '⚕ Llenando en vivo...';
+                        badgeDot.className = 'azf-dot working';
+                        await runFill(currentPage);
+                    }
                 }
             });
         } catch (e) { }
@@ -774,10 +786,11 @@ FUM:`;
                 const newPage = detectPage();
                 if (newPage && newPage !== currentPage) {
                     currentPage = newPage;
-                    badgeText.textContent = `⚕ Sección cambiada → ${newPage === 'evolucion' ? 'Evolución' : newPage === 'historia' ? 'Historia' : 'Urgencias'}`;
+                    badgeText.textContent = `⚕ Sección cambiada → ${newPage === 'evolucion' ? 'Evolución' : newPage === 'historia' ? 'Historia' : 'Urgencias'}. Esperando manual...`;
                     badgeDot.className = 'azf-dot idle';
-                    // Small extra wait for Wicket to finish rendering the new fields
-                    sleep(800).then(() => runFill(newPage));
+                    // We no longer automatically fill on tab change:
+                    // require the user to trigger the fill manually using Sync to HC
+
                 }
             }, 600);
         });

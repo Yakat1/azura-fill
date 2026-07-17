@@ -1,0 +1,29 @@
+var coloresMonoSeleccion={singleSelect:false,stroke:true,render_select:{fillColor:"190F6E",stroke:false,fillOpacity:0.3,},highlight:true,mapKey:"target",isSelectable:true},coloresMonoUsuario={singleSelect:true,mapKey:"target",render_highlight:{fillColor:"21E000",stroke:false,fillOpacity:0.3,},render_select:{fillColor:"21E000",stroke:true,fillOpacity:0.4,strokeWidth:2,strokeColor:"21E000",storkeOpacity:0.6},areas:[],isDeselectable:false,isSelectable:true,showToolTip:true,onClick:function(b){$("#tituloCapturaExploracionGrafica").text($(b.e.target).attr("tooltip")).css("visibility","visible").show()
+}};
+$(document).ready(function(){$("#mapAreas > area").each(function(){var d=$(this).attr("tooltip"),c=$(this).attr("target");
+coloresMonoUsuario.areas.push({key:c,toolTip:d})
+})
+});
+function reloadAreas(f,d){var e=$("#imgExpGrafica");
+e.mapster("unbind",false).mapster(coloresMonoSeleccion).mapster("set",true,f).mapster("snapshot").mapster("rebind",coloresMonoUsuario).mapster("set",true,d)
+}function addMapsterImage(b){image=$("#imgExpGrafica");
+image.mapster(coloresMonoSeleccion).mapster("set",true,b).mapster("snapshot").mapster("rebind",coloresMonoUsuario)
+}function cargarTextArea(){if($("#tituloCapturaExploracionGrafica").text()=="Tórax"){$("textarea#torax").text($("textarea.areaMono").val());
+calculaTamano("textarea#torax")
+}else{if($("#tituloCapturaExploracionGrafica").text()=="Abdomen"){$("textarea#abdomen").text($("textarea.areaMono").val());
+calculaTamano("textarea#abdomen")
+}else{if($("#tituloCapturaExploracionGrafica").text()=="Genitales"){$("textarea#genitales").text($("textarea.areaMono").val());
+calculaTamano("textarea#genitales")
+}else{}}}}function aumentarTamano(c){var d;
+enter=$(""+c).val().split("\n").length;
+enter=enter*17;
+$(""+c).css("height",""+d)
+}function calculaTamano(d){var e=Math.round($("textarea.areaMono").val().length/70);
+if(e!=0){e=(e+1)*17;
+var f;
+f=$(""+d).val().split("\n").length;
+f=f*17;
+e=e+f
+}else{e=17
+}$(""+d).css("height",""+e)
+};

@@ -1,0 +1,11 @@
+table.infRegistroTable{width:99%;text-align:center;display:inline-table;}
+table.infRegistroTable tbody tr td{white-space:nowrap;}
+table.infRegistroTable .fecha{width:15%;}
+table.infRegistroTable .hora{width:10%;}
+table.infRegistroTable .medico{width:39%;}
+table.infRegistroTable .persona{width:30%;}
+table.infRegistroTable .CompleteCombo{width:235px;}
+.medicoTratanteCombo{margin-right:20px;}
+.agregarMedicoTratante{color:#5D5;display:block;float:right;font-size:33px;font-weight:bolder;height:0;left:-23px;outline:medium none;position:relative;text-decoration:none;top:-14px;width:0;}
+a.agregarMedicoTratante:focus{box-shadow:0 0 0 0 #fff!important;}
+.bajaLabel{position:relative;display:inline-block;top:2px;}

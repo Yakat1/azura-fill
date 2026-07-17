@@ -1,0 +1,11 @@
+$(document).ready(function(){var u=$("#peso"),v=$("#talla");
+var p=u.val().replace(",","."),r=v.val().replace(",",".");
+var m=parseFloat(p==""?0:p,10),s=parseFloat(r==""?0:r,10);
+if(m!=0&&s!=0){$("#imc").val((m/(s*s)).toFixed(2))
+}else{$("#imc").val("")
+}if($("#pesoh").length){var t=$("#pesoh"),q=$("#tallah");
+var n=t.val().replace(",","."),x=q.val().replace(",",".");
+var o=parseFloat(n==""?0:n,10),w=parseFloat(x==""?0:x,10);
+if(o!=0&&w!=0){$("#imch").val((o/(w*w)).toFixed(2))
+}else{$("#imch").val("")
+}}});

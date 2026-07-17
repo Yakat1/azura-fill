@@ -1,0 +1,100 @@
+var SiHO=new Object();
+$(document).ready(function(){$("body").find('input,textarea,select,a,[tabindex="1"]').filter(':visible:not([type="hidden"]):not([tabindex="-1"]):not([disabled="disabled"])').first().focus();
+$("#deptoUsiuarioLogin,#menuOpcionesLogin img").click(function(){$("#menuOpcionesLogin td > div").slideToggle("fast");
+return false
+});
+$(window).click(function(a){if($(a.target).parents("#menuOpcionesLogin").length==0){$("#menuOpcionesLogin td > div:visible").slideUp("fast")
+}});
+scroll=function(){var a=$(window).height(),b=$("#layout_container").height(),c=$("#backTo");
+if((a+100)<b){c.show()
+}};
+$(this).scroll(scroll);
+if(localStorage.moveButton!=undefined){var s=localStorage.moveButton.split(","),r=$(window).height(),q=$(window).width();
+if(r>parseInt(s[0].replace("px",""))&&q>parseInt(s[1].replace("px",""))){$("#backTo").css({top:s[0],left:s[1]})
+}}var p;
+$("#backTo").draggable({start:function(b,a){$(this).addClass("noclick")
+},stop:function(){var a=$(this).css("top"),b=$(this).css("left");
+localStorage.moveButton=a+","+b
+},containment:"body"}).mouseup(function(d){var c=$(this).position().top,a=(d.pageY-c);
+if($(this).hasClass("noclick")){$(this).removeClass("noclick")
+}else{var b=0;
+if(a>35){b=$("body").height()
+}$("html, body").animate({scrollTop:b},"slow")
+}});
+$("#main").animate({opacity:1},1500,scroll);
+$("body").on("keyup focus change","textarea[maxlength]",function(){var a=$(this);
+var b=a.attr("name")+"mess";
+var c=$('span[name="'+b+'"]');
+if(c.length==0){c=jQuery("<span />").addClass("mensajeTextArea").attr("name",b);
+c.insertAfter(a)
+}else{c.show()
+}var d=parseInt(a.attr("maxlength"));
+var e=parseInt(a.val().length);
+c.text($("#mensajeCaracteresRestantes").attr("text")+(d-e))
+}).on("blur","textarea[maxlength]",function(){var a=$(this);
+var b=a.attr("name")+"mess";
+var c=$('span[name="'+b+'"]');
+c.hide()
+}).on("click","form.formaPassword input.aceptarPassword",function(){$(this).attr("disabled","disabled")
+}).on("keypress","form.formaPassword input.passwordTransacciones",function(a){if(a.which==13){$(this).parents("form").find("input.aceptarPassword").click();
+$(this).attr("disabled","disabled");
+return false
+}});
+var t=$("#navigationMenuLinks").attr("titulopagina");
+var o=sessionStorage.navegacion;
+var u;
+if(o==undefined||o==""){u=[]
+}else{u=o.split("///")
+}var m=$.inArray(t,u);
+if(m==-1){u.push(t)
+}else{u.splice(m+1,u.length)
+}o="";
+$.each(u,function(b,a){if(a==""){return true
+}o+=(a);
+if(b!=u.length){o+="///"
+}});
+var n=$("#navigationMenuLinks a");
+if(u.length==1){n.eq(0).show();
+n.eq(1).remove();
+n.eq(2).remove()
+}else{n.show()
+}sessionStorage.navegacion=o.replace(new RegExp("///$"),"");
+var l;
+$("#overlay").click(function(){clearTimeout(l);
+v()
+});
+function v(){$("#overlay").show();
+l=setTimeout(function(){$("#overlay").hide()
+},3000)
+}$("a[href]:not([target]):not([onclick])").each(function(){$(this).attr("hre",$(this).attr("href"))
+}).removeAttr("href").click(function(a){if(a.which==2||$(this).attr("hre")==undefined){return false
+}a.preventDefault();
+v();
+window.location=$(this).attr("hre")
+}).keypress(function(a){if(a.which==13&&$(this).attr("hre")!=undefined){v();
+window.location=$(this).attr("hre")
+}}).filter(":not([tabindex])").each(function(){$(this).attr("tabindex","0")
+});
+$("textarea").elastic();
+quitarPuntoCerosEnValora()
+});
+function cerrarFechaYHora(){$("#ui-datepicker-div").hide();
+$("input.hasDatepicker").datepicker("hide");
+if($("#ui-datepicker-div").css("display")=="block"){if($(".ui-datepicker-header").css("display")=="block"){$("img[title*=fecha]").click()
+}if($(".ui-timepicker-div").length==1){$("img[title*=hora]").click()
+}}}function capturarf5EnModal(c){var d=(c.keyCode?c.keyCode:c.which);
+if(d==116){cerrarFechaYHora()
+}}function quitarPuntoCerosEnValora(){var m=$(".contenedorTablaValoracion .valorRespuesta").length;
+for(var o=0;
+o<m;
+o++){var l=$(".contenedorTablaValoracion .valorRespuesta")[o];
+var j=$(l).text();
+if(j.endsWith(0)){$(l).text(j.replace(".0",""))
+}}var i=$("#tabla-clasificacion .cantidad span").length;
+for(var p=0;
+p<i;
+p++){var n=$("#tabla-clasificacion .cantidad span")[p];
+var k=$(n).text();
+if(k.endsWith(0)){console.log("funciona: "+k);
+$(n).text(k.replace(".0",""))
+}}};

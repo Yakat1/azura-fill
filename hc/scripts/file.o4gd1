@@ -1,0 +1,14 @@
+SiHO.mensajesDeUsuario=function(){$(".warning").removeAttr("title").removeClass("warning");
+$(".feedbackPanel li span").each(function(){var e=$(this).attr("nameAttr"),f=$(this).attr("formid"),d=$("#"+f+' [name="'+e+'"]');
+if(d.is("input[type='radio'] , input[type='checkbox']")){d.parent("div,span,td").addClass("warning").attr("title",$(this).text());
+return true
+}else{if(d.hasClass("completeCombo")){d.parents("div.CompleteCombo").addClass("warning").attr("title",$(this).text());
+return true
+}}d.addClass("warning").attr("title",$(this).text())
+}).click(function(){var e=$(this).attr("nameAttr"),f=$(this).attr("formid"),d=$("#"+f+' [name="'+e+'"]');
+console.log("#"+f+' [name="'+e+'"]');
+if(d.hasClass("completeCombo")){d.parent().children("input").focus()
+}else{if(d.is("input[type='radio']")){d.first().focus()
+}else{d.focus()
+}}})
+};

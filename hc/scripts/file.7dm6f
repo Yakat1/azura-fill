@@ -1,0 +1,37 @@
+SiHO.tablaConBuscadorMensaje=function(b){$("div#"+b+" div#contenedorbajo").delay(100).fadeIn("slow");
+$("div#"+b+" div#contenedorbajo").delay(1000).fadeOut("slow")
+};
+function seleccionaCheckBox(b){$("div#"+b+" table tbody tr td.ColumnaBorrar input").each(function(){if($(this).is(":visible")){this.click()
+}});
+return true
+}function enfocaNuevo(b){$("div#"+b+" table tbody tr td:first-child input").each(function(){if(!this.value){$(this).focus();
+return true
+}});
+document.getElementsByName(b+"_agregarTabInt")[0].click();
+return true
+}$(document).ready(function(){$("body").on("mouseover",'.tablaInteligente input[type="text"]',function(){if(!$(this).hasClass("warning")){}$(this).attr("title",$(this).val())
+}).on("click",'.tablaInteligente td:last-child input[type="checkbox"]',function(){var c=false,d=$(this).parents("div.tablaInteligente").first();
+d.find('input[type="checkbox"]').each(function(){if($(this).is(":checked")){c=true;
+return false
+}});
+if(c){d.find("a.botonCheckBox").show().end().find("a.button").hide()
+}else{d.find("a.botonCheckBox").hide().end().find("a.button").show()
+}})
+});
+function diagnosticoPrincipal(){var f=document.getElementsByClassName("checkPrincipal");
+var e=false;
+for(var d=0;
+d<f.length;
+d++){if(f[d].checked){e=true
+}}if(e){for(var d=0;
+d<f.length;
+d++){if(f[d].checked){f[d].removeAttribute("disabled")
+}else{f[d].setAttribute("disabled","disabled")
+}}}else{for(var d=0;
+d<f.length;
+d++){f[d].removeAttribute("disabled")
+}}}function disableDiag(){var c=document.getElementsByClassName("checkPrincipal");
+for(var d=0;
+d<c.length;
+d++){c[d].setAttribute("disabled","disabled")
+}};

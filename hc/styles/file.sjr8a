@@ -1,0 +1,25 @@
+#datosGenerales{clear:left;}
+#fotoPaciente{height:67px;margin-right:10px;margin-top:10px;border:1px dotted #000;padding:0;}
+#datosGenerales table tbody tr td.infoPaciente{background-color:#DDD;border-radius:10px 10px 10px 10px;font-size:12px;line-height:16px;padding-left:5px;text-align:justify;width:905px;vertical-align:top;text-align:left;}
+#datosGenerales table tbody tr td.infoPaciente table{border-spacing:0;}
+#datosGenerales table tbody tr td.infoPaciente b i{font-style:normal;margin:-1px 2px;}
+#datosGenerales{clear:left;}
+.infoPaciente div{display:inline-block;white-space:nowrap;padding-right:1em;}
+#diagAlergTable tbody td{vertical-align:initial;font-size:11px;}
+#diagAlergTable td ul,#diagAlergTable div ul{max-height:60px;padding-left:17px;overflow:auto;margin:0;width:auto;}
+#tablaNombreTipoPac{width:100%;border-collapse:collapse;}
+#columnaTipoInternamientoPac{float:right;margin-right:5px;}
+.descripcionPaquetes label{font-weight:bolder;color:blue;background-color:yellow;font-size:14px;padding-left:2px;padding-right:2px;}
+.descripcionPaquetes{margin-top:4px;margin-bottom:3px;}
+.triage1{background:#bf360c!important;}
+.triage1 #nombrePaciente,.triage1 #tipoInternamientoPac{color:white;}
+.triage2{background:#ffa726!important;}
+.triage2 #nombrePaciente,.triage2 #tipoInternamientoPac{color:white;}
+.triage3{background:#ffd740!important;}
+.triage4{background:#8bc34a!important;}
+.triage4 #nombrePaciente,.triage4 #tipoInternamientoPac{color:white;}
+.triage5{background:#b3e5fc!important;}
+.listMedTrata{max-height:32px!important;}
+.colMedicos ul{max-height:52px;max-height:60px;padding-left:17px;overflow:auto;margin:0;width:auto;}
+.colMedicosTratantes ul{max-height:52px;max-height:60px;padding-left:17px;overflow-y:scroll;margin:0;width:auto;}
+.divRiesgoVulnerabilidad{width:100%;overflow-x:auto;white-space:nowrap;}

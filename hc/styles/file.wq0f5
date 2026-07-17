@@ -1,0 +1,12 @@
+div.panelDiagnostico table tbody tr td.columnacie10 span{min-width:200px;display:block;}
+div.panelDiagnostico table tbody tr .columnaCatalogo{width:70%;}
+.colDiagnostico{width:404px;}
+.colDiagnosticoBig{width:612px;}
+.lblDiagnosticoBig{display:inline-block;position:absolute;left:296px;font-weight:700;margin-top:2px;}
+.lblDiagnostico{position:absolute;left:196px;font-weight:700;margin-top:2px;}
+.lblCodigoBig{display:-moz-inline-grid;position:absolute;left:649px;font-weight:700;text-align:center;line-height:1;width:41px;margin-top:2px;}
+.lblCodigo{position:absolute;left:441px;font-weight:700;text-align:center;line-height:1;width:41px;margin-top:2px;}
+.lblDiagnoCie10{position:absolute;left:544px;font-weight:700;margin-top:2px;}
+.columnaObsTablaInt{width:20%;}
+.descripcionDiagnoCie10{display:inline-block;width:25%;vertical-align:top;}
+.titulosDiagnoHistoricos{margin-top:27px!important;}

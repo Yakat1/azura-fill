@@ -1,0 +1,84 @@
+{
+  "_comment": "FIELD_MAP — maps your parameter keys to CSS selectors on the target page.",
+  "_instructions": [
+    "1. Replace TARGET_SITE_URL in autofill.user.js @match with your actual target site URL.",
+    "2. For each parameter key below, set the 'selector' to the CSS selector of the",
+    "   corresponding input/textarea/select element on the target page.",
+    "3. 'type' can be: 'input', 'textarea', 'select', or 'contenteditable'.",
+    "4. Set 'required: true' for fields that must be filled.",
+    "5. Re-import this file into autofill.user.js or paste its contents directly into",
+    "   the FIELD_MAP constant."
+  ],
+  "fields": [
+    {
+      "key": "Full Name",
+      "selector": "#fullName",
+      "type": "input",
+      "required": true,
+      "description": "Applicant full name"
+    },
+    {
+      "key": "Email",
+      "selector": "#email",
+      "type": "input",
+      "required": true,
+      "description": "Contact email address"
+    },
+    {
+      "key": "Phone",
+      "selector": "#phone",
+      "type": "input",
+      "required": false,
+      "description": "Phone number with country code"
+    },
+    {
+      "key": "Organization",
+      "selector": "#organization",
+      "type": "input",
+      "required": false,
+      "description": "Company or institution name"
+    },
+    {
+      "key": "Title",
+      "selector": "#title",
+      "type": "input",
+      "required": false,
+      "description": "Job title or role"
+    },
+    {
+      "key": "Project Description",
+      "selector": "#projectDescription",
+      "type": "textarea",
+      "required": true,
+      "description": "Main project description (multi-line)"
+    },
+    {
+      "key": "Notes",
+      "selector": "#notes",
+      "type": "textarea",
+      "required": false,
+      "description": "Additional notes or comments"
+    },
+    {
+      "key": "Category",
+      "selector": "#category",
+      "type": "select",
+      "required": false,
+      "description": "Dropdown category selection"
+    },
+    {
+      "key": "Custom Field 1",
+      "selector": "#customField1",
+      "type": "input",
+      "required": false,
+      "description": "Site-specific field — update selector"
+    },
+    {
+      "key": "Custom Field 2",
+      "selector": "#customField2",
+      "type": "input",
+      "required": false,
+      "description": "Site-specific field — update selector"
+    }
+  ]
+}

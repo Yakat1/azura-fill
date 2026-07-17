@@ -1,0 +1,40 @@
+(function(b){jQuery.fn.extend({elastic:function(){var a=["paddingTop","paddingRight","paddingBottom","paddingLeft","fontSize","lineHeight","fontFamily","width","fontWeight","border-top-width","border-right-width","border-bottom-width","border-left-width","borderTopStyle","borderTopColor","borderRightStyle","borderRightColor","borderBottomStyle","borderBottomColor","borderLeftStyle","borderLeftColor"];
+return this.each(function(){if(this.type!=="textarea"||this.elastic!=undefined){return false
+}this.elastic=new Object();
+var r=jQuery(this),v=jQuery("<span />").css({position:"absolute",display:"none","word-wrap":"break-word","white-space":"pre-wrap"});
+var o=parseInt(r.css("line-height"))||parseInt(r.css("font-size"));
+var i=o*1;
+var n=parseInt(r.css("max-height"))||Number.MAX_VALUE;
+var u=0;
+if(n<=0){n=Number.MAX_VALUE
+}if(r.context.scrollHeight<=n&&r.context.scrollHeight>0){r.css({height:r.context.scrollHeight+"px"})
+}else{if(r.context.scrollHeight==0){r.css("height",i)
+}else{r.css({height:n+"px","border-right":"3px inset #14DEF0"})
+}}r.css({overflow:"hidden","max-height":"1000000px"});
+v.appendTo(r.parent());
+var s=a.length;
+while(s--){v.css(a[s].toString(),r.css(a[s].toString()))
+}function q(){var c=Math.floor(parseInt(r.width(),10));
+if(v.width()!==c){v.css({width:c+"px"})
+}}function p(c,e){e==undefined?100:e;
+var d=Math.floor(parseInt(c,10));
+if(r.height()!==d){r.animate({height:d+"px"},100)
+}}function t(){var d=r.val().replace(/&/g,"&amp;").replace(/ {2}/g,"&nbsp;").replace(/<|>/g,"&gt;").replace(/\n/g,"<br />");
+var c=v.html().replace(/<br>/ig,"<br />");
+v.html(d+"&nbsp;");
+if(Math.abs(v.height()+o-r.height())>3){var e=v.height();
+if(e<n){if(e>i){p(e+o)
+}else{p(i+o)
+}r.css("border-right","1px solid #666")
+}else{p(e+o);
+r.css("border-right","3px inset #14DEF0")
+}}}r.bind("keyup cut paste focus",t).bind("resize",q).blur(function(){var c=v.height();
+if(c<n){if(c>i){p(c)
+}else{p(i)
+}r.css("border-right","1px solid #666")
+}else{p(n);
+r.css("border-right","3px inset #14DEF0")
+}})
+})
+}})
+})(jQuery);

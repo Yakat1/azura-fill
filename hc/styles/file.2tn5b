@@ -1,0 +1,9 @@
+table.contenedorAlergias{border:1px solid #CCC;border-radius:10px 10px 0 0;border-spacing:0;width:100%;}
+.contenedorAlergias thead th{background-color:#CCC;}
+.contenedorAlergias thead th:FIRST-CHILD{border-radius:10px 0 0 0;}
+.contenedorAlergias thead th:last-child{border-radius:0 10px 0 0;}
+table.contenedorAlergias td.elim{width:20px;}
+.odd{background-color:#EEE!important;}
+input#alergiasPac{width:720px;}
+div.errAlergia{color:red;}
+span.alergias-text{display:inline-block;width:100%;}

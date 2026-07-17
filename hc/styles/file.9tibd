@@ -1,0 +1,21 @@
+a.button,a.botonCheckBox{color:#5D5;font-weight:bold;height:32px;line-height:34px;position:relative;text-decoration:none;z-index:9999;top:-35px;left:-28px;font-size:26px;vertical-align:text-bottom;vertical-align:bottom;float:right;left:-4px;}
+a.botonCheckBox{display:none;letter-spacing:-3px;color:red;left:-7px;cursor:pointer;top:-36px;}
+.hiddenTag{display:none;}
+.columnaDatePicker{width:101px;white-space:nowrap;}
+.columnaDatePicker input{width:95px;}
+.deleteButton{background:transparent url('../images/trash.png');width:30px;height:30px;display:block;}
+.tablaInteligente .formaCheckBox button{padding:0;}
+a:hover.button{color:#06C;}
+.tablaInteligente{width:100%;}
+.tablaInteligente thead tr{height:22px;vertical-align:bottom;}
+.tablaInteligente table tr td{background:none repeat scroll 0 0 #FFF;}
+.tablaInteligente table tr.zebraInteligente td{background-color:#eee;}
+.tablaInteligente table{border-radius:10px;width:100%;background:none repeat scroll 0 0 #ccc;border-spacing:0;border:1px solid #ccc;}
+.tablaInteligente table tbody tr{vertical-align:top;}
+.tablaInteligente table tr:last-child td:last-child input[type="checkbox"]{display:none;}
+.tablaInteligente table tr:last-child td:last-child{border-bottom-right-radius:10px;}
+.tablaInteligente table tr:last-child td:first-child{border-bottom-left-radius:10px;}
+.tablaInteligente .ColumnaBorrar{width:1px;}
+.tablaInteligente .ColumnaBorrar label{display:block;}
+span.cabezeraCheckBox{width:15px;height:15px;text-align:center;color:transparent;display:inline-block;background-image:url('../images/paloma.png');background-repeat:no-repeat;cursor:pointer;}
+div#contenedorbajo{display:block;left:24px;position:relative;}

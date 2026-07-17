@@ -1,0 +1,21 @@
+#contenedorControlesVal .tituloControl span{font-weight:bold;color:#06A;font-size:13px;}
+.tabla-controles .headers{background-color:#6EA0C4;}
+.tabla-controles tbody tr td{border-bottom:1px dotted gray;border-right:1px dotted gray;}
+.tabla-controles .headers th:first-child{position:sticky;left:0;background-color:#6EA0C4;}
+.tabla-controles tr td:first-child{position:sticky;left:0;background-color:white;}
+.tabla-controles{margin-bottom:20px;display:block;overflow-x:auto;}
+.tabla-controles input:disabled{background-color:#fff!important;color:black;}
+.tabla-controles .datoResultado{font-weight:bold!important;width:60px!important;}
+.tabla-controles .datoGranResultado{color:#00C!important;font-weight:800!important;width:60px!important;}
+.tabla-controles .numero{text-align:right;width:70px;float:right;background-image:none!important;border:none!important;}
+.tabla-controles .forma-celda input{background-image:none!important;border:none!important;}
+.tabla-controles .renglones td.nombre{width:140px;}
+#tabla-obs textarea{width:98.9%!important;min-width:190px;color:#4d4d4d!important;}
+#contenedorControlesVal .panelControlValora{border:1px solid #E3E3E3;border-radius:5px;margin-bottom:10px;padding:5px;}
+.fbpModalCaptura li.feedbackPanelERROR span{color:red!important;}
+#tabla-preguntas-check .descTitulo{background-color:#ccc;}
+.descPregunta div{background:#e3e3e3 none repeat scroll 0 0;padding-left:8px;}
+.descRespuesta div{padding-left:16px;}
+#tabla-preguntas-check{border:1px solid #ccc;border-radius:10px;border-spacing:0;width:100%;}
+.conteOtroPreg{display:inline;}
+#tabla-preguntas-check input{border-left:0 none;border-right:0 none;border-top:0 none;}

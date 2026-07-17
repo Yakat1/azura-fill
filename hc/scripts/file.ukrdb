@@ -1,0 +1,16 @@
+function agregarPresion(c){$sel=$(c);
+$sel.validCampoF("0123456789/");
+var d=$sel.val();
+$sel.val(d);
+$sel.blur(function(){var a=/\d\d\d?\/\d\d\d?/g;
+if($(this).val().match(a)==null){$(this).val("")
+}else{if($(this).val().charAt(0)=="0"){$(this).val($(this).val().substring(1))
+}}$(this).val($(this).val().match(a))
+})
+}(function(a){a.fn.validCampoF=function(b){a(this).on({keypress:function(l){var c=l.which,d=l.keyCode,e=String.fromCharCode(c).toLowerCase(),f=b;
+(-1!=f.indexOf(e)||9==d||37!=c&&37==d||39==d&&39!=c||8==d||46==d&&46!=c)&&161!=c||l.preventDefault()
+}})
+}
+})(jQuery);
+(function(){$("input.presion").tooltip({trigger:"focus",animation:"true"})
+});

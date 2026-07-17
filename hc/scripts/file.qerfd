@@ -1,0 +1,32 @@
+SiHO.validarDecimalesPeso=function(f,d){var e=false;
+$("#"+f).keypress(function(j){var k=j.which;
+if(k!=44&&k!=46&&k>31&&(k<48||k>57)){return false
+}var a=String.fromCharCode(k);
+console.log("tecla presionada "+a+" tipo: "+k);
+var b=$(this).val();
+console.log("texto en press "+b);
+var c=document.getElementById($(this).attr("id")).selectionStart;
+console.log("posicion: "+c+" tamaño: "+b.length);
+if(b.length>c){console.log("cur menor que texto! "+b.substring(0,c));
+b=b.substring(0,c)+a+b.substring(c)
+}else{b=$(this).val()+a
+}if($(this).val()==""||b.match(/^\d{0,3}(\.\d{0,3})?$/)||k<31){e=false;
+return true
+}else{console.log("bandera al no cumplir: "+e+" tam: "+a.length);
+if(e==true&&a.length>0){$(this).val(a)
+}e=false;
+return false
+}}).blur(function(){$(this).parseNumber({format:"###.###",locale:"en"});
+$(this).formatNumber({format:"###.###",locale:"en"});
+var a=agregarCero($(this).val());
+$(this).val(a);
+var b=$(this).val();
+if(b.match(/^\d{0,3}(\.\d{0,3})?$/)){$(this).val(b)
+}else{$(this).val("")
+}}).focus(function(){$(this).val($(this).val().replace(/,/g,""))
+}).select(function(){e=true
+})
+};
+function agregarCero(b){if(b.indexOf(".")!=-1){if(b.indexOf(".")==0){b="0"+b
+}}return b
+};

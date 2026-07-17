@@ -1,0 +1,70 @@
+#wrapper .pageContainer{background-color:#FFF;border:1px solid #ADADAD;box-shadow:2px 2px 10px #101010;padding:15px;}
+#wrapper form .tableGrid{width:920px;text-align:center;border-collapse:collapse;}
+table.tableGrid thead{color:#FFF;background-color:#399FBD;background-repeat:repeat-x;position:static!important;}
+#wrapper form .tableGrid thead tr th{border-right:1px solid #fff;}
+#wrapper form .tableGrid thead tr th:last-child{border-right:none;}
+#wrapper form .tableGrid tr td:first-child{border-left:2px dotted #E0EAEF;}
+#wrapper form .tableGrid tr td{border-right:2px dotted #E0EAEF;}
+#wrapper form .tableGrid thead tr th.tableSel{width:40px;padding-bottom:15px;}
+#wrapper form .tableGrid thead tr th.tableFecha{width:120px;padding-bottom:15px;}
+#wrapper form .tableGrid thead tr th.tableDescripcion{width:263px;padding-bottom:15px;}
+#wrapper form .tableGrid thead tr th.tablePadece{width:146px;padding-bottom:15px;}
+#wrapper form .tableGrid thead tr th.tableObservaciones{width:260px;padding-bottom:15px;}
+#wrapper .tableCheckBox{font-size:13px;text-align:left;padding-left:5px;padding-right:2px;padding-top:4px;}
+.checkFix:first-child{margin-top:7px;margin-bottom:0;}
+.checkFix{padding-bottom:0;margin:0;}
+.divisionLine{border-bottom:1px dotted #334A57;height:3px;}
+.divisionLine:last-child{border:none;height:3px;}
+#wrapper .pageContainer form #leftCol p{font-size:15px;color:#000;margin-bottom:17px;}
+#wrapper .pageContainer form #leftCol .spanColumns{text-align:center;float:left;width:150px;margin-left:10px;}
+#wrapper .pageContainer form #leftCol .inputColumns{text-align:left;float:left;margin-left:10px;}
+.clearFix{clear:both;margin-top:20px;hiddenTag border-top:2px dotted #ddd;padding-top:20px;float:left;}
+#linkRight{float:left;height:auto;width:auto;line-height:20px;}
+#arbol{margin-right:50px;float:left;border-right:2px dotted #DDD;padding-right:20px;}
+#menuOpciones>a{height:31px;width:33px;display:inline-block;}
+#unlockBTN{background-image:url(../images/unlock.png);cursor:pointer;border:2px solid #F4F4F4;-webkit-border-radius:7px;-moz-border-radius:7px;border-radius:7px;background-repeat:no-repeat;}
+#guardarBTN{background-image:url(../images/save-block.png);cursor:pointer;border:2px solid #F4F4F4;-webkit-border-radius:7px;-moz-border-radius:7px;border-radius:7px;background-repeat:no-repeat;}
+#cancelarBTN{background-image:url(../images/cancel-block.png);cursor:pointer;border:2px solid #F4F4F4;-webkit-border-radius:7px;border-radius:7px;background-position:0 -1px;background-repeat:no-repeat;}
+#registroBTN{background-image:url(../images/patient-block.png);cursor:pointer;border:2px solid #F4F4F4;-webkit-border-radius:7px;-moz-border-radius:7px;border-radius:7px;background-repeat:no-repeat;}
+#imprimirBTN{background-image:url(../images/print-block.png);cursor:pointer;border:2px solid #F4F4F4;border-radius:7px;background-repeat:no-repeat;}
+div#menuOpciones a.hover:hover{background-color:#F7DE6E;-webkit-box-shadow:1px 1px 1px 2px #F7DE6;border:2px solid #F4CA35;}
+div#menuOpciones ul li span.wicket-ajax-indicator{left:822px;position:absolute;top:207px;}
+#activeOption{display:inline-block;width:92%!important;cursor:pointer;font-weight:700;padding-top:4px;height:100%;}
+#activeOption>img{height:20px;margin-bottom:-4px;}
+#arrowDown{display:inline-block;background-color:#71C1EB;background-image:url("../images/open.png");background-position:3.3px 50%;background-repeat:no-repeat;border-radius:0 0 10px 0;box-shadow:-1px 3px 6px #4786A5 inset;cursor:pointer;height:100%;width:18px;float:right;}
+#menuOpciones{display:inline-block;float:left;width:180px;}
+#comboContainer{background-color:#FFF;border:1px solid #DDD;border-radius:0 0 10px 10px;bottom:10px;display:inline-block;font-size:11px;width:450px!important;height:30px;}
+#comboContainer ul{list-style:none;margin:0;padding-left:6px;}
+#comboContainer ul>li{border-bottom:1px dashed #DDD;cursor:pointer;}
+#comboContainer ul>li:hover{font-weight:bold;}
+#areaContainer{background-color:white;z-index:9999;border-bottom:2px;border-left:1px;border-style:solid;border-top-width:0;border-right:0;border-color:#0072BC;position:absolute;max-height:145px;min-height:19px;overflow:auto;}
+div#comboContainer ul li span{color:#000;margin-left:6px;}
+div#comboContainer ul li img{width:20px;margin:-3px;}
+.sub{background-color:#ddd;}
+span.black{font-weight:700;}
+div#historiaAlimentacion.pageContainer span table#widthTable{width:660px;}
+div#historiaAlimentacion.pageContainer span table#widthTable tbody tr td textarea{width:880px!important;}
+table tbody tr td textarea.exploracionFisica{height:19px;margin-bottom:29px;margin-top:20px;overflow:hidden;width:911px!important;padding:0;}
+div#historiaAlimentacion.pageContainer span table#widthTable tbody tr td strong{color:#000;font-size:80%;}
+div#antecedentesPediatricos.pageContainer span div.bgBar{background-color:#B2C7D5;color:#FFF;font-size:100%;font-weight:700;height:20px;padding-left:10px;padding-top:3px;}
+div#antecedentesPediatricos.pageContainer span div.bgBar span{background-color:#B2C7D5;height:20px;color:#FFF;font-size:14px;font-weight:700;}
+div#antecedentesPediatricos.pageContainer span table tbody tr td span{font-weight:700;font-size:15px;}
+div#antecedentesPediatricos.pageContainer span table tbody tr td input.standardSize{width:50px;}
+div#antecedentesPediatricos.pageContainer span div div#pediatricHistory_head div#pediatricHistory_head_2{float:left;margin-left:20px;width:270px;}
+div#antecedentesPediatricos.pageContainer span div div#pediatricHistory_head div#pediatricHistory_head_3 input{width:35px;}
+div#ginecoobstetricos.pageContainer span div#GinecoobstetricosPanel_head_3{clear:left;}
+div#ginecoobstetricos.pageContainer span div.push{margin-bottom:60px;}
+div#ginecoobstetricos.pageContainer span div#tabla9 textarea{width:850px;}
+div#wrapper div.pageContainer span div span div div.and_BotonBg{height:16px;padding-left:6px;text-shadow:1px 1px 1px #A5A5A5;}
+div#wrapper div.pageContainer span div span div div.and_BotonBg a{background-color:#B4BCBC;border-radius:9px;padding:0 5px;}
+a.ant_Boton{color:#FFF;font-family:"Trebuchet MS",Arial,Helvetica,sans-serif;font-size:13px;text-decoration:none;text-shadow:1px 1px 1px #A5A5A5;}
+div#divSeparador{height:7px;width:auto;}
+div#wrapper div#expFisica.pageContainer span div span div div.ant_Informacion span span.ant_titulo{margin-right:2px;color:#000;}
+div#expFisica.pageContainer span div span div div.ant_Informacion span span.ant_data{font-weight:700;margin-right:23px;font-size:10px;color:#98AAAE;}
+div#terapeutica.pageContainer span textarea.movingTextArea,div#serviciosAuxiliares.pageContainer span textarea.movingTextArea{text-align:justify;width:922px!important;}
+div#expFisica.pageContainer span table tbody tr,div#antecedentesPediatricos.pageContainer span table tbody tr td.minSize{width:150px;}
+div#historiaAlimentacion.pageContainer span table#widthTable tbody tr td div.down,div#historiaAlimentacion.pageContainer span table#widthTable tbody tr td div.down2,div#historiaAlimentacion.pageContainer span table#widthTable tbody tr td div.down3,div#historiaAlimentacion.pageContainer span table#widthTable tbody tr td div.down4{display:none;}
+div#ginecoobstetricos.pageContainer span div#GinecoobstetricosPanel_head_1 div#edadM,div#ginecoobstetricos.pageContainer span div#GinecoobstetricosPanel_head_1 div#edadS{float:left;margin-right:25px;}
+#post_cabezales{background-color:#399FBD;height:46px;margin-left:-11px;margin-top:80px;width:970px;}
+#post_cabezales table thead tr th{color:#FFF;font-size:15px;text-align:center;text-shadow:1px 1px #000;vertical-align:middle;white-space:nowrap;word-spacing:4px;padding:11px 130px;}
+.post{margin-bottom:5px;color:#444;div.post_paciente{height:100%!important;}

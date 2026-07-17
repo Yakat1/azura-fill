@@ -1,0 +1,31 @@
+$(document).ready(function(){var b=$("#fechaNacimientoPaciente").text();
+if(b==""){b=null
+}else{b=b.split("/");
+b=new Date(parseInt(b[2]),parseInt(b[1])-1,parseInt(b[0]))
+}$.datepicker.setDefaults({minDate:b,maxDate:new Date()});
+$("body").on("change","input.calendario:not(.ignoreDateValidation)",function(){var a=$(this).val().split("/"),d=new Date(parseInt(a[2]),parseInt(a[1])-1,parseInt(a[0]));
+if(b>d||d>new Date()){$(this).val("")
+}}).on("focus",'input[type="text"].ignoreDateValidation',function(){if(this.ignoreDateValidation==undefined){this.ignoreDateValidation=true;
+$(this).datepicker("option","maxDate",null);
+var a=$(this).attr("fechaVal");
+if(a==undefined){$(this).datepicker("option","minDate",b)
+}else{$(this).datepicker("option","minDate",a)
+}}}).on("focus",'input[type="text"].desdeIngreso',function(){var a=$("#fechaHoraIngreso").text();
+if(this.desdeIngreso==undefined){this.desdeIngreso=true;
+$(this).datepicker("option","maxDate",new Date());
+$(this).datepicker("option","minDate",a)
+}}).on("focus",'input[type="text"].deHoyAFuturo',function(){var a=$("#fechaHoraIngreso").text();
+if(this.desdeIngreso==undefined){this.desdeIngreso=true;
+$(this).datepicker("option","maxDate",null);
+$(this).datepicker("option","minDate",new Date())
+}})
+});
+$(window).load(function(){if(jQuery.fn.pixastic==undefined||navigator.userAgent.indexOf("WebKit")!=-1){return true
+}$("#fotoPaciente").pixastic("sepia").pixastic("lighten",{amount:-0.13});
+$("img:not(#imgExpGrafica):not(.ui-datepicker-trigger)").each(function(){$(this).pixastic("lighten",{amount:-0.17})
+})
+});
+function validaFechaRetiro(f){var d=$(f);
+var e=$(d).attr("fechaVal");
+$(f).datepicker("option","minDate",e)
+};

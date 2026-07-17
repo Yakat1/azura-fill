@@ -1,0 +1,61 @@
+SiHO.guardadaStyle=function(){SiHO.elastico();
+var b=$("#unlockBTN,#registroBTN");
+SiHO.deshabilitarImagenes(b);
+$("#unlockBTN").hide()
+};
+SiHO.iniciarTablasHistorico=function iniciarTablasHistorico(f){var e=$("#"+f),d=$("#"+f).prev("div").find("a");
+if(d.attr("visi")=="true"){$("div.historico table tbody",d.parent("div")).clone().find("tr").each(function(){$(this).append("<td></td>")
+}).end().addClass("tbodyHis").prependTo($("table",e)).show()
+}};
+$(document).ready(function(){var b=$("#ginecoobstetricos > div  div").length;
+if(b==0){$("#ginecoobstetricos").hide()
+}b=$("#antecedentesPediatricos > div  div").length;
+if(b==0){$("#antecedentesPediatricos").hide()
+}b=$("#historiaAlimentacion > div  div").length;
+if(b==0){$("#historiaAlimentacion").hide()
+}$("div.HistoricoCampo > a").click(function(){if($(this).parent().children("ul,div").is(":visible")){$(this).text($(this).attr("ver"))
+}else{$(this).text($(this).attr("ocultar"))
+}$(this).parent().children("ul,div").slideToggle("fast");
+return false
+});
+$("div.historicoTablas > a").click(function(){var a=$(this).parent("div").parents("div").next("div.tablaInteligente");
+if($(this).attr("visi")=="false"){$("div.historico table tbody ",$(this).parent("div")).clone().find("tr").each(function(){$(this).append("<td></td>")
+}).end().addClass("tbodyHis").prependTo($("table",a)).show("slow");
+$(this).attr("visi","true").text($(this).attr("ocultar"))
+}else{$("table tbody.tbodyHis",a).hide("fast",function(){$(this).remove()
+});
+$(this).attr("visi","false").text($(this).attr("ver"))
+}return false
+}).each(function(a){SiHO.iniciarTablasHistorico($(this).parents("div").next("div.tablaInteligente").attr("id"));
+$(this).attr("visi","true").text($(this).attr("ocultar"))
+});
+$("#historiaAlimentacion label > input").change(function(){var a=$(this).parents("label").next("br").next("div");
+if($(this).is(":checked")){a.slideDown("fast")
+}else{a.slideUp("fast");
+a.find("textarea").val("")
+}}).trigger("change");
+$(".valoracionNutrimentalPanel").hide()
+});
+function precargarRH(h){var g=$("#antecedentesNoPatologicos td span span:visible");
+for(var e=0;
+e<g.length;
+e++){if(g[e].textContent=="GRUPO Y RH"){var f=$("#antecedentesNoPatologicos td.textAreaColumn textarea")[e];
+if($(f).text().trim()==""){$(f).text(""+h)
+}break
+}}}function ocultaHisSignos(){var e=$(".historicoOculta input").size();
+var g=$(".historicoOculta input");
+var f=0;
+for(var h=0;
+h<g.size();
+h++){if(g[h].value==""){f++
+}}if(g.size()==f){$(".signosVitalesPanel .historicoOculta, .signosVitalesPanel a").hide()
+}}function mostrarHistoricosInicio(){$("div.HistoricoCampo > a").click();
+$("div.historicoTablas > a").click();
+$(".historicoTablas a").click();
+ocultaHisSignos();
+if($(".padecimientoActualh ul li").size()==0){$(".padecimientoActualh").hide()
+}if($(".resultadosHistorico ul li").size()==0){$(".resultadosHistorico").hide()
+}if($(".terapeuticaHis ul li").size()==0){$(".terapeuticaHis").hide()
+}}function ocultarHistoricos(){$(".historicoTablas a").click();
+ocultaHisSignos()
+};

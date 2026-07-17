@@ -1,0 +1,11 @@
+.CompleteCombo{cursor:pointer;display:inline-block;height:17px!important;background-color:white;border-radius:6px 2px 5px 2px;border:1px solid gray;outline:none;padding-bottom:1px;padding-top:1px;vertical-align:top;}
+.outline{box-shadow:0 0 2px 2px #58ae4f;}
+.completeComboList{background-color:white;border-width:1px;border-color:#2cc;border-style:solid;margin:0;text-align:left;display:none;position:absolute;width:auto;z-index:11;max-height:242px;}
+.completeComboImg{background-image:url("../images/arrow-down.png");background-position:right center;background-repeat:no-repeat;float:right;display:inline-block;height:18px!important;width:19px!important;border-left:1px solid gray;}
+.completeComboField{cursor:pointer;margin:0;width:100%;display:block;height:17px;border:none!important;box-shadow:none;position:relative;padding-bottom:2px;padding-top:2px;position:relative;bottom:2px;}
+.CompleteCombo div.container{overflow:hidden;float:none;text-align:center;width:auto!important;}
+.completeComboList ul{list-style:none;padding-left:2px;margin:0;max-height:240px;overflow:auto;line-height:13px;white-space:nowrap;}
+.completeComboList ul li{border:2px solid transparent;font-weight:normal;}
+.completeComboList ul li.selected{border:2px solid #58AE4F;}
+.completeComboList ul li:hover{background-color:#00BFFF!important;cursor:pointer;}
+.completeComboContainer{display:inline-block;}

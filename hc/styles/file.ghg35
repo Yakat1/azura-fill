@@ -1,0 +1,79 @@
+@font-face{font-family:"OpenSans";src:url(../images/OpenSans-Regular.ttf) format('truetype'),url(../images/OpenSans-Regular.eot) format('eot');font-weight:normal;font-style:normal;}
+@font-face{font-family:"OpenSans";src:url(../images/OpenSans-Italic.ttf) format('truetype'),url(../images/OpenSans-Italic.eot) format('eot');font-weight:normal;font-style:italic;}
+@font-face{font-family:"OpenSans";src:url(../images/OpenSans-BoldItalic.ttf) format('truetype'),url(../images/OpenSans-BoldItalic.eot) format('eot');font-weight:bold;font-style:italic;}
+@font-face{font-family:"OpenSans";src:url(../images/OpenSans-Bold.ttf) format('truetype'),url(../images/OpenSans-Bold.eot) format('eot');font-weight:bold;font-style:normal;}
+@font-face{font-family:"OpenSans";src:url(../images/OpenSans-Light.ttf) format('truetype'),url(../images/OpenSans-Light.eot) format('eot');font-weight:200;font-style:normal;}
+@font-face{font-family:"OpenSans";src:url(../images/OpenSans-LightItalic.ttf) format('truetype'),url(../images/OpenSans-LightItalic.eot) format('eot');font-weight:200;font-style:italic;}
+@font-face{font-family:"OpenSans";src:url(../images/OpenSans-ExtraBold.ttf) format('truetype'),url(../images/OpenSans-ExtraBold.eot) format('eot');font-weight:900;font-style:normal;}
+@font-face{font-family:"OpenSans";src:url(../images/OpenSans-ExtraBoldItalic.ttf) format('truetype'),url(../images/OpenSans-ExtraBoldItalic.eot) format('eot');font-weight:900;font-style:italic;}
+@font-face{font-family:"OpenSans";src:url(../images/OpenSans-Semibold.ttf) format('truetype'),url(../images/OpenSans-Semibold.eot) format('eot');font-weight:600;font-style:normal;}
+@font-face{font-family:"OpenSans";src:url(../images/OpenSans-SemiboldItalic.ttf) format('truetype'),url(../images/OpenSans-SemiboldItalic.eot) format('eot');font-weight:600;font-style:italic;}
+label:hover{cursor:pointer;}
+html{margin:0;padding:0;}
+body{font:normal 12px OpenSans,sans-serif;background-color:#105566;margin:0;padding:0;background-position:110px 0;background-repeat:no-repeat;}
+a{color:#06A;text-decoration:none;}
+a:hover{color:#036;}
+a[hre]{cursor:pointer;}
+p{padding:.1em 0 .8em;}
+h1{font:bold italic 1.8em OpenSans,sans-serif;}
+h2{font:normal 1.5em OpenSans,sans-serif;}
+h3{font:bold 1em OpenSans,sans-serif;margin-bottom:5px;margin-top:0;}
+blockquote{background:#FFF url(../images/quote.gif) no-repeat;border:1px solid #EAEAEA;color:#555;display:block;font:normal 1em OpenSans,sans-serif;margin-bottom:1em;padding:10px 1em .2em 42px;}
+span.wicket-ajax-indicator{margin-left:-16px;}
+code{display:block;background:#FFFFFA;color:#335;border:1px solid #E8E8D5;overflow:auto;font-size:.9em;line-height:1.5em;margin:1em 0;padding:5px 10px;}
+ul,ol{margin:0 0 1em 1.6em;}
+ul ul,ol ol{margin:.3em 0 .3em 1em;}
+img{border:none;}
+textarea{resize:none;line-height:17px;box-sizing:border-box;padding-left:3px;}
+input[type ="text"],textarea,select,input[type ="password"]{font:1em OpenSans,sans-serif;border:1px solid gray;border-radius:6px 2px 5px 2px;background-color:#fff;text-transform:uppercase;}
+input[type ="checkbox"],input[type ="radio"]{cursor:pointer;}
+input[type ="text"]{padding-left:2px;}
+select:disabled,input:disabled,textarea:disabled,select[readonly],input[readonly],textarea[readonly]{background-color:#DDD!important;outline:none;cursor:auto;}
+*:focus{box-shadow:0 0 2px 2px #58ae4f;outline:none;}
+body:focus{outline:none;box-shadow:none;}
+img.ui-datepicker-trigger{margin-left:1px;}
+#layout_container{background:#FFF;border-radius:10px;width:970px;margin:5px auto;padding:5px;min-height:600px;}
+#main{min-height:531px;opacity:0;}
+#vidal-link{float:right;line-height:0;padding:0 5px 0 5px;}
+#vidal-link img{height:18px;margin:2px;}
+#vidal-link:focus{box-shadow:none;}
+#layout_header{background-color:#C5DEF0;border-radius:10px;height:100%;padding:0 10px;}
+.odd{background-color:#D4D4D4;}
+#layout_header h1{font:italic 1.4em OpenSans,sans-serif;letter-spacing:-1px;}
+#layout_header h1,#layout_header h1 a{color:#507A9A;margin:0;display:inline;}
+b.highlight{color:#58AE4F;}
+#layout_header h1 a:hover{color:#305A7A;}
+#layout_header h2{font:normal 1.1em OpenSans,sans-serif;color:#679;margin:1px;}
+#cerrarSesion{text-decoration:none;}
+#menuOpcionesLogin{display:inline-block;float:right;position:relative;left:11px;border-collapse:collapse;margin-bottom:-150px;}
+#menuOpcionesLogin td{vertical-align:top;}
+#menuOpcionesLogin img{border-bottom:7px;border-left:7px;cursor:pointer;border-right:7px;border-style:solid;border-color:#C5DEF0;width:35px;border-radius:6px;}
+#menuOpcionesLogin td>div{display:none;z-index:20;background-color:#C5DEF0;border-radius:0 0 7px 7px;padding-left:8px;padding-bottom:2px;}
+#deptoUsiuarioLogin{color:#507A9A;display:inline-block;cursor:pointer;}
+div#navigationMenuLinks{font:bold 12px OpenSans,sans-serif;margin-right:12px;display:block;padding:2px 0 0;background-color:#FFF;height:15px;padding:5px;}
+div#navigationMenuLinks a{text-decoration:none;cursor:pointer;display:none;}
+div#navigationMenuLinks a:after{content:"|";}
+div#navigationMenuLinks a:last-child:after{content:"";}
+div#navigationMenuLinks a:last-child{color:black;cursor:auto;}
+#layout_footer{display:table-cell;width:950px;vertical-align:middle;background:#A3B5C1;border-radius:10px;font-size:.85em;color:#FAFCFF;height:22px;padding:0 10px;line-height:21px;}
+.warning{box-shadow:0 0 2px 2px #B00!important;}
+.mensajeTextArea{position:relative;display:block;font-size:11px;color:#999!important;font-weight:bold;text-align:initial;}
+#backTo{height:70px;width:33px;display:inline;position:fixed;left:92%;top:88%;opacity:.6;display:none;z-index:50;}
+#backTo:hover{cursor:pointer;}
+.bordeOpciones{border:1px solid gray;display:inline-block;border-radius:5px;padding-right:10px;font-weight:400;}
+.bordeOpciones *{font-weight:400!important;}
+#overlay{position:fixed;height:100%;width:100%;z-index:1000000;display:none;}
+::-ms-clear{display:none;}
+.post_title{background:#D0D0D0;border-radius:5px 5px 0 0;color:#000;height:auto;min-height:15px;width:960px;padding:5px;}
+.post_title h1{font-family:OpenSans,sans-serif;color:#525252;float:left;font-size:14px;font-weight:700;margin:0;}
+.post_title h1 a{color:#444;}
+.post_title h1 a:hover{color:#469;text-decoration:underline;}
+.post_title h1.left{width:380px;}
+.post_body{background:#F4F4F4;border-radius:0 0 5px 5px;width:960px;margin-bottom:5px;padding:5px;position:relative;}
+a.linkEliminar{display:inline-block;background-image:url(../images/cross-script.png);background-repeat:no-repeat;height:16px;width:16px;}
+.linkOculto{display:none;}
+input:-moz-placeholder{color:#a1a1a1!important;}
+.palette .selectionSelect,.palette .choicesSelect{border-radius:0!important;}
+#ayuda{background-image:url("../images/help.png");background-repeat:no-repeat;float:right;height:22px;padding-left:21px;}
+.interaccion .imagenInteraccionMedicamentos,.interaccion .imagenInteraccion{background-image:url("../images/alert.png");background-repeat:no-repeat;width:17px;height:17px;display:inline-block;margin-right:5px;}
+.sinInteraccion .imagenInteraccion{display:none;}

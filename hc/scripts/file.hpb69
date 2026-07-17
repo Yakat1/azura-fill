@@ -1,0 +1,59 @@
+$(document).ready(function(){$("body").on("click","#comboContainer",function(){$("#areaContainer").css({width:$(this).width(),}).slideToggle("fast");
+return false
+});
+$(window).click(function(b){$("#areaContainer").slideUp("fast")
+})
+});
+SiHO.elastico=function(){$("textarea").elastic()
+};
+SiHO.deshabilitarImagenes=function(b){SiHO.elastico();
+return b.removeAttr("hre").removeAttr("tabindex").removeAttr("onclick").css("background-position","2px -30px").css("cursor","auto").removeClass("hover")
+};
+SiHO.deshabilidarJavaScript=function(){SiHO.elastico();
+$("#formaInformacionregistro input, #formaInformacionregistro textarea, #formaInformacionregistro button").attr("readonly",true).filter('input[type="checkbox"], input[type="radio"]').attr("disabled",true);
+$(".quitarCompleteList, #agregarMedicoTratante, .obtenerInformacionSomatometria a").removeAttr("onclick").removeAttr("href");
+$(".hasDatepicker").datepicker("disable");
+$(".AutoCompleteField").attr("disabled","disabled")
+};
+SiHO.cancelaStyle=function(){SiHO.elastico();
+var b=$("#guardarBTN,#registroBTN, #cancelarBTN, #imprimirBTN");
+SiHO.deshabilitarImagenes(b);
+SiHO.deshabilidarJavaScript();
+$(".CompleteCombo").css("background-color","#DDDDDD!important");
+if($("#unlockBTN").length!=0){$("#registroBTN").hide()
+}};
+SiHO.guardadaStyle=function(){SiHO.elastico();
+var b=$("#imprimirBTN,#unlockBTN");
+SiHO.deshabilitarImagenes(b);
+$("#unlockBTN").hide()
+};
+SiHO.nuevoStyle=function(){SiHO.elastico();
+SiHO.deshabilitarImagenes($("#registroBTN ,  #cancelarBTN , #imprimirBTN"));
+$("#unlockBTN").hide()
+};
+SiHO.registradaStyle=function(){SiHO.elastico();
+SiHO.deshabilitarImagenes($("#guardarBTN , #registroBTN, #cancelarBTN"));
+$(".CompleteCombo").css("background-color","#DDDDDD!important");
+if($("#unlockBTN").length!=0){$("#registroBTN").hide()
+}SiHO.deshabilidarJavaScript()
+};
+SiHO.vacioStyle=function(){SiHO.elastico();
+SiHO.deshabilitarImagenes($("#guardarBTN , #registroBTN, #cancelarBTN, #imprimirBTN, #unlockBTN"));
+$(".CompleteCombo").css("background-color","#DDDDDD!important");
+$("#unlockBTN").hide();
+SiHO.deshabilidarJavaScript()
+};
+SiHO.consultaStyle=function(){SiHO.elastico();
+SiHO.deshabilitarImagenes($("#guardarBTN , #registroBTN, #cancelarBTN, #unlockBTN"));
+$(".CompleteCombo").css("background-color","#DDDDDD!important");
+if($("#unlockBTN").length!=0){$("#registroBTN").hide()
+}SiHO.deshabilidarJavaScript()
+};
+SiHO.navegaStyle=function(){SiHO.elastico();
+SiHO.deshabilitarImagenes($("#guardarBTN , #registroBTN ,  #cancelarBTN , #imprimirBTN"));
+$("#unlockBTN").hide();
+$(".CompleteCombo").css("background-color","#DDDDDD!important");
+if($("#unlockBTN").length!=0){$("#registroBTN").hide()
+}SiHO.deshabilidarJavaScript();
+$("div.btnChangeEv").css("top",$(".infoPaciente").height()+100)
+};

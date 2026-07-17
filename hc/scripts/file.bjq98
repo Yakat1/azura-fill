@@ -1,0 +1,91 @@
+if(typeof String.prototype.startsWith!="function"){String.prototype.startsWith=function(b){return this.indexOf(b)==0
+}
+}SiHO.focusCombo=function(b){$(b.target).parents("div.CompleteCombo").find("input").focus();
+if($(b.target).is("span")){SiHO.expandir(b)
+}};
+SiHO.llenarDiv=function(j){var i=$(j.target),g=i.parent(),k=g.children("select.completeCombo"),l=g.children(".completeComboList").children("ul");
+if(l.children("li").length==1){var h="";
+l.empty();
+k.children("option").each(function(){if(this.text!=""){h+='<li onmouseup="return SiHO.seleccionoUno(event);" valueComplete="'+this.value+'" >'+this.text+"</li>"
+}});
+l.append(h)
+}i.parents("div.CompleteCombo").addClass("outline")
+};
+SiHO.jumpTo=function(d){var c=d.children("li").index(d.children("li.selected"));
+d.scrollTop(d.children("li.selected").offset().top-d.offset().top+d.scrollTop())
+};
+SiHO.buscarTexto=function(k){var j=$(document.activeElement),h=j.parent(),l=h.children("select.completeCombo"),m=h.children(".completeComboList").children("ul"),n=j.val(),i=(k.which)?k.which:k.keyCode;
+if(i!=40&&i!=38&&i!=13&&i!=27){n=$.trim(n.toUpperCase());
+if(n!=""){m.children("li").removeClass("selected").each(function(){var a=$(this).text().toUpperCase();
+if(a.startsWith(n)&&this.valueComplete!=""){$(this).addClass("selected");
+SiHO.jumpTo(m);
+return false
+}})
+}}};
+SiHO.hotkeys=function(q){var k=$(document.activeElement),n=k.parent(),p=n.children("select.completeCombo"),l=n.children(".completeComboList"),m=l.children("ul"),j=(q.which)?q.which:q.keyCode;
+if(j==27){if(l.is(":visible")){l.slideUp(100)
+}return false
+}if(!l.is(":visible")&&j!=9&&j!=16&&!k.is('[readonly="readonly"]')){l.css({width:k.width()+19+"px"}).slideDown(100,function(){if(m.children("li.selected").length==1){m.children("li.selected");
+SiHO.jumpTo(m)
+}});
+return true
+}if(j==38){var o=m.children("li").index(m.children("li.selected"));
+m.children("li").eq(o).removeClass("selected");
+if(o!=-1){o--
+}m.children("li").eq(o).addClass("selected");
+SiHO.jumpTo(m);
+return false
+}if(j==40){var o=m.children("li").index(m.children("li.selected"));
+m.children("li").eq(o).removeClass("selected");
+if(o==m.children("li").index(m.children("li").last())){o=-1
+}m.children("li").eq(o+1).addClass("selected");
+SiHO.jumpTo(m);
+return false
+}if(j==13){var r=new Object();
+r.target=m.children("li.selected");
+SiHO.seleccionoUno(r);
+q.preventDefault();
+return false
+}return true
+};
+SiHO.expandir=function(d){SiHO.llenarDiv(d);
+SiHO.buscarTexto(d);
+var e=$(document.activeElement).focus().parent(),f=e.children(".completeComboField");
+$combo=e.children("select.completeCombo"),$div=e.children(".completeComboList"),$lista=$div.children("ul");
+if(!$div.is(":visible")&&!f.is('[readonly="readonly"]')){$div.css({width:f.width()+19+"px"}).slideDown(100,function(){if($lista.children("li.selected").length==1){SiHO.jumpTo($lista)
+}});
+f.focus()
+}else{$div.slideUp(100)
+}};
+SiHO.cancelEnter=function(c){var d=(c.which)?c.which:c.keyCode;
+if(d==13){return false
+}return true
+};
+SiHO.changeComboComplete=function(k){var i=$(k.target),g=i.parent(),l=g.children("select.completeCombo"),h=g.children(".completeComboList"),j=false;
+if(i.val()!=""){l.children("option").each(function(){if($(this).text()==i.val()){j=true;
+return true
+}});
+if(!j){l.val(null);
+i.val(null)
+}}else{l.val(null)
+}return true
+};
+SiHO.seleccionoUno=function(d){var f=$(d.target),e=f.parent().parent().parent();
+$input=e.children("input"),$div=e.children(".completeComboList"),$combo=e.children("select.completeCombo");
+if(f.attr("valueComplete")!="-9999999"){$input.val(f.text());
+$combo.val(f.attr("valueComplete")).trigger("onchange")
+}else{$combo.val(null).trigger("onchange");
+$input.val(null)
+}$input.focus();
+if($div.is(":visible")){$div.slideUp(100)
+}return true
+};
+SiHO.blurComplete=function(b){setTimeout(function(){var a=document.activeElement;
+if($(b.target).parent().find(a).length==0){$div=$(b.target).parent().children("div.completeComboList");
+if($div.is(":visible")){$div.slideUp(100)
+}}},5);
+$(".outline").removeClass("outline")
+};
+SiHO.disableCompleteCombo=function(b){$("#"+b+" input").attr("disabled","disabled").removeAttr("onclick");
+$("#"+b).css("background-color","#DDD !important")
+};

@@ -4,8 +4,12 @@
 # Track the main project files
 !.gitignore
 !index.html
+!hc/
+!hc/**
 !azura-autofill.user.js
 !azura-scout.js
 !README.md
 !clinical-formatter.js
 !paste-parser.js
+!normal-session.json
+!field-map-config.json

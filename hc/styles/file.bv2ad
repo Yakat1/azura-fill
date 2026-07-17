@@ -1,0 +1,59 @@
+#historiaAlimentacion div.down>div.wrapTextarea{display:block;}
+div.mapster_tooltip{opacity:.8!important;}
+div.historicoTablas>a{cursor:pointer;}
+div.historicoTablas>div{display:none;}
+.tablaInteligente table tbody.tbodyHis{color:#666;display:none;}
+.tablaInteligente table tbody.tbodyHis tr td{border-radius:0!important;}
+#comboContainer{display:none;}
+.HistoricoCampo a{cursor:pointer;}
+.HistoricoCampo ul{display:none;margin-left:0;padding-left:20px;color:#666;list-style:none;}
+.HistoricoCampo div.historicoOculta{display:none;color:#666;}
+.muestrame{display:block!important;}
+.HistoricoCampo b{padding-right:5px;color:black;}
+#historiaAlimentacion div.bgComentario{color:black;font:normal 1.8em OpenSans,sans-serif;text-shadow:1px 1px 3px black;font-size:17px;text-indent:4px;}
+.padreMadreOtro{white-space:nowrap;}
+#heredoFamiliares div table tbody tr .textAreaColumn{width:75%!important;}
+.antecedentesPatologicos div table tbody tr .textAreaColumn{width:65%!important;}
+#antecedentesNoPatologicos div table tbody tr .textAreaColumn{width:75%!important;}
+#aparatoSistemaTI div table tbody tr .textAreaColumn{width:75%!important;}
+#padecimientoActual{width:100%;}
+#cirugiasTI div table tbody tr .columnaCatalogo{width:50%;}
+#transTI div table tbody tr .columnaCatalogo{width:50px;}
+#expFisica table tr td textarea{width:90%!important;}
+#expFisica table{border-collapse:collapse;width:100%!important;}
+#expFisica table td{text-align:justify;vertical-align:top;}
+#expFisica table .columna1{width:50%!important;}
+#expFisica .historico input,#expFisica .historico textarea{background-image:none!important;border:none!important;resize:none;overflow:hidden;color:#666;font-weight:700;background-color:transparent!important;}
+.historico h2{font-size:17px;}
+#valoracionNutrimental table{text-align:center;}
+#valoracionNutrimental table tr td:first-child{text-align:justify;}
+.columaSiNo{width:16%;}
+.columanTexareaValoracion{width:58%;}
+div.historico table,#valoracionNutrimental table,#valoracionNutrimental table tbody tr td textarea{width:100%;}
+div.historico table tr.headers{background-color:#B4BCBC;}
+div.historico{margin-top:5px;border:1px solid #777;color:#666!important;}
+div.historico span.black{color:#666!important;}
+#expFisica table .columna2{width:50%!important;}
+#antecedentesPediatricos span{font-weight:bold;color:black;}
+#historiaAlimentacion .historico span span:first-child{display:block;font-weight:bold;}
+#historiaAlimentacion label>h2{display:inline;}
+#HistoriaFarmacologicaPanel h3{text-shadow:1px 1px 2px gray;}
+#HistoriaFarmacologicaPanel .feedbackPanel .feedbackPanelERROR{color:red!important;}
+div.historiaFarmacologicaPanel{overflow-x:auto;}
+div.colDiv{display:inline-table;width:462px;}
+div.colDiv textarea{width:90%!important;}
+#espacio{height:20px;}
+.tablaFarmacoligico tr{vertical-align:middle!important;}
+#agregar{height:30px;padding-right:4px;}
+table.medicaFarma{width:100%;border-radius:5px;border:1px solid #ccc;margin-bottom:10px;border-spacing:0;}
+table.medicaFarma tr:last-child td:last-child{border-bottom-right-radius:10px;}
+table.medicaFarma tr:last-child td:first-child{border-bottom-left-radius:10px;}
+table.medicaFarma thead{background-color:#CCC;color:black;}
+table.medicaFarma tr{height:33px;padding-bottom:2px;padding-top:2px;text-align:center;}
+.editable .fechaIndi,.editable .fechaIniApli,.editable .fechaSusp,.editable .admonEn,.editable .edoNoEdit,.editable .elimina{display:none;}
+.estaEdit{width:94px;}
+.linkMuesOcul{color:black;cursor:pointer;display:inline-block;}
+.linkMuesOcul:hover{color:black;cursor:pointer;}
+.signosCol1{width:173px;}
+div.wicket-aa{white-space:normal!important;}
+.btnPosAMano{position:relative;top:-65px;left:160px;}

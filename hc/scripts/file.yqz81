@@ -1,0 +1,89 @@
+!function(f){var d=function(a,b){this.init("tooltip",a,b)
+};
+d.prototype={constructor:d,init:function(b,c,i){var a,j;
+this.type=b;
+this.$element=f(c);
+this.options=this.getOptions(i);
+this.enabled=true;
+if(this.options.trigger=="click"){this.$element.on("click."+this.type,this.options.selector,f.proxy(this.toggle,this))
+}else{if(this.options.trigger!="manual"){a=this.options.trigger=="hover"?"mouseenter":"focus";
+j=this.options.trigger=="hover"?"mouseleave":"blur";
+this.$element.on(a+"."+this.type,this.options.selector,f.proxy(this.enter,this));
+this.$element.on(j+"."+this.type,this.options.selector,f.proxy(this.leave,this))
+}}this.options.selector?(this._options=f.extend({},this.options,{trigger:"manual",selector:""})):this.fixTitle()
+},getOptions:function(a){a=f.extend({},f.fn[this.type].defaults,a,this.$element.data());
+if(a.delay&&typeof a.delay=="number"){a.delay={show:a.delay,hide:a.delay}
+}return a
+},enter:function(a){var b=f(a.currentTarget)[this.type](this._options).data(this.type);
+if(!b.options.delay||!b.options.delay.show){return b.show()
+}clearTimeout(this.timeout);
+b.hoverState="in";
+this.timeout=setTimeout(function(){if(b.hoverState=="in"){b.show()
+}},b.options.delay.show)
+},leave:function(a){var b=f(a.currentTarget)[this.type](this._options).data(this.type);
+if(this.timeout){clearTimeout(this.timeout)
+}if(!b.options.delay||!b.options.delay.hide){return b.hide()
+}b.hoverState="out";
+this.timeout=setTimeout(function(){if(b.hoverState=="out"){b.hide()
+}},b.options.delay.hide)
+},show:function(){var c,n,a,l,b,m,k;
+if(this.hasContent()&&this.enabled){c=this.tip();
+this.setContent();
+if(this.options.animation){c.addClass("fade")
+}m=typeof this.options.placement=="function"?this.options.placement.call(this,c[0],this.$element[0]):this.options.placement;
+n=/in/.test(m);
+c.detach().css({top:0,left:0,display:"block"}).insertAfter(this.$element);
+a=this.getPosition(n);
+l=c[0].offsetWidth;
+b=c[0].offsetHeight;
+switch(n?m.split(" ")[1]:m){case"bottom":k={top:a.top+a.height,left:a.left+a.width/2-l/2};
+break;
+case"top":k={top:a.top-b,left:a.left+a.width/2-l/2};
+break;
+case"left":k={top:a.top+a.height/2-b/2,left:a.left-l};
+break;
+case"right":k={top:a.top+a.height/2-b/2,left:a.left+a.width};
+break
+}c.offset(k).addClass(m).addClass("in")
+}},setContent:function(){var a=this.tip(),b=this.getTitle();
+a.find(".tooltip-inner")[this.options.html?"html":"text"](b);
+a.removeClass("fade in top bottom left right")
+},hide:function(){var c=this,b=this.tip();
+b.removeClass("in");
+function a(){var h=setTimeout(function(){b.off(f.support.transition.end).detach()
+},500);
+b.one(f.support.transition.end,function(){clearTimeout(h);
+b.detach()
+})
+}f.support.transition&&this.$tip.hasClass("fade")?a():b.detach();
+return this
+},fixTitle:function(){var a=this.$element;
+if(a.attr("title")||typeof(a.attr("data-original-title"))!="string"){a.attr("data-original-title",a.attr("title")||"").attr("title","")
+}},hasContent:function(){return this.getTitle()
+},getPosition:function(a){return f.extend({},(a?{top:0,left:0}:this.$element.offset()),{width:this.$element[0].offsetWidth,height:this.$element[0].offsetHeight})
+},getTitle:function(){var a,c=this.$element,b=this.options;
+a=c.attr("data-original-title")||(typeof b.title=="function"?b.title.call(c[0]):b.title);
+return a
+},tip:function(){return this.$tip=this.$tip||f(this.options.template)
+},validate:function(){if(!this.$element[0].parentNode){this.hide();
+this.$element=null;
+this.options=null
+}},enable:function(){this.enabled=true
+},disable:function(){this.enabled=false
+},toggleEnabled:function(){this.enabled=!this.enabled
+},toggle:function(a){var b=f(a.currentTarget)[this.type](this._options).data(this.type);
+b[b.tip().hasClass("in")?"hide":"show"]()
+},destroy:function(){this.hide().$element.off("."+this.type).removeData(this.type)
+}};
+var e=f.fn.tooltip;
+f.fn.tooltip=function(a){return this.each(function(){var b=f(this),c=b.data("tooltip"),h=typeof a=="object"&&a;
+if(!c){b.data("tooltip",(c=new d(this,h)))
+}if(typeof a=="string"){c[a]()
+}})
+};
+f.fn.tooltip.Constructor=d;
+f.fn.tooltip.defaults={animation:true,placement:"top",selector:false,template:'<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',trigger:"hover",title:"",delay:0,html:false};
+f.fn.tooltip.noConflict=function(){f.fn.tooltip=e;
+return this
+}
+}(window.jQuery);

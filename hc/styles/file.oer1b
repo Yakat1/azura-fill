@@ -1,0 +1,8 @@
+div.wicket-aa-container{border:1px solid #2cc!important;background-color:#fff;overflow-x:hidden!important;}
+div.wicket-aa{display:table;font-size:12px;padding:2px;margin:1px 0 0 0;text-align:left;white-space:nowrap;width:100%;}
+div.wicket-aa ul{list-style:none;margin:0;cursor:pointer;padding:2px;}
+div.wicket-aa li span.content-autocomplete{display:inline-block;}
+div.wicket-aa li span{white-space:initial;}
+div.wicket-aa li{border:2px solid transparent;margin:0;border-bottom:1px dashed #878787;}
+div.wicket-aa li.selected{border:2px solid #58AE4F!important;padding-bottom:2px;padding-top:2px;}
+.wicket-ajax-indicator{position:relative!important;float:right!important;top:6px!important;}

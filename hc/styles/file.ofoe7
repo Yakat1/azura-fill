@@ -1,0 +1,9 @@
+.CompleteList .quitarCompleteList{display:inline-block;background-image:url('../images/cross-script.png');height:16px;width:16px;padding-left:0!important;}
+.CompleteList{text-align:left;}
+.CompleteList *{vertical-align:top;}
+.CompleteList table,.CompleteList div{width:100%;}
+.CompleteList .oddList{background-color:whiteSmoke;}
+.CompleteList .evenList{background-color:#fff;}
+.CompleteList .descripcionElemento{width:99%;}
+.CompleteList div:last-child{border-radius:0 0 10px 10px;}
+div.CompleteListContainer{font-weight:normal;}

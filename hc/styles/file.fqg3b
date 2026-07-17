@@ -1,0 +1,40 @@
+.columnaCatalogo input{width:100%!important;}
+div#wrapper textarea{font-size:12px;height:17px;line-height:17px;background-position:0 -1px;border:none;padding:0;border:1px dotted #666;border-bottom:2px solid #666;background:#fff url('../images/renglon.png');display:block;border-bottom-right-radius:10px;width:98.9%;min-width:190px;}
+.tablaInteligente td span textarea{max-height:85px;}
+div#wrapper input[type="text"]:not(.completeComboField){font-size:12px;height:17px;background-image:url('../images/renglon.png');background-repeat:repeat-x;background-color:#fff;border:none;line-height:17px;}
+#wrapper .pageTitle{font:normal 1.8em OpenSans,sans-serif;margin-top:11px;margin-bottom:1px;text-shadow:1px 1px 2px black;font-size:17px;}
+.pageContainer{padding-top:55px!important;font-weight:600;line-height:25px;}
+#wrapper h1{font:normal 1.8em OpenSans,sans-serif;margin-top:11px;margin-bottom:1px;text-shadow:1px 1px 2px black;font-size:17px;}
+#formaInformacionregistro h2{font:normal 1.8em OpenSans,sans-serif;margin-top:11px;margin-bottom:1px;text-shadow:1px 1px 2px black;font-size:17px;}
+#formaInformacionregistro h3{font-size:15px;font-weight:400;margin:0;}
+input.format{margin-top:1px;text-align:inherit;width:57px;}
+.observaciones{border-radius:10px 10px 10px 0;border:1px solid #ccc;background:none repeat scroll 0 0 #CCC;margin-top:5px;margin-bottom:5px;}
+.observaciones input{background-color:#fff;}
+.observaciones span:first-child,.observaciones b,.observaciones strong{color:black;font-weight:bold;padding-left:5px;}
+.observaciones textarea{width:99.8%;background-color:#fff!important;}
+.tablatextareas tr td{width:50%;}
+div.divMaximo{width:930px;height:30px;}
+#mensajesParaUsuario{position:fixed;left:1px;z-index:500;width:250px;}
+#mensajesParaUsuario ul{background:white;border:solid black 1px;}
+div.divMaximo>span{float:left;position:relative;}
+div.divMaximo input{width:99%;float:none;position:relative;top:4px;}
+div.divMaximo>div{overflow:hidden;float:none;text-align:center;height:100%;}
+.wrapTextarea{background:none repeat scroll 0 0 whiteSmoke;border:1px solid #ccc;border-radius:10px 10px 10px 0;margin-bottom:5px;margin-top:5px;margin-left:auto;margin-right:auto;width:99%;}
+.wrapTextarea span{font-weight:bold;padding-left:10px;}
+.wrapTextarea textarea{background-color:#FFF;}
+div.titleDiag{display:inline-block;width:49%;text-align:center;}
+#tituloDocumento{position:relative;top:60px;left:16px;margin-bottom:0;margin-top:-25px;border-bottom:4px solid #A7CF86;height:23px;text-shadow:1px 1px 3px gray;font-size:17px;width:97%;}
+.feedbackPanelERROR{font-size:12px!important;}
+.feedbackPanelERROR span{color:black;}
+.etiquetaLasa{font-weight:bold;display:inline;position:relative;left:74px;top:2px;font-size:11px;}
+.obtenerInformacionSomatometria{display:inline;}
+.contenedorTablaValoracion{overflow-x:auto;display:block;width:917px;}
+.contenedorCapturaControlVal{overflow-y:auto;display:block;width:98%!important;height:595px!important;margin-left:10px;}
+.contenedorCapturaControlVal .contenedorTablaValoracion{width:790px!important;}
+.contenedorCapturaControlVal h1{font:17px OpenSans,sans-serif;margin-top:11px;margin-bottom:1px;text-shadow:1px 1px 2px #000;}
+#tabla-clasificacion thead.encabezado tr th{background-color:#CCC;}
+#tabla-clasificacion thead.encabezado tr th:first-child{background-color:#ccc;border-radius:8px 0 0;}
+#tabla-clasificacion thead.encabezado tr th:last-child{background-color:#ccc;border-radius:0 8px 0 0;}
+.contenedorCapturaControlVal #tabla-clasificacion{width:790px;}
+.contenedorAgrega{border:1px solid black;padding:4px;margin-top:5px;margin-bottom:5px;}
+.contenedorAgrega .contenedorTabla,.contenedorTabla{border-radius:10px;width:100%;background:none repeat scroll 0 0 #ccc;border-spacing:0;border:1px solid #ccc;text-align:center;}
